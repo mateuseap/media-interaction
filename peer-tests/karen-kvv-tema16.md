@@ -351,4 +351,4 @@ Isso significa que um script que processa os 19 documentos da turma (como o pró
 
 **Comentário para a autora (até 300 caracteres):**
 
-> Estrutura muito forte nas 4 etapas e no rigor do filtro anti-maduro — a melhor parte é a Seção 7/8 obrigarem autoauditoria real. Mas o bloco YAML da Seção 5 diverge do formato oficial: usa `roda_dos_futuros` em vez de `roda`, `filhos` em vez de `efeitos`, falta `ordem`, e `sinal: moderado` não é um valor válido. Um script de processamento da turma quebraria nisso.
+> Entrevista e filtro anti-maduro mandam muito bem, e a seção de autocrítica te obriga a te contestar de verdade. Só a Roda dos Futuros foge do formato oficial: chave errada (roda_dos_futuros em vez de roda), filhos em vez de efeitos, falta ordem, e sinal:moderado nem existe. Quebraria um script.
