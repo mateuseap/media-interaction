@@ -40,11 +40,11 @@ O repositório oficial do Microsoft BitNet descreve inferência ternária de 1,5
 
 ### 4.1. Modelos locais mediados pelo sistema operacional
 
-Isso rompe com a expectativa de que cada aplicativo precise integrar, hospedar e atualizar seu próprio modelo. AICore mostra uma camada do sistema para inferência local, gestão de modelo e atualização. Falta observar contratos estáveis de permissão, explicação e portabilidade entre plataformas para que a mediação seja compreensível para pessoas e criadores.
+Isso rompe com a expectativa de que cada aplicativo precise integrar, hospedar e atualizar seu próprio modelo. AICore mostra uma camada do sistema para inferência local, gestão de modelo e atualização. Por que agora: a documentação Android já descreve essa mediação de inferência, gestão e atualização para Gemini Nano. Falta observar contratos estáveis de permissão, explicação e portabilidade entre plataformas para que a mediação seja compreensível para pessoas e criadores.
 
 ### 4.2. Execução local heterogênea em hardware e navegador
 
-Isso rompe com a divisão simples entre aplicação conectada e aplicação sem inteligência. BitNet reúne pesquisa de inferência com kernels de CPU e GPU, enquanto WebLLM demonstra execução WebGPU no navegador. Falta evidência de interoperabilidade e desempenho comparável entre hardware, navegadores e modelos para que esse caminho vire convenção de interação.
+Isso rompe com a divisão simples entre aplicação conectada e aplicação sem inteligência. BitNet reúne pesquisa de inferência com kernels de CPU e GPU, enquanto WebLLM demonstra execução WebGPU no navegador. Por que agora: os dois projetos já documentam rotas locais em CPU, GPU e navegador, incluindo download e cache no caso do WebLLM. Falta evidência de interoperabilidade e desempenho comparável entre hardware, navegadores e modelos para que esse caminho vire convenção de interação.
 
 ## 5. A roda dos futuros
 
@@ -183,11 +183,19 @@ Tema: IA local em dispositivos e navegadores. Recorte: tecnologia, infraestrutur
 
 ### Triagem de maturidade
 
-BitNet foi mantido como tecnologia emergente: a fonte confirma inferência e kernels, mas não autoriza afirmar adoção ampla. Apple Foundation Models e Gemini Nano foram mantidos como evidência de execução local em plataformas. AICore foi mantido como camada de mediação do sistema. WebLLM e WebGPU foram mantidos como rota de execução no navegador. Nenhum item foi chamado de substituto geral da nuvem.
+- BitNet: emergente. A fonte confirma inferência ternária e kernels, mas não autoriza afirmar adoção ampla.
+- Apple Foundation Models: disruptiva. A fonte descreve modelo local integrado a uma plataforma de aparelho; foi usada como evidência de mudança de distribuição, não como prova de adoção global.
+- Gemini Nano: disruptiva. A documentação descreve inferência local em uma plataforma móvel; foi usada como evidência de capacidade de produto, não como substituta geral da nuvem.
+- AICore: disruptiva. A documentação mostra mediação de inferência, gestão e atualização pelo sistema, base da disrupção 4.1.
+- WebLLM: emergente. O repositório demonstra inferência WebGPU, download inicial e cache no navegador, sem provar interoperabilidade ampla.
+- WebGPU: emergente. É rota de execução para o experimento WebLLM, sem evidência nas fontes de comportamento igual em todos os navegadores e aparelhos.
+- APIs de nuvem: madura. Permanecem contexto de comparação e nunca são disrupção-raiz.
+- Auto-hospedagem clássica: madura. Permanece contexto de comparação e nunca é disrupção-raiz.
+- Quantização INT8 e FP16: madura. Permanecem contexto técnico e nunca são disrupção-raiz; a fonte BitNet foi citada apenas por sua inferência ternária de 1,58 bit.
 
 ### Rodada adversarial
 
-Foram descartados efeitos que exigiam adoção total de IA local, equivalência de desempenho entre aparelhos ou privacidade garantida. Foram mantidos com reserva efeitos ligados a permissões, versão de modelo e degradação, pois dependem de decisões de plataforma ainda não demonstradas pelas fontes. Foram reescritos efeitos que ligavam browser e sistema operacional como se tivessem a mesma camada de distribuição.
+Resumo: 3 efeitos descartados, 4 efeitos mantidos com reserva e 2 efeitos reescritos. Foram descartados `d1`, `d2` e `d3`: adoção total de IA local, equivalência de desempenho entre aparelhos e privacidade garantida. Foram mantidos com reserva `e1.1`, `e2.1`, `e4.1` e `e4.1.1`, pois permissões, versão de modelo, degradação e controles de acessibilidade dependem de decisões de plataforma ainda não demonstradas pelas fontes. Foram reescritos `e3.1` e `e3.1.1` para não tratar browser e sistema operacional como a mesma camada de distribuição.
 
 ### Limites de pesquisa
 
