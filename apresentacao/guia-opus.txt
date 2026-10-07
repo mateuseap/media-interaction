@@ -64,7 +64,11 @@ Referencia: /home/mateuseap/Work/Repositories/r-python/docs/presentation/index.h
 - Branding textual: `Tendencias em Midia e Interacao / Centro de Informatica, UFPE`, sem imagem de logo.
 - Slides sugeridos (12-14): capa > a ruptura em 1 frase > onde isso esta hoje (3 dados com fonte e data) > 3 disrupcoes-raiz > roda (1 slide por cascata) > contra-mapa + falsificador > experimento + pergunta > 2 perguntas pra sala > fim.
 
-6. CHECKLIST ANTES DE ENTREGAR
+6. PERMISSOES: REPOSITORIO SIM, SITE SO COM CONFIRMACAO
+- Voce PODE subir e organizar coisas no meu repositorio (github.com/mateuseap/media-interaction): criar pastas, commitar, dar push. Seguir o padrao existente (pastas por atividade, README no padrao do repo).
+- Voce NAO pode submeter nada no site da disciplina sem minha confirmacao explicita antes: link do documento, feedbacks, ideias, experimento. Monte tudo, me mostre o resumo do que vai enviar e ESPERE eu dizer "pode enviar".
+
+7. CHECKLIST ANTES DE ENTREGAR
 [ ] doc valida (frontmatter + 12 titulos + roda parseavel + links 200)
 [ ] link do doc salvo na pagina de escolha ate 07/10 23h59
 [ ] slides abrem offline (menos fontes) e navegam por seta
