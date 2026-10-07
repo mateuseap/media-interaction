@@ -1,0 +1,72 @@
+GUIA OPUS - APRESENTACAO MEAP | CIN0055 TMI 2026.2 | TEMA 16 IA LOCAL
+==============================================================================
+
+0. QUEM SOU E ONDE ESTOU
+- Aluno: meap (Mateus Elias), login do CIn usado em todos os sistemas
+- Tema: 16 - IA local: no dispositivo e no navegador
+- Apresentacao: 08/10 (aula de margem, fim da etapa 2), junto com vjmm (tema 15)
+- Documento tendencia-ia-local.md vence: 07/10 23h59, link na pagina de escolha
+- Status agora: skill entregue, feedbacks dos colegas em dia, DOCUMENTO PENDENTE
+- Ideias do movimento 3: uma semana depois da apresentacao (~15/10)
+
+1. ONDE ESTA CADA COISA (o que consumir, nesta ordem)
+1.1 Minha skill (o metodo oficial do meu trabalho):
+- https://github.com/mateuseap/media-interaction/tree/master/activity-03
+- SKILL.md = a ferramenta (6 fases, opera em ingles, gera documento com 12 titulos em PT literal)
+- ESTUDO.md = o metodo estudado (Futures Wheel, Hype Cycle, Quadrante Magico, emergente x disruptivo, ordens de efeito, Delphi)
+- skill_usada: futurization-meap | autor_login: meap
+1.2 Pesquisa verificada no meu tema (reaproveitar, nao refazer):
+- https://github.com/mateuseap/media-interaction/blob/master/peer-tests/karen-kvv-tema16.md
+- Fontes com URL conferida: BitNet/bitnet.cpp, Apple Foundation Models, Gemini Nano/AICore, WebLLM, rate limits OpenAI/Google
+- ATENCAO: esse teste usou a skill da colega (futurizacao-kvv), cujo bloco YAML da roda DIVERGE do formato oficial. Usar so a pesquisa, nunca o formato dela.
+1.3 Formato oficial do documento (lei, nao sugestao):
+- https://tendencias-midia-interacao.vercel.app/materiais/formato-documento-tendencia/
+- frontmatter YAML completo + 12 secoes com titulos literais em PT + bloco `roda:` EXATO:
+  chave raiz `roda`, item com `disrupcao:` + sublista `efeitos:`, cada efeito com id hierarquico, ordem 1/2/3, efeito em frase afirmativa, sinal so forte|medio|fraco, prazo como ano unico, confianca alta|media|baixa
+1.4 Meu tema em detalhe (disrupcao-raiz, linha maduro/emergente, perguntas da roda, fronteiras):
+- https://tendencias-midia-interacao.vercel.app/materiais/temas-tendencias-2026-2/ secao 16
+- Linha oficial: chamar API na nuvem = maduro. Emergente = modelo NO dispositivo do usuario final com qualidade pra agente, voz e visao.
+1.5 Pagina do meu tema com mapas prontos e confronto:
+- https://tendencias-midia-interacao.vercel.app/futuros/16-ia-local-no-dispositivo-e-no-navegador/
+1.6 Regras da apresentacao e da nota:
+- https://tendencias-midia-interacao.vercel.app/temas/escolher/ (bloco "Feedback para quem apresentou" + "A nota desta etapa")
+- A aula e discussao, nao palestra. O professor traz o mapa dele + confronto com 5 perguntas.
+- Os 4 criterios que valem nota no feedback: puxou discussao? efeitos ancorados em fonte? mostrou o contra-mapa? experimento claro?
+1.7 Banco da pagina (leitura publica, mesma base que o site le):
+- Supabase REST https://rrfjezpecrjzaomqiouk.supabase.co/rest/v1/ KEY sb_publishable_zC5cR1oRWD1Wf8TdzCQlkA_Rv5V5qzk
+- Tabelas: tmi_tema (escolhas), tmi_alunos (links), tmi_skill_feedback, tmi_aula_feedback (feedbacks reais da turma, melhor gabarito do que a turma valoriza)
+
+2. O QUE A TURMA DE FATO COBRA (extraido dos feedbacks reais no banco)
+- Fonte primaria em vez de noticia requentada; recorte geografico coerente com as fontes
+- Contra-mapa com falsificador concreto, nao so ressalva; vies declarado E testado
+- Experimento que isola uma variavel so
+- Separar "nao encontrei" de "nao existe"
+
+3. TAREFA 1: DOCUMENTO tendencia-ia-local.md
+- Rode minha skill de verdade no tema 16. Entrevista: horizonte 2031, publico desenvolvedores e arquitetos de produto, recorte global, sem vies, sem vetor imposto.
+- Filtro anti-maduro: API de nuvem e self-hosting classico = contexto, nunca disrupcao.
+- Roda em 3 ordens + adversarial + levantamento bruto sem edicao na secao 12. Cenarios da secao 9 no preterito.
+- REGRAS ANTI-ALUCINACAO: nenhum numero redondo sem fonte; nenhuma URL sem HTTP 200 testado (teste uma por uma, descarte as mortas); nenhuma autoria sem verificacao; se nao achou, escreva "nao encontrei".
+- Validacao final obrigatoria: frontmatter parseavel com todos os campos; 12 titulos `## ` literais; YAML da roda parseavel com as chaves exatas da secao 1.3.
+
+4. TAREFA 2: APRESENTACAO (discussao, nao palestra)
+- Estrutura: ruptura central em 2 min; 3 efeitos mais fortes cada um com fonte e data; ponto onde o mapa quebra com falsificador concreto; experimento com pergunta clara; fechar com 2 perguntas pra turma.
+- Antecipar o confronto: me dar replicas prontas pros 3 ataques mais provaveis do mapa do professor.
+- Formato: HTML single-file, abrir direto no navegador, sem build. Seguir o padrao visual abaixo.
+
+5. PADRAO VISUAL OBRIGATORIO (extraido de exemplo real aprovado no CIn)
+Referencia: /home/mateuseap/Work/Repositories/r-python/docs/presentation/index.html (apresentacao da disciplina de Compiladores, padrao CIn UFPE).
+- Estrutura: vanilla puro, sem reveal.js. `<main.deck>` + `<section.slide>`, JS proprio de navegacao (setas/espaco, F fullscreen, hash por slide). Palco fixo 1600x900 com escala proporcional a tela. Roda abrindo o arquivo, so precisa internet pras fontes.
+- Cores (Manual Visual CIn-UFPE ago.2020): vermelho --cin-red #DB1E2F, vermelho escuro #AF0421, preto #231F20, cinza #E0E1E0, papel #FFFFFF, papel-2 #F3F3F2, textos #231F20/#5B5657/#8C8788. Codigo dark #2E2A2B com syntax highlight proprio.
+- Tipografia: Figtree (sans, substituto aberto da Proxima Nova) + JetBrains Mono (codigo), via Google Fonts. Display 112px, h1 64px, h2 40px, corpo 25px.
+- Motion design: SO CSS, sem biblioteca. Slide entra com opacity + translateX(24px) 320ms; fragmentos sobem com fade; underline vermelho marca item atual; barra de progresso no rodape; respeitar prefers-reduced-motion.
+- Layout: padding 80px 96px, faixa vermelha de 8px a esquerda em todo slide, rodape com posicao/contador/controles. Capa inversa com barra vermelha 240x12. Bullets com traco vermelho. Cards em 3 colunas, callouts com borda vermelha, console preto pra demo.
+- Branding textual: `Tendencias em Midia e Interacao / Centro de Informatica, UFPE`, sem imagem de logo.
+- Slides sugeridos (12-14): capa > a ruptura em 1 frase > onde isso esta hoje (3 dados com fonte e data) > 3 disrupcoes-raiz > roda (1 slide por cascata) > contra-mapa + falsificador > experimento + pergunta > 2 perguntas pra sala > fim.
+
+6. CHECKLIST ANTES DE ENTREGAR
+[ ] doc valida (frontmatter + 12 titulos + roda parseavel + links 200)
+[ ] link do doc salvo na pagina de escolha ate 07/10 23h59
+[ ] slides abrem offline (menos fontes) e navegam por seta
+[ ] cada efeito tem fonte com data; vies declarado e testado; falsificador explicito
+[ ] replicas prontas pros 3 ataques do confronto
