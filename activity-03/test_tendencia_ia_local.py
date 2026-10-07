@@ -136,7 +136,7 @@ for root in wheel["roda"]:
     effects = root.get("efeitos")
     check(isinstance(effects, list) and 2 <= len(effects) <= 5, "each root needs 2 to 5 first-order effects")
     for effect in effects:
-        effect_counts = validate_effect(effect)
+        effect_counts = validate_effect(effect, parent_order=0)
         counts = [left + right for left, right in zip(counts, effect_counts)]
 check(counts[:3] == [
     frontmatter["efeitos_ordem_1"],
