@@ -7,7 +7,7 @@ BASE BRANCH: master (remoto não tem develop).
 
 COMPLETED:
 - `activity-03/tendencia-ia-local.md`: frontmatter canônico, 12 seções literais, 3 disrupções-raiz, 18 efeitos (6 por ordem), 9 fontes com HTTP 200 direto, triagem de maturidade, rodada adversarial, falsificadores, viés declarado e testado, cenários no pretérito, experimento de variável única.
-- `activity-03/presentation/index.html`: 18 slides com rodas SVG, linha do tempo, barras do BitNet, requisitos do Chrome, cenários e votação A/B ao vivo;, vanilla, palco 1600x900, setas, espaço, PageUp/PageDown, Home/End, clique, F, hash e hashchange, progresso, prefers-reduced-motion.
+- `activity-03/presentation/index.html`: 10 slides simples, uma ideia por slide, com votação A/B ao vivo.
 - `activity-03/test_tendencia_ia_local.py`: valida documento, roda, URLs e estrutura do deck; funciona com `python3 -O`.
 
 TESTS PASSED:
