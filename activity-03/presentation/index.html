@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IA local em 2031</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cin-red: #DB1E2F;
+  --cin-red-dark: #AF0421;
+  --cin-black: #231F20;
+  --cin-gray: #E0E1E0;
+  --paper: #FFFFFF;
+  --paper-2: #F3F3F2;
+  --ink: #231F20;
+  --ink-2: #5B5657;
+  --ink-3: #8C8788;
+  --code-bg: #2E2A2B;
+  --font-sans: "Figtree", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --fs-display: 112px; --fs-h1: 64px; --fs-h2: 40px; --fs-lead: 30px; --fs-body: 25px; --fs-small: 19px;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --dur: 320ms;
+}
+@media (prefers-reduced-motion: reduce) { :root { --dur: 0ms; } }
+
+* { box-sizing: border-box; margin: 0; }
+html, body { height: 100%; }
+body { background: var(--cin-black); color: var(--ink); font-family: var(--font-sans); overflow: hidden; -webkit-font-smoothing: antialiased; }
+
+.deck {
+  position: absolute; left: 50%; top: 50%; width: 1600px; height: 900px;
+  transform: translate(-50%, -50%) scale(var(--scale, 1));
+  background: var(--paper); overflow: hidden;
+}
+.slide {
+  position: absolute; inset: 0; padding: 80px 96px 96px;
+  display: flex; flex-direction: column;
+  opacity: 0; visibility: hidden; transform: translateX(24px);
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease), visibility 0s linear var(--dur);
+}
+.slide.active { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+.slide.past { transform: translateX(-24px); }
+.slide::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8px; background: var(--cin-red); }
+.slide.inverse { background: var(--cin-black); color: #fff; }
+
+h1 { font-size: var(--fs-h1); line-height: 1.04; font-weight: 800; letter-spacing: -.02em; max-width: 24ch; }
+h2 { font-size: var(--fs-h2); line-height: 1.12; font-weight: 700; }
+h3 { font-size: 28px; line-height: 1.2; font-weight: 700; }
+.display { font-size: var(--fs-display); line-height: .98; font-weight: 800; letter-spacing: -.035em; }
+.lead { font-size: var(--fs-lead); line-height: 1.34; color: var(--ink-2); max-width: 48ch; }
+.inverse .lead { color: rgba(255,255,255,.86); }
+p, li { font-size: var(--fs-body); line-height: 1.42; }
+.small { font-size: var(--fs-small); color: var(--ink-3); line-height: 1.4; }
+.inverse .small { color: rgba(255,255,255,.7); }
+.src { font-size: 17px; color: var(--ink-3); margin-top: 12px; line-height: 1.35; }
+.src b { color: var(--ink-2); font-weight: 600; }
+code { font-family: var(--font-mono); font-size: .86em; background: var(--paper-2); padding: 1px 6px; border-radius: 4px; }
+.head { margin-bottom: 48px; }
+.kicker { font-size: var(--fs-small); color: var(--cin-red); font-weight: 600; margin-bottom: 16px; }
+.inverse .kicker { color: #FF6B78; }
+
+.cols { display: grid; gap: 64px; grid-template-columns: 1fr 1fr; align-items: start; }
+.cols3 { display: grid; gap: 32px; grid-template-columns: repeat(3, 1fr); }
+ul.clean { list-style: none; padding: 0; }
+ul.clean li { padding-left: 28px; position: relative; }
+ul.clean li + li { margin-top: 16px; }
+ul.clean li::before { content: ""; position: absolute; left: 0; top: .62em; width: 12px; height: 3px; background: var(--cin-red); }
+
+.cover { justify-content: space-between; }
+.cover .bar { height: 12px; width: 240px; background: var(--cin-red); margin-bottom: 48px; }
+.cover .meta { display: flex; justify-content: space-between; align-items: end; font-size: var(--fs-small); }
+
+.stat { border-top: 4px solid var(--cin-red); background: var(--paper-2); padding: 28px 32px; }
+.stat .num { font-size: 56px; font-weight: 800; letter-spacing: -.03em; color: var(--cin-red); line-height: 1; }
+.stat p { font-size: 21px; margin-top: 12px; }
+
+.root { border-top: 4px solid var(--cin-red); padding-top: 24px; }
+.root .layer { font-family: var(--font-mono); font-size: 16px; color: var(--ink-3); }
+.root h3 { margin: 8px 0 16px; }
+.root p { font-size: 20px; line-height: 1.4; }
+.root p + p { margin-top: 10px; }
+.root strong { color: var(--cin-red-dark); }
+
+/* cascade: three orders as a descending column, confidence as bar fill */
+.cascade { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; flex: 1; min-height: 0; }
+.branch { display: flex; flex-direction: column; }
+.branch .bid { font-family: var(--font-mono); font-size: 17px; color: var(--ink-3); margin-bottom: 12px; }
+.step { position: relative; padding: 18px 22px 18px 32px; border-left: 4px solid var(--cin-gray); }
+.step + .step { margin-left: 40px; }
+.step + .step + .step { margin-left: 80px; }
+.step.o1 { border-left-color: var(--cin-red); background: #FBEDEE; }
+.step.o2 { border-left-color: var(--cin-red-dark); }
+.step.o3 { border-left-color: var(--ink-3); }
+.step .ord { font-family: var(--font-mono); font-size: 15px; color: var(--ink-3); }
+.step p { font-size: 21px; line-height: 1.35; margin-top: 4px; }
+.step .conf { display: inline-block; font-family: var(--font-mono); font-size: 15px; margin-top: 8px; color: var(--ink-2); }
+.meter { display: inline-block; width: 60px; height: 6px; background: var(--cin-gray); vertical-align: middle; margin-left: 8px; }
+.meter i { display: block; height: 100%; background: var(--cin-red); }
+
+.callout { border-left: 6px solid var(--cin-red); padding: 16px 24px; background: var(--paper-2); font-size: var(--fs-body); line-height: 1.4; }
+.callout + .callout { margin-top: 20px; }
+.inverse .callout { background: rgba(255,255,255,.08); }
+.term { background: var(--code-bg); color: #EDEDED; border-radius: 10px; padding: 24px 32px; font: 19px/1.6 var(--font-mono); white-space: pre; }
+.term .p { color: #FF6B78; } .term .ok { color: #9BDB9F; } .term .c { color: #A59FA0; }
+
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--cin-gray); vertical-align: top; font-size: 20px; line-height: 1.35; }
+th { font-weight: 700; color: var(--ink-2); border-bottom: 2px solid var(--ink); }
+td:first-child { font-weight: 700; width: 30%; }
+
+.question { font-size: 44px; font-weight: 700; line-height: 1.18; letter-spacing: -.01em; max-width: 30ch; }
+.question + .question { margin-top: 56px; }
+
+[data-at] { transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease); }
+[data-at]:not(.shown) { opacity: 0; transform: translateY(8px); }
+[data-at].fresh { box-shadow: 0 3px 0 var(--cin-red); }
+
+.chrome { position: absolute; left: 12px; right: 0; bottom: 0; height: 56px; display: flex; align-items: center; padding: 0 48px 0 96px; gap: 24px; z-index: 10; pointer-events: none; }
+.chrome .where { font-size: 16px; color: var(--ink-3); flex: 1; }
+.chrome .count { font-family: var(--font-mono); font-size: 16px; color: var(--ink-2); }
+.chrome button { pointer-events: auto; background: none; border: 1px solid var(--cin-gray); color: var(--ink-2); width: 40px; height: 40px; border-radius: 4px; font: 600 18px var(--font-sans); cursor: pointer; }
+.chrome button:hover { background: var(--cin-red); color: #fff; border-color: var(--cin-red); }
+.chrome button:focus-visible { outline: 3px solid var(--cin-red); outline-offset: 2px; }
+.deck.on-color .chrome .where, .deck.on-color .chrome .count { color: rgba(255,255,255,.8); }
+.deck.on-color .chrome button { color: #fff; border-color: rgba(255,255,255,.4); }
+.progress { position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: rgba(35,31,32,.08); z-index: 11; }
+.progress i { display: block; height: 100%; width: 0; background: var(--cin-red); transition: width 560ms var(--ease); }
+</style>
+</head>
+<body>
+<main class="deck" id="deck" aria-live="polite">
+
+<section class="slide inverse cover" data-title="Capa">
+  <div>
+    <div class="bar" aria-hidden="true"></div>
+    <div class="display">IA local<br>em 2031</div>
+    <p class="lead" style="margin-top:32px">Quando o modelo sai do servidor e passa a morar no sistema, no navegador e no chip, quem decide o que ele faz?</p>
+  </div>
+  <div class="meta">
+    <span>Tendências em Mídia e Interação<br>Centro de Informática, UFPE</span>
+    <span class="small">meap, tema 16, 08/10/2026<br>Setas ou espaço navegam. F para tela cheia.</span>
+  </div>
+</section>
+
+<section class="slide" data-title="A ruptura">
+  <div class="head"><div class="kicker">A ruptura em uma frase</div>
+  <h1>"Ter IA" deixa de significar ter uma chave de API.</h1></div>
+  <div class="cols">
+    <div>
+      <h2 style="margin-bottom:24px">Maduro, fica como contexto</h2>
+      <ul class="clean">
+        <li>Chamar modelo na nuvem e pagar por chamada</li>
+        <li>Self-hosting clássico em servidor próprio</li>
+        <li>Quantização INT8 e FP16</li>
+      </ul>
+    </div>
+    <div>
+      <h2 style="margin-bottom:24px">Emergente, é o mapa</h2>
+      <ul class="clean">
+        <li>Modelo no aparelho do usuário final</li>
+        <li>Com qualidade para tarefa real de produto</li>
+        <li>Sob controle do sistema, do navegador ou do próprio usuário</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Onde isso está hoje">
+  <div class="head"><div class="kicker">Onde isso está hoje</div><h1>As três camadas já têm documentação primária</h1></div>
+  <div class="cols3">
+    <div class="stat">
+      <div class="num">30 tok/s</div>
+      <p>Modelo Apple on-device de cerca de 3B parâmetros, 3,7 bits por peso, no iPhone 15 Pro.</p>
+      <div class="src"><b>Apple ML Research</b>, WWDC 2024</div>
+    </div>
+    <div class="stat">
+      <div class="num">CRD</div>
+      <p>WebGPU é Candidate Recommendation Draft do W3C. WebLLM roda LLM inteiro no navegador sobre ele.</p>
+      <div class="src"><b>W3C</b>, 15/09/2026; <b>WebLLM</b>, consultado 06/10/2026</div>
+    </div>
+    <div class="stat">
+      <div class="num">2,37 a 6,17x</div>
+      <p>Speedup do bitnet.cpp em x86 com pesos ternários. NPU ainda é trabalho futuro.</p>
+      <div class="src"><b>microsoft/BitNet</b>, consultado 06/10/2026</div>
+    </div>
+  </div>
+  <p class="small" style="margin-top:40px">Contexto maduro: a Gemini API limita por RPM, TPM e RPD, devolve <code>429 RESOURCE_EXHAUSTED</code> e diz que a capacidade "pode variar". É o custo que a IA local promete remover.</p>
+</section>
+
+<section class="slide" data-title="Três disrupções-raiz">
+  <div class="head"><div class="kicker">Disrupções-raiz</div><h1>A mesma passagem em três camadas</h1></div>
+  <div class="cols3">
+    <div class="root">
+      <div class="layer">sistema operacional</div>
+      <h3>O modelo vira serviço do sistema</h3>
+      <p><strong>Rompe:</strong> cada produto contratar e versionar o próprio modelo.</p>
+      <p><strong>Agora:</strong> AICore já é dono da distribuição e atualização do Gemini Nano.</p>
+      <p><strong>Falta:</strong> contrato comum entre Apple e Android.</p>
+    </div>
+    <div class="root">
+      <div class="layer">navegador</div>
+      <h3>O navegador vira runtime</h3>
+      <p><strong>Rompe:</strong> back-end de IA como requisito da web inteligente.</p>
+      <p><strong>Agora:</strong> WebGPU em CRD, WebLLM e Chrome built-in AI.</p>
+      <p><strong>Falta:</strong> suporte uniforme e cache persistente.</p>
+    </div>
+    <div class="root">
+      <div class="layer">chip</div>
+      <h3>Inferência ternária barateia o hardware</h3>
+      <p><strong>Rompe:</strong> modelo útil exigir GPU dedicada.</p>
+      <p><strong>Agora:</strong> paridade ternária com FP16 (arXiv, 02/2024) e kernels CPU.</p>
+      <p><strong>Falta:</strong> NPU e modelos grandes abertos.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="Cascata 1: sistema" data-steps="2">
+  <div class="head" style="margin-bottom:32px"><div class="kicker">Roda, disrupção 4.1</div><h2>O sistema operacional vira dono do modelo</h2></div>
+  <div class="cascade">
+    <div class="branch">
+      <div class="bid">e1</div>
+      <div class="step o1"><span class="ord">1ª ordem, 2027</span><p>Apps pedem capacidade de IA ao sistema em vez de empacotar o próprio modelo.</p><span class="conf">confiança alta<span class="meter"><i style="width:100%"></i></span></span></div>
+      <div class="step o2" data-at="1"><span class="ord">2ª ordem, 2029</span><p>O fabricante decide por política quais tarefas o modelo embutido aceita.</p><span class="conf">confiança média<span class="meter"><i style="width:60%"></i></span></span></div>
+      <div class="step o3" data-at="2"><span class="ord">3ª ordem, 2031</span><p>Reguladores tratam o modelo do sistema como a revisão de loja de apps.</p><span class="conf">confiança baixa<span class="meter"><i style="width:25%"></i></span></span></div>
+    </div>
+    <div class="branch">
+      <div class="bid">e2</div>
+      <div class="step o1"><span class="ord">1ª ordem, 2027</span><p>Atualização do modelo chega como atualização do sistema, não por escolha do dev.</p><span class="conf">confiança alta<span class="meter"><i style="width:100%"></i></span></span></div>
+      <div class="step o2" data-at="1"><span class="ord">2ª ordem, 2029</span><p>Produtos mantêm testes de regressão do modelo a cada update do aparelho.</p><span class="conf">confiança média<span class="meter"><i style="width:60%"></i></span></span></div>
+      <div class="step o3" data-at="2"><span class="ord">3ª ordem, 2031</span><p>Aparelho sem update de modelo vira obsoleto com hardware funcional.</p><span class="conf">confiança baixa<span class="meter"><i style="width:25%"></i></span></span></div>
+    </div>
+  </div>
+  <div class="src">Âncora: <b>Android Developers, Gemini Nano e AICore</b>, consultado 06/10/2026: "AICore manages model updates and safety".</div>
+</section>
+
+<section class="slide" data-title="Cascata 2: navegador" data-steps="2">
+  <div class="head" style="margin-bottom:32px"><div class="kicker">Roda, disrupção 4.2</div><h2>A aba carrega o modelo como carrega uma biblioteca</h2></div>
+  <div class="cascade">
+    <div class="branch">
+      <div class="bid">e3</div>
+      <div class="step o1"><span class="ord">1ª ordem, 2028</span><p>Resumo, tradução e revisão funcionam na web sem back-end de IA.</p><span class="conf">confiança alta<span class="meter"><i style="width:100%"></i></span></span></div>
+      <div class="step o2" data-at="1"><span class="ord">2ª ordem, 2030</span><p>Custo marginal por uso cai para perto de zero; cobrança por chamada perde espaço.</p><span class="conf">confiança média<span class="meter"><i style="width:60%"></i></span></span></div>
+      <div class="step o3" data-at="2"><span class="ord">3ª ordem, 2031</span><p>Nuvem se concentra no que o aparelho não roda e sobe o preço relativo disso.</p><span class="conf">confiança baixa<span class="meter"><i style="width:25%"></i></span></span></div>
+    </div>
+    <div class="branch">
+      <div class="bid">e4</div>
+      <div class="step o1"><span class="ord">1ª ordem, 2028</span><p>A GPU do visitante decide qual versão da funcionalidade o site entrega.</p><span class="conf">confiança média<span class="meter"><i style="width:60%"></i></span></span></div>
+      <div class="step o2" data-at="1"><span class="ord">2ª ordem, 2029</span><p>Degradação entre local, modelo menor e remoto vira requisito de produto.</p><span class="conf">confiança média<span class="meter"><i style="width:60%"></i></span></span></div>
+      <div class="step o3" data-at="2"><span class="ord">3ª ordem, 2031</span><p>Acesso a IA na web passa a refletir desigualdade de hardware.</p><span class="conf">confiança baixa<span class="meter"><i style="width:25%"></i></span></span></div>
+    </div>
+  </div>
+  <div class="src">Âncoras: <b>WebLLM</b>, consultado 06/10/2026; <b>Chrome built-in AI</b>, consultado 06/10/2026: Chrome "manages the built-in AI model's download, updates, and purges".</div>
+</section>
+
+<section class="slide" data-title="Cascata 3: chip" data-steps="2">
+  <div class="head" style="margin-bottom:32px"><div class="kicker">Roda, disrupção 4.3</div><h2>Pesos ternários levam o modelo para CPU comum</h2></div>
+  <div class="cascade">
+    <div class="branch">
+      <div class="bid">e5</div>
+      <div class="step o1"><span class="ord">1ª ordem, 2028</span><p>Modelos úteis rodam em CPU de notebook sem GPU dedicada.</p><span class="conf">confiança média<span class="meter"><i style="width:60%"></i></span></span></div>
+      <div class="step o2" data-at="1"><span class="ord">2ª ordem, 2030</span><p>Fabricantes anunciam suporte ternário em NPU como argumento de venda.</p><span class="conf">confiança média<span class="meter"><i style="width:60%"></i></span></span></div>
+      <div class="step o3" data-at="2"><span class="ord">3ª ordem, 2031</span><p>Tokens por segundo por watt vira métrica pública de aparelho.</p><span class="conf">confiança baixa<span class="meter"><i style="width:25%"></i></span></span></div>
+    </div>
+    <div class="branch">
+      <div class="bid">e6</div>
+      <div class="step o1"><span class="ord">1ª ordem, 2029</span><p>Agentes pessoais operam sobre e-mail, agenda e arquivos sem tirar dado do aparelho.</p><span class="conf">confiança média<span class="meter"><i style="width:60%"></i></span></span></div>
+      <div class="step o2" data-at="1"><span class="ord">2ª ordem, 2030</span><p>O modelo pessoal ajustado vira ativo que precisa de backup e portabilidade.</p><span class="conf">confiança média<span class="meter"><i style="width:60%"></i></span></span></div>
+      <div class="step o3" data-at="2"><span class="ord">3ª ordem, 2031</span><p>Tribunais discutem apreensão e herança de modelos pessoais.</p><span class="conf">confiança baixa<span class="meter"><i style="width:25%"></i></span></span></div>
+    </div>
+  </div>
+  <div class="src">Âncoras: <b>Ma et al., arXiv 2402.17764</b>, 27/02/2024; <b>microsoft/BitNet</b>, consultado 06/10/2026: 100B em uma CPU a 5 a 7 tok/s.</div>
+</section>
+
+<section class="slide" data-title="Contra o próprio mapa" data-steps="3">
+  <div class="head"><div class="kicker">Onde o mapa quebra</div><h1>Três falsificadores concretos</h1></div>
+  <div class="callout" data-at="1"><strong>Qualidade satura.</strong> Se até 2028 nenhum modelo de celular de consumo igualar, em benchmark público, um modelo de nuvem de 2026 na mesma tarefa, e5 e e6 caem para confiança baixa.</div>
+  <div class="callout" data-at="2"><strong>Fabricante fecha a porta.</strong> Se Apple ou Google restringirem as APIs on-device a apps próprios ou parceiros, e1 e e2 deixam de valer para terceiros.</div>
+  <div class="callout" data-at="3"><strong>WebGPU empaca.</strong> Se não sair de Candidate Recommendation até 2029, ou um navegador majoritário mantiver suporte parcial, e3 e e4 ficam presos a um navegador.</div>
+  <p class="small" style="margin-top:32px">Viés declarado: uso modelo local no dia a dia. Teste: só ganhou confiança alta o efeito com capacidade já documentada pelo fornecedor. e4, e5 e e6 não passaram e ficaram em média.</p>
+</section>
+
+<section class="slide inverse" data-title="O experimento">
+  <div class="head"><div class="kicker">O experimento</div><h1>Uma variável só: de onde vem a resposta</h1></div>
+  <div class="cols">
+    <div>
+      <ul class="clean">
+        <li>Mesma tarefa de escrita curta, mesmo prompt, mesma interface</li>
+        <li>Rota A: modelo no navegador via WebLLM e WebGPU</li>
+        <li>Rota B: mesma tarefa via API de nuvem</li>
+        <li>Turma vota qual prefere e tenta adivinhar qual é local</li>
+      </ul>
+      <p class="lead" style="margin-top:32px">Pergunta: para tarefa curta de produto, a diferença já é pequena demais para perceber?</p>
+    </div>
+    <div class="term"><span class="c"># resultado que muda o mapa</span>
+<span class="p">acerto ≈ acaso</span>
+  <span class="ok">e3 se sustenta</span>
+  cenário provável reforçado
+
+<span class="p">acerto alto + prefere nuvem</span>
+  e3.1 perde confiança
+  paridade mais longe</div>
+  </div>
+</section>
+
+<section class="slide" data-title="Réplicas ao confronto">
+  <div class="head"><div class="kicker">Antecipando o confronto</div><h1>Três ataques prováveis e a resposta</h1></div>
+  <table>
+    <thead><tr><th>Ataque</th><th>Réplica</th></tr></thead>
+    <tbody>
+      <tr><td>"Modelo local é só modelo pequeno ruim"</td><td>O mapa não diz que local substitui nuvem. Diz que tarefa curta migra (e3) e a nuvem se especializa (e3.1.1). O experimento testa exatamente essa paridade.</td></tr>
+      <tr><td>"Isso é Apple Intelligence, já é produto, é maduro"</td><td>O maduro é chamar API. A ruptura é o sistema virar dono do modelo e das atualizações (AICore documenta isso). O efeito de governança (e1.1, e2.1) ainda não aconteceu.</td></tr>
+      <tr><td>"Local é privado, então o mapa é otimista"</td><td>O mapa nega isso: execução local não prova ausência de telemetria. Foi o erro nº 1 corrigido na seção 8. O cenário indesejável é justamente o sistema como porteiro.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="slide" data-title="Perguntas para a sala">
+  <div class="head"><div class="kicker">Para a turma</div></div>
+  <p class="question">Se o modelo do seu celular muda a resposta depois de um update, de quem é a responsabilidade: sua, do app ou do fabricante?</p>
+  <p class="question">Um modelo ajustado com seus e-mails e arquivos é patrimônio seu? Deveria poder ser herdado ou apreendido?</p>
+</section>
+
+<section class="slide inverse cover" data-title="Fim">
+  <div>
+    <div class="bar" aria-hidden="true"></div>
+    <div class="display">Obrigado</div>
+    <p class="lead" style="margin-top:32px">Documento completo com roda YAML, nove fontes verificadas e anexo bruto em <code style="background:rgba(255,255,255,.12)">activity-03/tendencia-ia-local.md</code>.</p>
+  </div>
+  <div class="meta">
+    <span>Tendências em Mídia e Interação<br>Centro de Informática, UFPE</span>
+    <span class="small">meap, skill futurization-meap</span>
+  </div>
+</section>
+
+<nav class="chrome" aria-label="Navegação">
+  <span class="where" id="where"></span>
+  <span class="count" id="count"></span>
+  <button id="prev" aria-label="Slide anterior">&#8249;</button>
+  <button id="next" aria-label="Próximo slide">&#8250;</button>
+  <button id="fs" aria-label="Tela cheia">&#x26F6;</button>
+</nav>
+<div class="progress" aria-hidden="true"><i id="bar"></i></div>
+</main>
+
+<script>
+(() => {
+  const deck = document.getElementById('deck');
+  const slides = [...deck.querySelectorAll('.slide')];
+  const $ = id => document.getElementById(id);
+  const stepsOf = s => +(s.dataset.steps || 0);
+  let i = 0, step = 0;
+
+  const fit = () => deck.style.setProperty('--scale', Math.min(innerWidth / 1600, innerHeight / 900));
+  addEventListener('resize', fit); fit();
+
+  function paint() {
+    slides.forEach((s, k) => { s.classList.toggle('active', k === i); s.classList.toggle('past', k < i); });
+    const s = slides[i];
+    s.querySelectorAll('[data-at]').forEach(el => {
+      const at = +el.dataset.at;
+      el.classList.toggle('shown', step >= at);
+      el.classList.toggle('fresh', step === at);
+    });
+    deck.classList.toggle('on-color', s.classList.contains('inverse'));
+    $('where').textContent = s.dataset.title || '';
+    $('count').textContent = `${i + 1} / ${slides.length}`;
+    const n = stepsOf(s);
+    $('bar').style.width = `${((i + (n ? step / (n + 1) : 0)) / (slides.length - 1)) * 100}%`;
+    try { history.replaceState(null, '', `#${i + 1}` + (step ? `.${step}` : '')); } catch (e) {}
+  }
+
+  function go(to, toStep = 0) {
+    i = Math.max(0, Math.min(slides.length - 1, to));
+    step = Math.max(0, Math.min(stepsOf(slides[i]), toStep));
+    paint();
+  }
+  const next = () => step < stepsOf(slides[i]) ? (step++, paint()) : (i < slides.length - 1 && go(i + 1));
+  const prev = () => step > 0 ? (step--, paint()) : (i > 0 && go(i - 1, stepsOf(slides[i - 1])));
+  const toggleFs = () => document.fullscreenElement ? document.exitFullscreen?.() : document.documentElement.requestFullscreen?.().catch(() => {});
+
+  addEventListener('keydown', e => {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    switch (e.key) {
+      case 'ArrowRight': case 'ArrowDown': case 'PageDown': case ' ': e.preventDefault(); next(); break;
+      case 'ArrowLeft': case 'ArrowUp': case 'PageUp': e.preventDefault(); prev(); break;
+      case 'Home': go(0); break;
+      case 'End': go(slides.length - 1); break;
+      case 'f': case 'F': toggleFs(); break;
+    }
+  });
+  $('next').onclick = next; $('prev').onclick = prev; $('fs').onclick = toggleFs;
+  document.addEventListener('fullscreenchange', () => $('fs').setAttribute('aria-label', document.fullscreenElement ? 'Sair da tela cheia' : 'Tela cheia'));
+  deck.addEventListener('click', e => {
+    if (e.target.closest('button')) return;
+    const r = deck.getBoundingClientRect();
+    (e.clientX - r.left > r.width / 2 ? next : prev)();
+  });
+
+  const fromHash = () => {
+    const m = location.hash.match(/^#(\d+)(?:\.(\d+))?$/);
+    go(m ? +m[1] - 1 : 0, m && m[2] ? +m[2] : 0);
+  };
+  addEventListener('hashchange', fromHash);
+  fromHash();
+})();
+</script>
+</body>
+</html>
