@@ -152,4 +152,15 @@ check(len(urls) == frontmatter["fontes"], "source count differs from frontmatter
 for source_url in urls:
     check_http_200(source_url)
 
-print(f"validated {DOCUMENT.name}: {len(urls)} sources, {sum(counts[:3])} effects")
+DECK = Path(__file__).with_name("presentation") / "index.html"
+check(DECK.exists(), "missing presentation/index.html")
+deck = DECK.read_text(encoding="utf-8")
+slide_count = len(re.findall(r'<section class="slide[ "]', deck))
+check('<main class="deck"' in deck, "deck needs main.deck")
+check(12 <= slide_count <= 14, f"deck needs 12 to 14 slides, has {slide_count}")
+for needle in ("keydown", "location.hash", "hashchange", "requestFullscreen", "prefers-reduced-motion", "aria-label"):
+    check(needle in deck, f"deck missing {needle}")
+check("—" not in deck, "deck must not use em dash")
+check(not re.search(r"<script[^>]+src=", deck), "deck must not load external scripts")
+
+print(f"validated {DOCUMENT.name}: {len(urls)} sources, {sum(counts[:3])} effects; deck: {slide_count} slides")
