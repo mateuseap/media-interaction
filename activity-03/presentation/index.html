@@ -134,7 +134,7 @@ h1 { font-size: 72px; line-height: 1.04; font-weight: 800; letter-spacing: -.025
   <div>
     <div class="bar" aria-hidden="true"></div>
     <div class="display">IA local<br>em 2031</div>
-    <p class="lead" style="margin-top:32px">E se o modelo de IA morasse no seu celular, e não na nuvem?</p>
+    <p class="lead" style="margin-top:32px">Seu celular já tem IA. A pergunta é quanto ela vai fazer sozinha, e quem manda nela.</p>
   </div>
   <div class="meta">
     <span>Tendências em Mídia e Interação<br>Centro de Informática, UFPE</span>
@@ -142,24 +142,36 @@ h1 { font-size: 72px; line-height: 1.04; font-weight: 800; letter-spacing: -.025
   </div>
 </section>
 
+<!-- 2a -->
+<section class="slide inverse" data-title="Vocês já fizeram isso">
+  <div class="kicker">Antes de começar</div>
+  <h1>Essa tendência já aconteceu dentro desta disciplina</h1>
+  <div class="ex" style="margin-top:20px">
+    <div><div class="big" style="color:#fff">500</div><p class="cap" style="color:rgba(255,255,255,.8)">itens que três colegas avaliaram com um modelo rodando no próprio computador (Ollama, Qwen 27B).</p></div>
+    <div><p class="say">O motivo: a cota grátis da API acabou no meio da atividade.</p><div class="so" style="background:rgba(219,30,47,.2);color:#fff">E a ferramenta nº 1 da varredura de IA da turma foi o <b style="color:#FF6B78">bitnet.cpp</b>, de IA local.</div></div>
+  </div>
+  <div class="src">Fonte: página de temas da disciplina, tema 16, "O que a turma trouxe"</div>
+</section>
+
 <!-- 2 -->
 <section class="slide" data-title="A ideia" data-steps="1">
   <div class="kicker">A ideia</div>
-  <h1>A IA está saindo da nuvem e indo para o seu aparelho</h1>
+  <h1>Seu celular já tem IA. Mas ela ainda é pequena</h1>
   <div class="ba">
-    <div class="before"><div class="tag">hoje</div><p>Você manda a pergunta para um servidor e paga por cada uso.</p></div>
-    <div class="after" data-at="1"><div class="tag">2031</div><p>O modelo já vem no aparelho. Responde sem internet e sem custo por uso.</p></div>
+    <div class="before"><div class="tag">hoje</div><p>No aparelho: resumir notificação e corrigir texto. O pesado ainda vai para servidor, até na Apple.</p></div>
+    <div class="after" data-at="1"><div class="tag">2031?</div><p>Agente, voz e visão rodando no aparelho, para qualquer app, sem custo por uso.</p></div>
   </div>
+  <div class="src"><b>Apple ML Research</b>, WWDC 2024: modelo de 3B no aparelho e um modelo maior em servidor (Private Cloud Compute)</div>
 </section>
 
 <!-- 3 -->
 <section class="slide" data-title="Três lugares">
   <div class="kicker">Para onde ela vai</div>
-  <h1>Três lugares, já com exemplo real</h1>
+  <h1>O que muda está em três lugares</h1>
   <div class="places">
     <div class="place">
       <svg class="ico" viewBox="0 0 72 72" aria-hidden="true"><rect x="20" y="6" width="32" height="60" rx="6" fill="none" stroke="#DB1E2F" stroke-width="4"/><circle cx="36" cy="56" r="3" fill="#DB1E2F"/></svg>
-      <h2>No sistema</h2><p>Android e iPhone já trazem um modelo de fábrica.</p>
+      <h2>No sistema</h2><p>O modelo de fábrica do celular vira serviço que qualquer app pode usar.</p>
     </div>
     <div class="place">
       <svg class="ico" viewBox="0 0 72 72" aria-hidden="true"><rect x="6" y="12" width="60" height="48" rx="4" fill="none" stroke="#DB1E2F" stroke-width="4"/><line x1="6" y1="24" x2="66" y2="24" stroke="#DB1E2F" stroke-width="4"/><circle cx="14" cy="18" r="2" fill="#DB1E2F"/><circle cx="21" cy="18" r="2" fill="#DB1E2F"/></svg>
@@ -181,7 +193,7 @@ h1 { font-size: 72px; line-height: 1.04; font-weight: 800; letter-spacing: -.025
       <p class="cap">Velocidade do modelo da Apple rodando dentro do iPhone 15 Pro.</p>
     </div>
     <div>
-      <p class="say">No Android, quem atualiza o modelo é o sistema, não o app.</p>
+      <p class="say">Já existe. O novo é virar serviço para qualquer app, e no Android quem atualiza o modelo é o sistema.</p>
       <div class="so">Então quem decide o que a IA faz é <b>o Google ou a Apple</b>, não o desenvolvedor.</div>
     </div>
   </div>
@@ -194,7 +206,7 @@ h1 { font-size: 72px; line-height: 1.04; font-weight: 800; letter-spacing: -.025
   <div class="ex">
     <div>
       <div class="big">22<small> GB</small></div>
-      <p class="cap">Livres no disco, além de GPU forte, para o Chrome rodar o modelo dele. No celular, ainda não roda.</p>
+      <p class="cap">Livres no disco para o Chrome rodar o modelo dele, mais GPU de 4 GB ou 16 GB de RAM. No celular, ainda não roda.</p>
     </div>
     <div>
       <p class="say">Um site já consegue rodar IA sem servidor nenhum.</p>
@@ -213,7 +225,7 @@ h1 { font-size: 72px; line-height: 1.04; font-weight: 800; letter-spacing: -.025
       <p class="cap">Até 6 vezes mais rápido em CPU comum, usando pesos que só valem -1, 0 ou 1.</p>
     </div>
     <div>
-      <p class="say">A Microsoft rodou um modelo enorme numa única CPU, sem placa de vídeo.</p>
+      <p class="say">A Microsoft criou modelos com pesos -1, 0 e 1 que rodam em CPU comum, sem placa de vídeo.</p>
       <div class="so">Se isso escalar, <b>IA boa deixa de exigir hardware caro.</b></div>
     </div>
   </div>
@@ -225,11 +237,12 @@ h1 { font-size: 72px; line-height: 1.04; font-weight: 800; letter-spacing: -.025
   <div class="kicker">Roda dos futuros, resumida</div>
   <h1>Uma coisa puxa a outra</h1>
   <div class="chain">
-    <div class="c1"><div class="n">1ª ordem, 2027</div><p>O modelo passa a vir com o sistema do aparelho.</p><div class="conf">mais certo</div></div>
+    <div class="c1"><div class="n">1ª ordem, 2027</div><p>A maioria dos apps troca a nuvem pelo modelo do sistema em tarefa curta.</p><div class="conf">mais certo</div></div>
     <div class="c2" data-at="1"><div class="n">2ª ordem, 2029</div><p>O fabricante decide o que a IA aceita fazer.</p><div class="conf">provável</div></div>
     <div class="c3" data-at="2"><div class="n">3ª ordem, 2031</div><p>O governo passa a regular o modelo do celular, como faz com a loja de apps.</p><div class="conf">aposta</div></div>
   </div>
   <p class="lead" style="margin-top:44px" data-at="2">A parte técnica é a mais certa. A dúvida de verdade é <b>quem manda</b>.</p>
+  <div class="src">Âncora da 1ª ordem: <b>Android Developers, Gemini Nano</b>, 06/10/2026; <b>Apple Foundation Models</b>, 07/10/2026</div>
 </section>
 
 <!-- 8 -->
