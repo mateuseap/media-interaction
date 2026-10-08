@@ -12,7 +12,7 @@ efeitos_ordem_1: 6
 efeitos_ordem_2: 6
 efeitos_ordem_3: 6
 tecnologias_citadas: [Apple Foundation Models, Gemini Nano, AICore, ML Kit GenAI, Chrome built-in AI, WebGPU, WebLLM, BitNet b1.58, bitnet.cpp]
-fontes: 9
+fontes: 12
 confianca: media
 experimento: Teste cego com a mesma tarefa de escrita curta e a mesma interface, variando apenas a origem da inferência (modelo local no navegador ou API de nuvem), para medir se a turma distingue as respostas e qual prefere.
 skill_usada: futurization-meap
@@ -34,6 +34,8 @@ IA local é inferência executada no aparelho de quem usa o produto, sem round-t
 **Navegador.** O WebGPU é Candidate Recommendation Draft do W3C, em versão de 15 de setembro de 2026 (fonte 4). O WebLLM executa LLMs inteiramente no navegador via WebGPU, sem servidor, com download inicial de artefatos e cache por Cache API, IndexedDB ou OPFS (fonte 5). O Chrome documenta APIs de IA embutidas que usam Gemini Nano gerenciado pelo próprio navegador, que cuida de download, atualização e remoção do modelo, com programa de origin trial (fonte 6).
 
 **Eficiência do modelo.** O artigo BitNet b1.58 (arXiv, 27 de fevereiro de 2024) afirma que um LLM com pesos ternários {-1, 0, 1} iguala o Transformer FP16 de mesmo tamanho em perplexidade e tarefas finais (fonte 7). O repositório oficial bitnet.cpp relata speedup de 2,37x a 6,17x e redução de energia de 71,9% a 82,2% em x86, e um modelo de 100B rodando em uma CPU a 5 a 7 tokens por segundo; NPU aparece como trabalho futuro (fonte 8).
+
+**Requisitos reais.** O Chrome exige, para o modelo embutido, Windows 10 ou 11, macOS 13 ou Linux, pelo menos 22 GB livres no volume do perfil, e GPU com mais de 4 GB de VRAM ou CPU com 16 GB de RAM e 4 núcleos; o modelo é apagado se o espaço livre cair abaixo de 10 GB, e celular ainda não é suportado (fonte 10). Das APIs, Translator, Language Detector e Summarizer estão estáveis desde o Chrome 138, enquanto Writer, Rewriter e Proofreader seguem em developer trial (fonte 11). Na Apple, o framework Foundation Models para desenvolvedores aparece a partir do iOS 26 e do macOS 26, para "language understanding, structured output, and tool calling" (fonte 12). IA local hoje é recurso de aparelho recente, não de qualquer aparelho.
 
 **Contexto maduro.** APIs de nuvem impõem limites por projeto em RPM, TPM e RPD, retornam `429 RESOURCE_EXHAUSTED` quando excedidos e declaram que a capacidade "pode variar" (fonte 9). Isso é contexto, não disrupção: mostra o custo operacional que a IA local promete remover.
 
@@ -197,13 +199,46 @@ roda:
 
 O YAML não mostra um padrão importante. Os efeitos de primeira ordem com confiança alta são de arquitetura (e1, e2, e3): onde o modelo mora e quem o atualiza. Os efeitos de terceira ordem com confiança baixa são de poder (e1.1.1, e2.1.1, e6.1.1): quem governa, quem responde e o que acontece com o modelo pessoal. A parte tecnicamente mais previsível do mapa é a politicamente menos resolvida. A roda responde às três perguntas oficiais do tema: assinatura e nuvem em e3.1 e e3.1.1; atualização, governo e responsabilidade em e1.1 e e2.1; patrimônio, herança e apreensão em e6.1 e e6.1.1.
 
+### Âncora de cada efeito
+
+Cada efeito de primeira ordem parte de uma capacidade já documentada. Os de segunda e terceira ordem são derivação causal: a fonte sustenta o mecanismo, não o efeito.
+
+| Efeito | Âncora | Data da fonte | Tipo |
+|---|---|---|---|
+| e1 | AICore como interface entre app e modelo (fonte 2); APIs ML Kit GenAI (fonte 3) | consultado 2026-10-06 | capacidade documentada |
+| e1.1 | AICore aplica filtros de segurança dentro do serviço (fonte 2) | consultado 2026-10-06 | mecanismo documentado |
+| e1.1.1 | analogia com revisão de loja; nenhuma fonte regulatória | sem fonte | derivação |
+| e2 | AICore "manages model updates" (fonte 2) | consultado 2026-10-06 | capacidade documentada |
+| e2.1 | atualização fora do controle do app (fonte 2) | consultado 2026-10-06 | mecanismo documentado |
+| e2.1.1 | modelo apagado ou indisponível conforme requisito de aparelho (fonte 10) | consultado 2026-10-07 | derivação |
+| e3 | Summarizer e Translator estáveis no Chrome 138 (fonte 11); WebLLM sem servidor (fonte 5) | consultado 2026-10-07 | capacidade documentada |
+| e3.1 | inferência local sem chamada remota (fontes 5 e 6); cobrança por uso da nuvem (fonte 9) | consultado 2026-10-06 | derivação |
+| e3.1.1 | fallback de nuvem oferecido pelo próprio Chrome (fonte 6) | consultado 2026-10-06 | derivação |
+| e4 | 22 GB livres e GPU acima de 4 GB de VRAM (fonte 10) | consultado 2026-10-07 | capacidade documentada |
+| e4.1 | recomendação de avisar download e prontidão do modelo (fonte 6) | consultado 2026-10-06 | mecanismo documentado |
+| e4.1.1 | celular não suportado pelo modelo do Chrome (fonte 10) | consultado 2026-10-07 | derivação |
+| e5 | 100B em uma CPU a 5 a 7 tok/s; speedup x86 (fonte 8); paridade ternária (fonte 7) | 2024-02-27 e consultado 2026-10-06 | capacidade demonstrada pelo autor |
+| e5.1 | NPU declarada como próximo passo (fonte 8) | consultado 2026-10-06 | mecanismo documentado |
+| e5.1.1 | ganho de energia publicado como métrica de projeto (fonte 8) | consultado 2026-10-06 | derivação |
+| e6 | Foundation Models com tool calling no aparelho (fonte 12) | consultado 2026-10-07 | capacidade documentada |
+| e6.1 | adaptadores de modelo carregados e trocados em tempo de execução (fonte 1) | WWDC 2024 | derivação |
+| e6.1.1 | pergunta oficial do tema; nenhuma fonte jurídica | sem fonte | derivação |
+
 ## 6. Sinais fracos e wildcards
 
 **Sinal fraco 1.** O Chrome já recomenda que o site avise o usuário quando o modelo embutido está baixando e quando está pronto (fonte 6). É a primeira convenção de interface sobre ciclo de vida de modelo local; se ela se espalhar, "modelo pronto" vira estado de UI como "offline".
 
 **Sinal fraco 2.** O Chrome oferece fallback de nuvem para IA do lado do cliente via Firebase AI Logic (fonte 6). O próprio fornecedor do modelo local já desenha a arquitetura híbrida, o que sugere que local e nuvem vão coexistir em vez de um substituir o outro.
 
-**Wildcard.** Um modelo ternário de qualidade de fronteira roda em celular de entrada sem loja de aplicativo intermediando. Isso anteciparia e5 e e6 em anos e tiraria do fabricante do sistema o papel de porteiro descrito em e1.1.
+**Sinal fraco 3.** O Chrome apaga o modelo embutido quando o espaço livre cai abaixo de 10 GB e baixa de novo quando o espaço volta (fonte 10). O modelo local já é tratado como cache descartável, não como software instalado. Isso pesa contra e6.1: um modelo que o sistema apaga sozinho dificilmente vira patrimônio.
+
+**Sinal fraco 4.** Na Apple, o framework para desenvolvedores expõe "tool calling" e "structured output" (fonte 12), e não apenas geração de texto. É o primeiro degrau de agente local documentado por fabricante de sistema, e é a âncora mais forte de e6.
+
+**Sinal fraco 5.** O bitnet.cpp já publica modelos de embedding ternários (README, 16/07/2026, fonte 8). Busca semântica local é tarefa mais simples que geração e pode chegar antes, como infraestrutura invisível.
+
+**Wildcard 1.** Um modelo ternário de qualidade de fronteira roda em celular de entrada sem loja de aplicativo intermediando. Isso anteciparia e5 e e6 em anos e tiraria do fabricante do sistema o papel de porteiro descrito em e1.1.
+
+**Wildcard 2.** Um incidente de segurança em modelo embutido, como injeção de prompt que vaza dado local por uma API do sistema, leva um regulador grande a exigir desligamento padrão. A distribuição pelo sistema (e1, e2) recua anos, e o navegador (e3) vira a rota principal por ser isolado por origem.
 
 ## 7. Contra o próprio mapa
 
@@ -229,15 +264,15 @@ O YAML não mostra um padrão importante. Os efeitos de primeira ordem com confi
 
 ### 9.1. Provável
 
-Em 2031, a maioria dos produtos de consumo já usava o modelo embutido no sistema para tarefas curtas como resumo, revisão e busca semântica, e mandava para a nuvem o que era difícil. Cada plataforma tinha mantido API própria, e quem atendia iOS e Android tinha mantido duas integrações. O navegador já rodava modelos via WebGPU, mas poucos produtos o usaram como motor principal, porque o download inicial e a variação entre aparelhos pesaram mais que o custo de API. O mercado tinha se estratificado: IA barata e local para o comum, IA cara e remota para o difícil.
+Em 2031, a maioria dos produtos de consumo já usava o modelo embutido no sistema para tarefas curtas como resumo, revisão e busca semântica, e mandava para a nuvem o que era difícil. Cada plataforma tinha mantido API própria, e quem atendia iOS e Android tinha mantido duas integrações. O navegador já rodava modelos via WebGPU, mas poucos produtos o usaram como motor principal, porque o download inicial e a variação entre aparelhos pesaram mais que o custo de API. O mercado tinha se estratificado: IA barata e local para o comum, IA cara e remota para o difícil. **Sinal precoce:** Writer, Rewriter e Proofreader do Chrome tinham saído de developer trial para estável, e Safari e Firefox tinham ficado sem API equivalente.
 
 ### 9.2. Desejável
 
-Em 2031, um contrato comum de capacidades de IA local, semelhante ao que o WebGPU fez para a GPU, tinha permitido escrever uma integração e rodar em sistemas diferentes. Modelos ternários tinham rodado em celular de entrada, e tarefas de produtividade tinham deixado de custar por uso. O usuário tinha visto na interface onde cada tarefa rodou e tinha escolhido se um dado saía do aparelho. Para chegar aqui foram necessários padronização entre fabricantes, política pública de versão do modelo e modelos ternários abertos.
+Em 2031, um contrato comum de capacidades de IA local, semelhante ao que o WebGPU fez para a GPU, tinha permitido escrever uma integração e rodar em sistemas diferentes. Modelos ternários tinham rodado em celular de entrada, e tarefas de produtividade tinham deixado de custar por uso. O usuário tinha visto na interface onde cada tarefa rodou e tinha escolhido se um dado saía do aparelho. Para chegar aqui foram necessários padronização entre fabricantes, política pública de versão do modelo e modelos ternários abertos. **Sinal precoce:** uma proposta de API de IA embutida tinha entrado em grupo de trabalho do W3C com mais de um navegador como apoiador.
 
 ### 9.3. Indesejável
 
-Em 2031, o modelo embutido no sistema tinha virado o novo porteiro: cada fabricante decidia, por política não auditável, o que o modelo respondia, e desenvolvedores terceiros não tinham acesso às mesmas otimizações. Atualizações de modelo tinham sido usadas para forçar troca de aparelho. Sites tinham entregado IA só a quem tinha GPU recente, e a desigualdade de hardware tinha virado desigualdade de acesso. O sinal precoce desse cenário foi a restrição das APIs on-device a apps do próprio fabricante.
+Em 2031, o modelo embutido no sistema tinha virado o novo porteiro: cada fabricante decidia, por política não auditável, o que o modelo respondia, e desenvolvedores terceiros não tinham acesso às mesmas otimizações. Atualizações de modelo tinham sido usadas para forçar troca de aparelho. Sites tinham entregado IA só a quem tinha GPU recente, e a desigualdade de hardware tinha virado desigualdade de acesso. **Sinal precoce:** a restrição das APIs on-device a apps do próprio fabricante.
 
 ## 10. O experimento
 
@@ -248,6 +283,18 @@ Em 2031, o modelo embutido no sistema tinha virado o novo porteiro: cada fabrica
 **Tecnologia emergente:** inferência de LLM inteira no navegador (fonte 5), sem servidor de IA.
 
 **O que a turma faz:** cada pessoa recebe duas respostas, A e B, sem saber qual é local. Vota qual prefere e tenta dizer qual veio do aparelho. Depois a origem é revelada.
+
+**Protocolo:**
+
+1. Tarefa: reescrever em tom formal um parágrafo informal de 60 a 90 palavras.
+2. Entradas: 6 parágrafos fixos, iguais para todos, preparados antes da aula.
+3. Rota local: WebLLM no navegador do apresentador, modelo pequeno já em cache para não medir download.
+4. Rota nuvem: mesmo prompt por API de nuvem, temperatura fixa nas duas rotas.
+5. Cada par aparece como A e B, com a ordem sorteada por par; ninguém vê qual rota gerou cada texto.
+6. A turma responde, por par: qual prefere, e qual acha que veio do aparelho.
+7. Medidas: taxa de acerto da origem (acaso é 50%) e taxa de preferência pela nuvem.
+
+O que fica constante: tarefa, prompt, texto de entrada, interface, ordem sorteada. O que varia: só a origem da inferência. Latência é registrada mas não mostrada, para não vazar a origem.
 
 **O que me faria mudar de ideia:** se a turma não acertar a origem acima do acaso, isso reforça e3 e o cenário provável. Se a turma acertar e preferir a nuvem de forma consistente, a leitura adversarial da seção 7 ganha: a paridade está mais longe do que o mapa supõe, e e3.1 cai de confiança.
 
@@ -263,6 +310,9 @@ Em 2031, o modelo embutido no sistema tinha virado o novo porteiro: cada fabrica
 8. https://github.com/microsoft/BitNet. Repositório oficial bitnet.cpp, consultado em 2026-10-06: speedup e energia por arquitetura, 100B em uma CPU, NPU como trabalho futuro. Fonte primária do projeto; benchmarks do próprio autor.
 
 9. https://ai.google.dev/gemini-api/docs/rate-limits. Gemini API, consultado em 2026-10-06: limites por projeto em RPM, TPM e RPD, erro 429 e capacidade não garantida. Documentação primária; usada só como contexto maduro.
+10. https://developer.chrome.com/docs/ai/get-started. Chrome for Developers, consultado em 2026-10-07: sistemas suportados, 22 GB livres, GPU acima de 4 GB de VRAM ou CPU com 16 GB de RAM, sem suporte a celular. Documentação primária do fornecedor.
+11. https://developer.chrome.com/docs/ai/built-in-apis. Chrome for Developers, consultado em 2026-10-07: status de cada API embutida por plataforma. Documentação primária; a própria página tem datas de atualização conflitantes, por isso o status foi tratado como possivelmente desatualizado.
+12. https://developer.apple.com/tutorials/data/documentation/foundationmodels.json. Apple Developer Documentation, consultado em 2026-10-07: framework Foundation Models, plataformas a partir do iOS 26 e macOS 26. Documentação primária, lida pelo endpoint JSON porque a página HTML exige JavaScript.
 
 ## 12. Anexo — o levantamento bruto
 
@@ -291,6 +341,26 @@ Em 2031, o modelo embutido no sistema tinha virado o novo porteiro: cada fabrica
 | Chrome built-in AI | emergente | Em origin trial; base de 4.2. |
 | BitNet b1.58 e bitnet.cpp | emergente | Viabilidade demonstrada, NPU ainda ausente; base de 4.3. |
 
+### Primeira rodada, antes do adversarial (sem edição)
+
+```
+Disrupções candidatas: 4
+  R1 modelo embutido no sistema
+  R2 navegador como runtime
+  R3 inferência ternária
+  R4 IA local substitui a nuvem         -> descartada na triagem: é efeito, não raiz
+Efeitos gerados: 21
+  d1 IA local substitui a nuvem até 2031
+  d2 modelos locais têm a mesma qualidade em qualquer aparelho
+  d3 execução local garante privacidade
+  e1.1 Apple e Google censuram respostas do modelo embutido
+  e2.1.1 aparelho sem update de modelo vira obsoleto (prazo 2029)
+  e5.1.1 consumidores escolhem aparelho por tokens por watt
+  custo por uso cai a zero (sob R3)
+  ... mais 14 que sobreviveram sem mudança de texto
+Problemas: 3 descartes, 4 reservas, 3 reescritas, 1 reconexão
+```
+
 ### Rodada adversarial
 
 Resumo: 3 efeitos descartados, 4 mantidos com reserva, 3 reescritos, 1 reconectado.
@@ -302,14 +372,29 @@ Resumo: 3 efeitos descartados, 4 mantidos com reserva, 3 reescritos, 1 reconecta
 - Reescritos: e1.1 tinha "Apple e Google censuram respostas" e virou política de plataforma; e2.1.1 tinha prazo 2029 e passou a 2031 por adoção acelerada; e5.1.1 tinha "consumidores escolhem aparelho por tokens por watt" e virou métrica pública.
 - Reconectado: "custo por uso cai a zero" saiu da raiz 4.3 e foi para e3.1, porque o mecanismo é o runtime no navegador, não o formato do peso.
 
+### Log de buscas
+
+1. Releitura do teste da skill de colega no tema 16: lista de fontes candidatas (BitNet, Apple, Gemini Nano, WebLLM, limites de API).
+2. Leitura direta do README do BitNet: speedup, energia, 100B, NPU futura, linha do tempo de lançamentos.
+3. Artigo Apple ML Research: 3B, 3,7 bits por peso, 30 tok/s.
+4. Página Gemini Nano do Android: AICore, atualização, Private Compute Services.
+5. README WebLLM: WebGPU, cache, limites.
+6. Teste HTTP de 8 candidatas: 7 com 200 direto, OpenAI com 301.
+7. W3C WebGPU: status e data da versão.
+8. Chrome built-in AI, built-in APIs e get-started: modelo gerenciado, status por API, requisitos de hardware.
+9. arXiv 2402.17764: título, autores, data, afirmação de paridade.
+10. Apple Foundation Models: HTML vazio sem JavaScript; endpoint JSON com plataformas.
+
 ### Buscas sem resultado (não encontrei, o que não prova que não existe)
 
 - Não encontrei número público de quantos apps usam as APIs on-device da Apple ou do ML Kit GenAI.
 - Não encontrei benchmark independente comparando modelo on-device e modelo de nuvem na mesma tarefa de produto.
 - Não encontrei modelo ternário acima de 2B parâmetros treinado nativamente e publicado pelo autor do BitNet para uso em produto.
 - Não encontrei, na página consultada, a lista de navegadores que suportam WebLLM.
-- A documentação do framework Foundation Models da Apple renderiza por JavaScript e não pôde ser lida pelo coletor; usei o artigo de pesquisa da Apple no lugar.
+- A página HTML do framework Foundation Models da Apple renderiza por JavaScript; os dados vieram do endpoint JSON da mesma documentação (fonte 12).
 
 ### Fontes testadas e descartadas
 
 - https://platform.openai.com/docs/guides/rate-limits: HTTP 301, descartada pela regra de HTTP 200 direto.
+- https://huggingface.co/microsoft/BitNet-b1.58-2B-4T: HTTP 307, descartada; a existência do modelo 2B foi citada pelo README do BitNet (fonte 8).
+- https://developer.apple.com/documentation/foundationmodels: HTTP 200, mas sem corpo legível sem JavaScript; substituída pelo endpoint JSON (fonte 12).
