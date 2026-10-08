@@ -91,7 +91,7 @@ h1 { font-size: 72px; line-height: 1.04; font-weight: 800; letter-spacing: -.025
 /* wheel grid: one row per branch, columns are orders */
 .wg { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px 14px; margin-top: 26px; }
 .wg .h { font-family: var(--mono); font-size: 16px; color: var(--ink-3); padding-bottom: 4px; }
-.wg .c { padding: 14px 18px; font-size: 21px; line-height: 1.3; }
+.wg .c { padding: 18px 20px; font-size: 22px; line-height: 1.3; }
 .wg .c b { display: block; font-family: var(--mono); font-size: 15px; font-weight: 600; margin-bottom: 4px; }
 .wg .o1 { background: var(--red); color: #fff; }
 .wg .o2 { background: var(--red-tint); }
@@ -101,6 +101,7 @@ h1 { font-size: 72px; line-height: 1.04; font-weight: 800; letter-spacing: -.025
 .wg .stop.o1 { background: var(--ink); }
 .wg .stop.o2, .wg .stop.o3 { background: var(--paper); box-shadow: inset 0 0 0 2px var(--ink); }
 .wg .stop.o2 b, .wg .stop.o3 b { color: var(--ink); }
+.wg .rl { font-size: 22px; font-weight: 700; display: flex; align-items: center; }
 .wkey { display: flex; gap: 28px; margin-top: 16px; font-size: 16px; color: var(--ink-3); align-items: center; }
 .wkey i { display: inline-block; width: 14px; height: 14px; vertical-align: middle; margin-right: 6px; }
 
@@ -157,17 +158,6 @@ h1 { font-size: 72px; line-height: 1.04; font-weight: 800; letter-spacing: -.025
     <span>Tendências em Mídia e Interação<br>Centro de Informática, UFPE</span>
     <span class="r">meap, tema 16, 08/10/2026<br>Setas ou espaço navegam. F para tela cheia.</span>
   </div>
-</section>
-
-<!-- 2a -->
-<section class="slide inverse" data-title="Vocês já fizeram isso">
-  <div class="kicker">Antes de começar</div>
-  <h1>Essa tendência já aconteceu dentro desta disciplina</h1>
-  <div class="ex" style="margin-top:20px">
-    <div><div class="big" style="color:#fff">500</div><p class="cap" style="color:rgba(255,255,255,.8)">itens que três colegas avaliaram com um modelo rodando no próprio computador (Ollama, Qwen 27B).</p></div>
-    <div><p class="say">O motivo: a cota grátis da API acabou no meio da atividade.</p><div class="so" style="background:rgba(219,30,47,.2);color:#fff">E a ferramenta nº 1 da varredura de IA da turma foi o <b style="color:#FF6B78">bitnet.cpp</b>, de IA local.</div></div>
-  </div>
-  <div class="src">Fonte: página de temas da disciplina, tema 16, "O que a turma trouxe"</div>
 </section>
 
 <!-- 2 -->
@@ -249,29 +239,13 @@ h1 { font-size: 72px; line-height: 1.04; font-weight: 800; letter-spacing: -.025
   <div class="src"><b>microsoft/BitNet</b>, README, consultado 06/10/2026; <b>Ma et al.</b>, arXiv 2402.17764, 27/02/2024</div>
 </section>
 
-<!-- 7: wheels -->
-<section class="slide" data-title="Roda 1: sistema" data-steps="2">
-  <div class="kicker">Roda dos futuros, raiz 1</div>
-  <h1 style="font-size:52px;max-width:none">O sistema operacional vira dono do modelo</h1>
-  <div class="wg"><div class="h">1ª ordem: mais certo</div><div class="h">2ª ordem: provável</div><div class="h">3ª ordem: aposta</div><div class="c o1"><b>e1, 2027</b>A maioria dos apps troca a nuvem pelo modelo do sistema em tarefa curta.</div><div class="c o2"><b>e1.1, 2029</b>O fabricante decide, por política, o que o modelo aceita fazer.</div><div class="c o3"><b>e1.1.1, 2031</b>Reguladores tratam o modelo do sistema como a revisão da loja de apps.</div><div data-at="1" class="c o1"><b>e2, 2027</b>A atualização do modelo chega com o sistema, não por escolha do app.</div><div data-at="1" class="c o2"><b>e2.1, 2029</b>Produtos testam o comportamento do modelo a cada update do aparelho.</div><div data-at="1" class="c o3"><b>e2.1.1, 2031</b>Aparelho sem update de modelo vira obsoleto com hardware funcionando.</div><div data-at="2" class="c o1 stop"><b>e7, 2027</b>Tarefa de raciocínio longo continua indo para servidor.</div><div data-at="2" class="c o2 stop"><b>e7.1, 2029</b>Produtos avisam o que rodou no aparelho e o que foi para a nuvem.</div><div data-at="2" class="c o3 stop"><b>e7.1.1, 2031</b>A promessa de privacidade local perde força como argumento de venda.</div></div>
-  <div class="wkey"><span><i style="background:var(--red)"></i>efeito</span><span><i style="background:var(--ink)"></i>freio: o que segura a própria tendência</span></div>
-  <div class="src" style="margin-top:12px">Âncoras: <b>Android Developers, Gemini Nano</b>, 06/10/2026; <b>Apple ML Research</b>, WWDC 2024</div>
-</section>
-
-<section class="slide" data-title="Roda 2: navegador" data-steps="2">
-  <div class="kicker">Roda dos futuros, raiz 2</div>
-  <h1 style="font-size:52px;max-width:none">O navegador vira lugar de rodar IA</h1>
-  <div class="wg"><div class="h">1ª ordem: mais certo</div><div class="h">2ª ordem: provável</div><div class="h">3ª ordem: aposta</div><div class="c o1"><b>e3, 2028</b>Resumo, tradução e revisão funcionam na web sem servidor de IA.</div><div class="c o2"><b>e3.1, 2030</b>O custo por uso cai perto de zero e a cobrança por chamada perde espaço.</div><div class="c o3"><b>e3.1.1, 2031</b>A nuvem fica com o que o aparelho não roda e cobra mais caro por isso.</div><div data-at="1" class="c o1"><b>e4, 2028</b>A máquina do visitante decide qual versão do site ele recebe.</div><div data-at="1" class="c o2"><b>e4.1, 2029</b>Prever o plano B entre local, modelo menor e nuvem vira requisito.</div><div data-at="1" class="c o3"><b>e4.1.1, 2031</b>O acesso a IA na web passa a refletir a desigualdade de hardware.</div><div data-at="2" class="c o1 stop"><b>e8, 2028</b>Safari e Firefox seguem sem API igual à do Chrome.</div><div data-at="2" class="c o2 stop"><b>e8.1, 2029</b>Sites de alcance amplo continuam chamando a nuvem.</div><div data-at="2" class="c o3 stop"><b>e8.1.1, 2031</b>A web sem servidor de IA fica restrita a público técnico.</div></div>
-  <div class="wkey"><span><i style="background:var(--red)"></i>efeito</span><span><i style="background:var(--ink)"></i>freio: o que segura a própria tendência</span></div>
-  <div class="src" style="margin-top:12px">Âncoras: <b>Chrome built-in APIs</b> e <b>Get started</b>, 07/10/2026; <b>WebLLM</b>, 06/10/2026</div>
-</section>
-
-<section class="slide" data-title="Roda 3: chip" data-steps="2">
-  <div class="kicker">Roda dos futuros, raiz 3</div>
-  <h1 style="font-size:52px;max-width:none">Modelos mais leves levam a IA para hardware comum</h1>
-  <div class="wg"><div class="h">1ª ordem: mais certo</div><div class="h">2ª ordem: provável</div><div class="h">3ª ordem: aposta</div><div class="c o1"><b>e5, 2028</b>Modelos úteis rodam em CPU de notebook, sem placa de vídeo.</div><div class="c o2"><b>e5.1, 2030</b>Fabricantes vendem suporte a esses modelos no chip como diferencial.</div><div class="c o3"><b>e5.1.1, 2031</b>Velocidade por watt vira número de comparação entre aparelhos.</div><div data-at="1" class="c o1"><b>e6, 2029</b>Agentes pessoais usam e-mail, agenda e arquivos sem tirar dado do aparelho.</div><div data-at="1" class="c o2"><b>e6.1, 2030</b>A IA ajustada aos seus dados vira bem que precisa de backup.</div><div data-at="1" class="c o3"><b>e6.1.1, 2031</b>Tribunais discutem herança e apreensão de modelos pessoais.</div><div data-at="2" class="c o1 stop"><b>e9, 2028</b>Celular de entrada vendido no Brasil segue sem memória para o modelo.</div><div data-at="2" class="c o2 stop"><b>e9.1, 2030</b>A IA local chega primeiro a quem compra aparelho caro.</div><div data-at="2" class="c o3 stop"><b>e9.1.1, 2031</b>O acesso à IA passa a acompanhar a faixa de preço do aparelho.</div></div>
-  <div class="wkey"><span><i style="background:var(--red)"></i>efeito</span><span><i style="background:var(--ink)"></i>freio: o que segura a própria tendência</span></div>
-  <div class="src" style="margin-top:12px">Âncoras: <b>microsoft/BitNet</b>, 06/10/2026; <b>Apple Foundation Models</b>, 07/10/2026; e9 sem fonte de vendas no Brasil</div>
+<!-- 7: wheel -->
+<section class="slide" data-title="Roda dos futuros" data-steps="2">
+  <div class="kicker">Roda dos futuros</div>
+  <h1 style="font-size:56px;max-width:none">Uma coisa puxa a outra</h1>
+  <div class="wg" style="grid-template-columns:170px 1fr 1fr 1fr"><div></div><div class="h">1ª ordem: mais certo</div><div class="h">2ª ordem: provável</div><div class="h">3ª ordem: aposta</div><div class="rl">No sistema</div><div class="c o1"><b>e1, 2027</b>A maioria dos apps troca a nuvem pelo modelo do sistema em tarefa curta.</div><div data-at="1" class="c o2"><b>e1.1, 2029</b>O fabricante decide, por política, o que o modelo aceita fazer.</div><div data-at="2" class="c o3"><b>e1.1.1, 2031</b>Reguladores tratam o modelo do sistema como a revisão da loja de apps.</div><div class="rl">No navegador</div><div class="c o1"><b>e3, 2028</b>Resumo, tradução e revisão funcionam na web sem servidor de IA.</div><div data-at="1" class="c o2"><b>e3.1, 2030</b>O custo por uso cai perto de zero e a cobrança por chamada perde espaço.</div><div data-at="2" class="c o3"><b>e3.1.1, 2031</b>A nuvem fica com o que o aparelho não roda e cobra mais caro por isso.</div><div class="rl">No chip</div><div class="c o1"><b>e6, 2029</b>Agentes pessoais usam e-mail, agenda e arquivos sem tirar dado do aparelho.</div><div data-at="1" class="c o2"><b>e6.1, 2030</b>A IA ajustada aos seus dados vira bem que precisa de backup.</div><div data-at="2" class="c o3"><b>e6.1.1, 2031</b>Tribunais discutem herança e apreensão de modelos pessoais.</div></div>
+  <p class="lead" style="margin-top:28px;font-size:28px" data-at="2">A parte técnica é a mais certa. A dúvida de verdade é <b>quem manda</b>.</p>
+  <div class="src" style="margin-top:22px">Âncoras: <b>Android Developers, Gemini Nano</b>, 06/10/2026; <b>Chrome built-in APIs</b>, 07/10/2026; <b>Apple Foundation Models</b>, 07/10/2026. Roda completa, com 27 efeitos e freios, no documento.</div>
 </section>
 
 <!-- 8 -->
