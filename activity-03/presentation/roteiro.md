@@ -1,265 +1,396 @@
 # Roteiro da apresentação: IA local em 2031
 
-Como usar: cada slide tem **Fale**, que é o texto para ler em voz alta, e **Contexto**, que é para estudar antes e responder perguntas. `[clique]` marca onde avançar. A meta é falar uns 15 minutos e deixar o resto para discussão.
+O roteiro tem quatro partes:
 
-| Bloco | Slides | Tempo |
+1. **A história em um minuto:** o fio condutor. Se você esquecer tudo, lembre disto.
+2. **Conceitos que sustentam o argumento:** os termos que provavelmente você não conhece e que aparecem nas perguntas. Leia com calma antes.
+3. **O roteiro, slide a slide:** o que falar, já com a ponte para o slide seguinte.
+4. **Perguntas difíceis:** respostas prontas para o professor.
+
+---
+
+# Parte 1: A história em um minuto
+
+A apresentação inteira responde a uma pergunta só:
+
+> **Quando a IA sai da nuvem e passa a rodar no seu aparelho, quem passa a mandar nela?**
+
+A história anda em quatro atos, e cada slide é um passo:
+
+1. **O que está mudando (slides 1 a 3).** Hoje a IA séria roda no servidor de uma empresa, e você paga por uso. O celular já tem uma IA pequena, mas o que vem é IA de verdade rodando no aparelho, em três lugares: no sistema, no navegador e no chip.
+2. **A prova de que já começou (slides 4 a 7).** Não é palpite: Apple, Google e Microsoft já publicaram números. Mostro esses números, a linha do tempo e as três mudanças.
+3. **O que vem depois (slides 8 a 12).** Para cada mudança, sigo a cadeia de consequências até 2031. Quanto mais longe, mais a pergunta deixa de ser técnica e vira de poder: o fabricante decide o que a IA faz, o governo entra, e quem tem celular barato fica de fora.
+4. **Testando o próprio mapa (slides 13 a 15).** Mostro onde posso estar errado, três futuros possíveis e um experimento real que, inclusive, enfraquece parte do mapa.
+
+E fecho com duas perguntas para a turma (slides 16 a 18).
+
+A frase para guardar: **"a parte técnica é a mais certa; a dúvida de verdade é quem manda."**
+
+---
+
+# Parte 2: Conceitos que sustentam o argumento
+
+Estes são os pontos em que alguém pode te perguntar "mas o que é isso?". Cada um explica o conceito e diz **por que ele importa para o seu argumento**.
+
+## 2.1. Treinar e rodar um modelo são coisas diferentes
+
+Um modelo de linguagem é, na prática, um arquivo enorme cheio de números, chamados **parâmetros** ou **pesos**. Esses números foram ajustados olhando trilhões de pedaços de texto, até o modelo aprender a prever a próxima palavra.
+
+Existem dois momentos bem diferentes:
+
+- **Treinar** é ajustar esses números. Custa milhões, usa milhares de placas de vídeo e acontece uma vez, nos servidores da empresa.
+- **Rodar**, também chamado de **inferência**, é usar o modelo pronto: você manda um texto e ele calcula a resposta.
+
+**Por que importa:** "IA local" é só sobre **rodar** no aparelho. Ninguém está treinando modelo no celular. O modelo é treinado na empresa e depois baixado. Se alguém confundir as duas coisas, corrija.
+
+## 2.2. Por que é difícil o modelo caber no celular
+
+O tamanho de um modelo é contado em parâmetros: "3B" quer dizer 3 bilhões de números. Cada número ocupa espaço, e o padrão é 16 bits (2 bytes) por número.
+
+Conta aproximada: 3 bilhões de números × 2 bytes = **cerca de 6 GB**. O modelo inteiro precisa caber na memória RAM, e a cada palavra gerada o aparelho precisa ler praticamente todos esses números de novo.
+
+Por isso o gargalo de IA no aparelho é **memória**, não só processador. Um celular com 6 GB de RAM não consegue dedicar 6 GB a um modelo.
+
+**Por que importa:** é isso que explica o slide 10 (o Chrome pede 16 GB de RAM ou placa de vídeo) e o freio e9 (celular barato vendido no Brasil não tem memória). A desigualdade de acesso nasce daqui.
+
+## 2.3. Quantização: guardar os números com menos precisão
+
+Quantizar é guardar cada número com menos bits. Em vez de 16 bits, usar 8, 4, ou menos. O modelo fica menor e mais rápido, e perde um pouco de qualidade.
+
+Exemplo real: a Apple comprimiu o modelo dela para uma média de **3,7 bits por número**. Pela mesma conta do item anterior, isso leva de cerca de 6 GB para cerca de 1,4 GB.
+
+Outro exemplo real: o modelo que rodou no meu notebook para o experimento (Qwen2.5 com 1,5 bilhão de parâmetros, em 4 bits) é um arquivo de **1,1 GB**.
+
+**Por que importa:** quantização comum (8 ou 16 bits) já é técnica madura e fica fora do mapa como contexto. O que é novo é o próximo item.
+
+## 2.4. Pesos ternários (BitNet): o salto do chip
+
+A Microsoft propôs um modelo em que cada número só pode valer **-1, 0 ou 1**. Isso se chama **ternário**.
+
+Duas coisas tornam isso diferente de só "comprimir mais":
+
+- **A conta fica muito mais barata.** Multiplicar por -1, 0 ou 1 é o mesmo que subtrair, ignorar ou somar. Processador comum faz isso rápido, sem precisar de placa de vídeo.
+- **O modelo é treinado assim desde o começo.** Não é um modelo normal espremido depois. Por isso o paper (Ma et al., arXiv, 27/02/2024) afirma que ele empata em qualidade com um modelo normal do mesmo tamanho, treinado com a mesma quantidade de dados.
+
+O nome "1,58 bit" vem da matemática: para guardar um de três valores possíveis, você precisa de cerca de 1,58 bit (log de 3 na base 2).
+
+**Por que importa:** é a base da terceira disrupção. Se modelo bom roda em CPU comum, IA deixa de exigir hardware caro. Mas os ganhos de velocidade (até 6,17x) e energia (até 82% menos) foram medidos pelo próprio autor, e por isso o efeito e5 tem confiança média, não alta.
+
+## 2.5. Token e tokens por segundo
+
+O modelo não lê palavra por palavra. Ele lê e escreve **tokens**, que são pedaços de palavra. "Apresentação" pode virar dois ou três tokens.
+
+**Tokens por segundo** é a velocidade de escrita do modelo. O README do BitNet diz que 5 a 7 tokens por segundo é comparável à velocidade de leitura humana. Então os **30 tokens por segundo** do modelo da Apple no iPhone 15 Pro são várias vezes mais rápidos do que alguém consegue ler.
+
+**Por que importa:** mostra que velocidade não é mais o problema no celular. O problema passou a ser qualidade e memória.
+
+## 2.6. API, nuvem e o modelo de cobrança
+
+Uma **API** é a porta pela qual um programa pede algo para outro. Quando um app usa IA da nuvem, ele manda o texto para a API da empresa (OpenAI, Google, Anthropic) e recebe a resposta.
+
+Isso tem três consequências:
+
+- **Custo por uso:** a empresa cobra por token, a cada chamada.
+- **Limite:** a API do Google, por exemplo, limita pedidos por minuto (RPM), tokens por minuto (TPM) e pedidos por dia (RPD). Se passar, devolve o erro `429 RESOURCE_EXHAUSTED`. A documentação diz que a capacidade "pode variar".
+- **Dependência:** se a empresa muda o preço ou desliga, o app para.
+
+**Por que importa:** IA local muda a economia. O custo deixa de ser "por chamada" e passa a ser do aparelho do usuário (bateria, memória). É daí que vem o efeito e3.1 (cobrança por chamada perde espaço) e a pergunta 2 da turma (você pagaria assinatura?).
+
+## 2.7. O sistema operacional como intermediário
+
+Hoje, um app que quer IA escolhe o modelo, paga a API e decide a versão.
+
+O que Apple e Google estão fazendo é diferente. Eles colocam o modelo **dentro do sistema** e o app só pede: "resume este texto". É como a câmera: o app não traz câmera própria, ele pede ao sistema.
+
+- No **Android**, o modelo é o **Gemini Nano**, que fica num serviço do sistema chamado **AICore**. Segundo a documentação, o AICore gerencia a execução, a segurança e as **atualizações** do modelo. O app nem baixa o modelo.
+- No **iPhone**, o framework **Foundation Models** (iOS 26 em diante) deixa apps usarem o modelo do aparelho para entender texto, gerar saída estruturada e chamar funções.
+- O pesado continua indo para servidor. A Apple tem o **Private Cloud Compute**, um servidor próprio para o que o aparelho não aguenta.
+
+**Por que importa:** esse é o centro do argumento de poder. Se o sistema atualiza o modelo, **o fabricante decide** como a IA se comporta em todos os apps. O desenvolvedor perde controle. É o que gera e1.1 (o fabricante decide o que a IA aceita fazer) e e2.1.1 (celular sem update de modelo vira obsoleto).
+
+## 2.8. CPU, GPU e NPU
+
+- **CPU** é o processador comum. Faz qualquer conta, mas uma de cada vez (ou poucas).
+- **GPU** é a placa de vídeo. Faz milhares de contas simples ao mesmo tempo, que é exatamente o que um modelo de IA precisa.
+- **NPU** é um chip dedicado só a IA, presente em celulares e notebooks novos. Gasta menos energia que a GPU.
+
+**Por que importa:** o BitNet roda em CPU e GPU, e a própria Microsoft diz que suporte a NPU é "o próximo passo". Esse é o "o que falta" da terceira disrupção.
+
+## 2.9. WebGPU e IA no navegador
+
+Até pouco tempo, um site só conseguia fazer contas pesadas no processador, via JavaScript. Lento demais para IA.
+
+**WebGPU** é uma API do navegador que deixa o site usar a **placa de vídeo** do visitante. É um padrão do W3C, o órgão que define os padrões da web, e está como **Candidate Recommendation Draft** (rascunho avançado, ainda não final), em versão de 15/09/2026.
+
+Existem dois jeitos de ter IA no navegador:
+
+- **O site traz o modelo:** o **WebLLM** baixa o modelo na primeira visita, guarda no navegador (cache) e roda tudo na aba, sem servidor.
+- **O navegador traz o modelo:** o **Chrome** já vem com o Gemini Nano e oferece APIs prontas. Summarizer, Translator e Language Detector estão estáveis desde o Chrome 138. Writer, Rewriter e Proofreader ainda estão em teste. O próprio Chrome cuida do download, da atualização e da remoção do modelo.
+
+**Por que importa:** é a segunda disrupção. Mas o Chrome exige máquina boa e não roda em celular, e Safari e Firefox não têm API igual. Isso gera o e4 (a máquina do visitante decide a versão do site) e o freio e8.
+
+## 2.10. O método: roda dos futuros
+
+A **roda dos futuros** é um método de Jerome Glenn, de 1972. Você parte de uma mudança central, a **disrupção-raiz**, e pergunta em cadeia: "e então, o que acontece?".
+
+- **1ª ordem:** consequência direta da mudança. Mais certa.
+- **2ª ordem:** consequência da consequência. Muda um mercado ou um comportamento.
+- **3ª ordem:** consequência da 2ª. Muda instituições, leis, valores. É uma aposta.
+
+Cada efeito ganha um nome: **e1** é de 1ª ordem, **e1.1** é a consequência do e1, **e1.1.1** é a seguinte.
+
+Três ideias complementam o método:
+
+- **Maduro, emergente e disruptivo:** maduro é o que já é comum e fica como contexto. Emergente funciona mas não se espalhou. Disruptivo quebra um jeito de fazer as coisas. Só disruptivo vira raiz.
+- **Freio:** um efeito que segura a própria tendência. Sem freio, a roda só anda para um lado e vira propaganda.
+- **Falsificador:** um fato concreto que, se acontecer, prova que a previsão estava errada. É o que separa previsão de opinião.
+
+**Por que importa:** o professor avalia se você usou o método direito. Saber explicar ordem, freio e falsificador em uma frase cada já te protege.
+
+---
+
+# Parte 3: O roteiro, slide a slide
+
+`[clique]` marca onde avançar. **Ponte** é a frase que liga ao slide seguinte: é ela que dá continuidade.
+
+| Ato | Slides | Tempo |
 |---|---|---|
-| Abertura | 1 a 3 | 2 min |
-| Onde estamos hoje | 4 a 7 | 3 min |
-| As três rodas | 8 a 11 | 5 min |
-| Padrão, erros e cenários | 12 a 14 | 3 min |
-| Experimento e discussão | 15 a 18 | 2 min, depois a turma |
+| O que está mudando | 1 a 3 | 2 min |
+| A prova de que já começou | 4 a 7 | 3 min |
+| O que vem depois | 8 a 12 | 5 min |
+| Testando o próprio mapa | 13 a 15 | 4 min |
+| Fechamento | 16 a 18 | 1 min, depois a turma |
 
----
+## Ato 1: O que está mudando
 
-## Slide 1: Capa
+### Slide 1: Capa
 
-**Fale:**
-"Meu tema é IA local: a IA rodando no próprio aparelho, sem depender da nuvem. A frase que resume tudo é esta: a IA está mudando de endereço, da nuvem para o seu bolso. O que eu quero discutir com vocês não é só se isso é possível. É o que muda quando acontece, e principalmente quem passa a mandar nessa IA."
+"Meu tema é IA local. A frase que resume é esta: a IA está mudando de endereço, da nuvem para o seu bolso.
 
-**Contexto:**
-- "Nuvem" é o servidor de uma empresa. Quando você usa o ChatGPT, o seu texto vai para o servidor, ele calcula a resposta e devolve.
-- "Local" é quando esse cálculo acontece no seu aparelho.
-- A pilha à direita mostra os quatro lugares onde a IA pode rodar: nuvem, sistema, navegador e chip. Hoje o pesado está na nuvem.
+Hoje, quando vocês usam o ChatGPT, o texto de vocês vai para o servidor de uma empresa, o modelo calcula lá e a resposta volta. Vocês, ou a empresa do app, pagam por isso. O que eu vou mostrar é esse cálculo vindo para dentro do aparelho de vocês. E a pergunta que eu quero discutir não é se dá para fazer. É quem manda nessa IA quando ela chega."
 
----
+**Ponte:** "Mas antes, um aviso: isso já começou."
 
-## Slide 2: Seu celular já tem IA (3 cliques)
+### Slide 2: Seu celular já tem IA (3 cliques)
 
-**Fale:**
-"Um aviso antes: o celular de vocês já tem IA. Quando o iPhone resume uma notificação ou o Android corrige um texto, isso roda no aparelho. Mas é IA pequena, do fabricante, para tarefa simples. O pesado ainda vai para servidor, e até a Apple faz isso.
-[clique] A primeira mudança é no sistema: o modelo de fábrica deixa de ser só do fabricante e vira um serviço que qualquer app pode usar. E quem atualiza é o sistema, não o app.
-[clique] A segunda é no navegador: um site baixa o modelo e roda na placa de vídeo de quem está visitando, sem servidor.
-[clique] A terceira é no chip: um jeito novo de montar o modelo faz ele caber num processador comum."
+"O celular de vocês já tem IA. Quando o iPhone resume uma notificação, isso roda no aparelho. Mas é uma IA pequena, do fabricante, para tarefa simples. Quando a tarefa é pesada, até a Apple manda para um servidor dela.
 
-**Contexto:**
-- A Apple usa dois modelos: um de cerca de 3 bilhões de parâmetros no aparelho e um maior num servidor dela, chamado Private Cloud Compute (Apple ML Research, WWDC 2024).
-- "Modelo" é um arquivo com bilhões de números, os parâmetros, que aprendeu padrões de texto. "3B" quer dizer 3 bilhões.
-- No Android, o modelo se chama Gemini Nano e fica dentro de um serviço do sistema chamado AICore.
+Então a pergunta não é se vai ter IA no celular. É até onde ela vai. E ela está avançando em três lugares.
 
----
+[clique] Primeiro, no sistema: o modelo que vem de fábrica deixa de ser só do fabricante e vira um serviço que qualquer app pode pedir, como pede a câmera. E quem atualiza esse modelo é o sistema, não o app.
 
-## Slide 3: O mapa ignora o que já é comum
+[clique] Segundo, no navegador: um site baixa o modelo e roda na placa de vídeo de quem está visitando, sem servidor nenhum.
 
-**Fale:**
-"Antes de prever qualquer coisa, eu filtrei o que já é comum, porque coisa madura não é tendência. Chamar API de nuvem, rodar modelo em servidor próprio, compactar modelo e até o modelo pequeno do fabricante: tudo isso já existe e fica como contexto. No meio está o emergente, que funciona mas ainda não se espalhou. À direita está o que rompe de fato: o modelo do sistema aberto a qualquer app, e IA capaz de agir, ouvir e ver rodando no aparelho. O teste que usei foi este: se eu não consigo dizer o que a tecnologia quebra hoje, ela é madura."
+[clique] Terceiro, no chip: um jeito novo de montar o modelo faz ele caber num processador comum, sem placa de vídeo."
 
-**Contexto:**
-- Quantização INT8 e FP16: guardar os números do modelo com menos precisão para ocupar menos memória. FP16 usa 16 bits por número; INT8 usa 8.
-- Self-hosting: a empresa roda o modelo no próprio servidor em vez de pagar uma API.
-- Agente: IA que executa ações, como marcar reunião ou mandar e-mail, em vez de só responder.
-- CRD (Candidate Recommendation Draft): rascunho avançado de um padrão no W3C, o órgão que define os padrões da web.
+**Ponte:** "Antes de dizer o que vem daí, eu precisei separar o que é novidade do que já é comum."
 
----
+### Slide 3: O mapa ignora o que já é comum
 
-## Slide 4: Os números já são do fabricante
+"Tendência não é o que já existe. Então eu tirei do mapa tudo que é maduro: chamar API de nuvem, rodar modelo em servidor próprio, compactar modelo do jeito tradicional e até o modelo pequeno que o fabricante usa para resumo. Tudo isso fica como contexto.
 
-**Fale:**
-"Três números, todos do próprio fabricante. Trinta tokens por segundo é a velocidade do modelo da Apple dentro do iPhone 15 Pro. Dois bilhões é o tamanho do modelo oficial da Microsoft com pesos que só valem menos um, zero ou um, e que roda em CPU comum. E zero é quantos servidores de IA o WebLLM precisa: o modelo roda inteiro na aba do navegador.
-Embaixo está o contraste: a API do Google limita pedidos por minuto e por dia e avisa que a capacidade pode variar. É esse custo e essa instabilidade que a IA local promete tirar."
+O que entra como raiz é o que quebra algo agora: o modelo do sistema aberto para qualquer app, e IA capaz de agir, ouvir e ver rodando no aparelho.
 
-**Contexto:**
-- Token é um pedaço de palavra, geralmente menor que uma palavra inteira.
-- O modelo da Apple foi comprimido para uma média de 3,7 bits por número.
-- O modelo BitNet de 2B foi treinado com 4 trilhões de tokens e lançado em abril de 2025.
-- WebLLM: no primeiro acesso, o site baixa o modelo; depois ele fica guardado no navegador (cache).
-- `429 RESOURCE_EXHAUSTED` é o erro de "recurso esgotado", quando você passa do limite. RPM, TPM e RPD são pedidos por minuto, tokens por minuto e pedidos por dia.
+O teste que usei: se eu não consigo dizer o que a tecnologia quebra hoje, ela é madura."
 
----
+**Ponte:** "E não estou chutando. Os números que sustentam isso são dos próprios fabricantes."
 
-## Slide 5: Pesos ternários aceleram até 6 vezes
+## Ato 2: A prova de que já começou
 
-**Fale:**
-"Esse gráfico é da terceira mudança, o chip. O bitnet.cpp, programa da Microsoft para rodar esses modelos, fica de 1,4 a 5 vezes mais rápido em processador ARM, que é o tipo usado em celular, e de 2,4 a 6 vezes em processador x86, o de PC. E corta de 55% a 82% do consumo de energia. Mas atenção: esses números são do próprio autor. Por isso eu não dei confiança alta para o efeito que depende deles."
+### Slide 4: Os números já são do fabricante
 
-**Contexto:**
-- Por que acelera: multiplicar por -1, 0 ou 1 vira somar, subtrair ou pular. É uma conta muito mais barata que multiplicar números quebrados.
-- "1,58 bit": com três valores possíveis, cada número precisa de cerca de 1,58 bit (é o logaritmo de 3 na base 2).
-- O paper que lançou a ideia (Ma et al., arXiv, 27/02/2024) diz que esse modelo empata com um modelo normal do mesmo tamanho, treinado com a mesma quantidade de dados.
-- A parte clara de cada barra é o mínimo medido, e a parte forte vai até o máximo.
+"Três números.
 
----
+Trinta tokens por segundo: é a velocidade do modelo da Apple, com 3 bilhões de parâmetros, dentro de um iPhone 15 Pro. É mais rápido do que alguém consegue ler. Velocidade já não é o problema.
 
-## Slide 6: Linha do tempo
+Dois bilhões: é o modelo oficial da Microsoft em que cada número só vale menos um, zero ou um. Ele roda em processador comum.
 
-**Fale:**
-"Na faixa de cima está só o que tem fonte: o paper de 2024, a Apple descrevendo o modelo no aparelho, o lançamento do bitnet.cpp, o suporte a placa de vídeo, a otimização de CPU deste ano e a nova versão do WebGPU em setembro. Na faixa de baixo, tracejada, está o que eu projetei: 2027 para os primeiros efeitos e 2031 para os mais distantes. A separação é de propósito: em cima é fato, embaixo é aposta minha."
+Zero: é quantos servidores de IA o WebLLM precisa. O modelo roda inteiro na aba do navegador.
 
-**Contexto:**
-- Datas: paper em 02/2024; Apple em 06/2024; bitnet.cpp 1.0 em 10/2024; suporte a GPU em 05/2025; otimização de CPU em 01/2026; nova versão do WebGPU no W3C em 15/09/2026.
-- O espaçamento entre os pontos não é proporcional ao tempo. O slide avisa isso.
+Embaixo está o contraste: a API do Google limita quantos pedidos você faz por minuto e por dia, e avisa que a capacidade pode variar. É esse custo e essa dependência que a IA local promete tirar."
 
----
+**Ponte:** "Desses três, o número do chip é o que mais surpreende. Vale olhar mais de perto."
 
-## Slide 7: A mesma descida, em três camadas
+### Slide 5: Pesos ternários aceleram até 6 vezes
 
-**Fale:**
-"Juntando tudo, são três disrupções-raiz: a mesma descida, em três camadas.
-No sistema, rompe a ideia de que cada app escolhe e paga o próprio modelo. O Android já faz o sistema cuidar disso. Falta um padrão comum entre Apple e Google.
-No navegador, rompe a necessidade de servidor. O Chrome já tem resumo e tradução estáveis. Falta Safari, Firefox e celular.
-No chip, rompe a necessidade de placa de vídeo. O modelo e o programa já existem. Falta suporte nos chips de IA, que a própria Microsoft diz que vem depois."
+"Quando cada número do modelo só vale menos um, zero ou um, multiplicar vira somar, subtrair ou ignorar. É uma conta muito mais barata.
 
-**Contexto:**
-- Disrupção-raiz é a mudança central da qual saem as consequências.
-- O slide segue o formato "rompe, agora, falta": o que quebra, por que acontece agora e o que ainda falta.
-- NPU é o chip dedicado a IA dentro de celulares e notebooks novos.
-- No Chrome 138, Summarizer, Translator e Language Detector ficaram estáveis. Writer, Rewriter e Proofreader ainda estão em teste.
+O resultado, segundo a Microsoft: de 1,4 a 5 vezes mais rápido em processador de celular, de 2,4 a 6 vezes em processador de PC, e de 55% a 82% menos energia.
 
----
+Mas atenção: quem mediu foi o próprio autor. Por isso eu não dei confiança alta para o efeito que depende desses números."
 
-## Slide 8: Roda 1, o sistema (3 cliques)
+**Ponte:** "Juntando os três lugares, dá para ver que isso não aconteceu de repente."
 
-**Fale:**
-"Agora a roda dos futuros. Cada efeito tem um nome: e1 é a consequência direta, e1.1 é a consequência dela, e1.1.1 é a seguinte. Quanto mais longe do centro, menos certeza.
-[clique] Primeira ordem: a maioria dos apps troca a nuvem pelo modelo do sistema em tarefa curta, e a atualização do modelo passa a vir com o sistema, não com o app.
-[clique] Segunda ordem: o fabricante decide por política o que a IA aceita fazer, e os apps precisam testar tudo de novo a cada update do celular.
-[clique] Terceira ordem: governos passam a tratar esse modelo como tratam a loja de apps, e um celular sem update de modelo vira velho mesmo com o hardware funcionando.
-Em preto está o freio, o e7: tarefa de raciocínio longo continua indo para servidor, e os produtos passam a avisar o que rodou onde."
+### Slide 6: Linha do tempo
 
-**Contexto:**
-- Âncora: a documentação do Android diz que o AICore "gerencia atualizações e segurança do modelo".
-- Freio é um efeito que segura a própria tendência. Ele existe para a roda não ser só otimista.
+"Em cima, só o que tem fonte: o paper do modelo ternário em fevereiro de 2024, a Apple descrevendo o modelo no aparelho em junho, o programa da Microsoft em outubro, o suporte a placa de vídeo em 2025, e a nova versão do padrão WebGPU no mês passado.
 
----
+Embaixo, tracejado, o que eu projetei: os primeiros efeitos em 2027 e os mais distantes em 2031.
 
-## Slide 9: Roda 2, o navegador (3 cliques)
+A separação é de propósito: em cima é fato, embaixo é aposta minha."
 
-**Fale:**
-"[clique] Primeira ordem: resumo, tradução e revisão funcionam na web sem servidor de IA, e a placa de vídeo de quem visita decide qual versão do site ela recebe.
-[clique] Segunda ordem: o custo por uso cai para perto de zero, e prever um plano B entre modelo local, modelo menor e nuvem vira requisito de produto.
-[clique] Terceira ordem: a nuvem fica com o que o aparelho não roda e cobra mais caro por isso, e o acesso a IA na web passa a refletir quem tem máquina boa.
-Freio, o e8: Safari e Firefox não têm API igual à do Chrome, então site que quer alcançar todo mundo continua na nuvem."
+**Ponte:** "A partir daqui, eu organizo o mapa nessas três mudanças."
 
-**Contexto:**
-- Back-end é o servidor do site.
-- API é o jeito de um programa pedir algo a outro programa.
+### Slide 7: A mesma descida, em três camadas
 
----
+"São três disrupções-raiz. É a mesma descida da nuvem, em três camadas.
 
-## Slide 10: O Chrome não roda em qualquer máquina
+No sistema, quebra a ideia de que cada app escolhe e paga o próprio modelo. O Android já faz o sistema cuidar do modelo. Falta um padrão comum entre Apple e Google.
 
-**Fale:**
-"Esse slide explica por que existe o e4. Para rodar o modelo embutido do Chrome, você precisa de 22 GB livres no disco, placa de vídeo com mais de 4 GB ou então 16 GB de RAM, e Windows, Mac ou Linux. Em celular, ainda não roda. E se o espaço livre cair abaixo de 10 GB, o Chrome apaga o modelo sozinho. Ou seja: hoje, IA local é coisa de máquina nova."
+No navegador, quebra a necessidade de servidor. O Chrome já tem resumo e tradução estáveis. Falta Safari, Firefox e celular.
 
-**Contexto:**
-- VRAM é a memória da placa de vídeo.
-- O Chromebook Plus também é suportado.
-- Fonte: Chrome for Developers, página "Get started with built-in AI", consultada em 07/10/2026.
+No chip, quebra a necessidade de placa de vídeo. O modelo e o programa já existem. Falta suporte nos chips de IA dos celulares, que a própria Microsoft diz que vem depois."
 
----
+**Ponte:** "Agora a parte central: o que acontece depois de cada uma dessas mudanças."
 
-## Slide 11: Roda 3, o chip (3 cliques)
+## Ato 3: O que vem depois
 
-**Fale:**
-"[clique] Primeira ordem: modelos úteis rodam em CPU de notebook, sem placa de vídeo, e agentes pessoais passam a mexer no seu e-mail, agenda e arquivos sem tirar nada do aparelho.
-[clique] Segunda ordem: fabricantes de chip vendem suporte a esses modelos como diferencial, e a IA ajustada aos seus dados vira um bem que precisa de backup.
-[clique] Terceira ordem: velocidade por watt vira número de comparação entre aparelhos, e tribunais discutem se esse modelo pessoal pode ser herdado ou apreendido.
-Freio, o e9, que é o do Brasil: celular de entrada vendido aqui não tem memória para isso, então a IA local chega primeiro a quem compra aparelho caro. Para esse eu não tenho fonte de vendas, e deixo isso claro."
+### Slide 8: Roda 1, o sistema (3 cliques)
 
-**Contexto:**
-- A Apple diz que o modelo dela no aparelho faz "tool calling", que é chamar funções de outros programas. É o primeiro degrau de um agente.
-- Watt é a unidade de potência. "Velocidade por watt" mede quanto o aparelho entrega para cada unidade de energia gasta.
+"Para cada mudança eu fiz uma roda dos futuros. Funciona em cadeia: e1 é a consequência direta, e1.1 é a consequência dela, e1.1.1 é a seguinte. Quanto mais longe do centro, menos certeza.
 
----
+[clique] Primeira ordem: a maioria dos apps troca a nuvem pelo modelo do sistema em tarefa curta. E a atualização do modelo passa a vir com o sistema, não com o app.
 
-## Slide 12: Quanto mais longe, mais vira poder
+[clique] Segunda ordem: se o sistema controla o modelo, o fabricante decide por política o que a IA aceita fazer. E os apps precisam testar tudo de novo a cada update do celular.
 
-**Fale:**
-"Olhando as três rodas juntas, aparece um padrão. A primeira ordem é arquitetura: onde o modelo mora, quem distribui, quem atualiza. É a parte mais certa. A segunda é produto e mercado: política do fabricante, custo, testes. A terceira é governança: regulação, obsolescência, herança. Ou seja, a parte tecnicamente previsível é justamente a politicamente aberta. A dúvida de verdade não é se dá para rodar IA no celular. É quem manda nela."
+[clique] Terceira ordem: governos passam a fiscalizar esse modelo como fiscalizam a loja de apps. E um celular que deixa de receber update de modelo vira velho, mesmo com o hardware funcionando.
 
----
+Em preto está o freio, o e7: o que segura essa tendência. Tarefa de raciocínio longo continua indo para servidor, e os produtos passam a avisar o que rodou onde."
 
-## Slide 13: Onde eu posso estar errado
+**Ponte:** "No navegador, a cadeia leva para outro lugar: dinheiro e acesso."
 
-**Fale:**
-"Agora, onde eu posso estar errado. São três fatos que, se acontecerem, derrubam pedaços do mapa.
+### Slide 9: Roda 2, o navegador (3 cliques)
+
+"[clique] Primeira ordem: resumo, tradução e revisão funcionam na web sem servidor de IA. E a placa de vídeo de quem visita decide qual versão do site essa pessoa recebe.
+
+[clique] Segunda ordem: o custo por uso cai para perto de zero, e a cobrança por chamada perde espaço. E prever um plano B, entre modelo local, modelo menor e nuvem, vira requisito de todo produto.
+
+[clique] Terceira ordem: a nuvem fica só com o que o aparelho não roda, e cobra mais caro por isso. E o acesso a IA na web passa a depender de quem tem máquina boa.
+
+O freio, o e8: Safari e Firefox não têm API igual à do Chrome. Então site que quer alcançar todo mundo continua na nuvem."
+
+**Ponte:** "Esse ponto de quem tem máquina boa não é teoria. Olhem o que o Chrome exige hoje."
+
+### Slide 10: O Chrome não roda em qualquer máquina
+
+"Para rodar o modelo que vem dentro do Chrome, você precisa de 22 GB livres no disco, placa de vídeo com mais de 4 GB ou então 16 GB de RAM, e Windows, Mac ou Linux. Em celular, ainda não roda. E se o espaço livre cair abaixo de 10 GB, o Chrome apaga o modelo sozinho.
+
+O motivo é memória: o modelo inteiro precisa caber na RAM. Hoje, IA local é coisa de máquina nova. É daí que vem o efeito e4."
+
+**Ponte:** "E a terceira roda, a do chip, é justamente a que tenta resolver esse problema de hardware."
+
+### Slide 11: Roda 3, o chip (3 cliques)
+
+"[clique] Primeira ordem: modelos úteis rodam em processador de notebook, sem placa de vídeo. E agentes pessoais passam a mexer no seu e-mail, agenda e arquivos sem que nada saia do aparelho.
+
+[clique] Segunda ordem: fabricantes de chip vendem suporte a esses modelos como diferencial. E a IA que aprendeu com os seus dados vira um bem que precisa de backup.
+
+[clique] Terceira ordem: velocidade por watt vira número de comparação entre aparelhos, como hoje é a câmera. E tribunais discutem se esse modelo pessoal pode ser herdado ou apreendido.
+
+O freio, o e9, é o do Brasil: celular de entrada vendido aqui não tem memória para isso. Então a IA local chega primeiro a quem compra aparelho caro. Para esse eu não achei fonte de vendas, e o documento diz isso."
+
+**Ponte:** "Olhando as três rodas juntas, aparece um padrão."
+
+### Slide 12: Quanto mais longe, mais vira poder
+
+"Na primeira ordem, tudo é arquitetura: onde o modelo mora, quem distribui, quem atualiza. É a parte mais certa.
+
+Na segunda, é produto e mercado: política do fabricante, custo, testes.
+
+Na terceira, é governança: regulação, obsolescência, herança.
+
+Ou seja: o que é tecnicamente previsível é justamente o que está politicamente em aberto. A dúvida de verdade não é se dá para rodar IA no celular. É quem manda nela."
+
+**Ponte:** "Mas eu posso estar errado. E eu quero dizer exatamente onde."
+
+## Ato 4: Testando o próprio mapa
+
+### Slide 13: Onde eu posso estar errado
+
+"São três fatos que, se acontecerem, derrubam pedaços do mapa.
+
 Se até 2028 nenhum modelo de celular empatar com um modelo de nuvem de 2026 na mesma tarefa, caem o e5 e o e6.
+
 Se Apple ou Google liberarem o modelo só para os próprios apps, caem o e1 e o e2.
+
 Se o WebGPU não virar padrão até 2029, ou um navegador grande não suportar, caem o e3 e o e4.
+
 E o meu viés: eu uso IA local no dia a dia, então tendo a ser otimista. Para compensar, só dei confiança alta a efeito com capacidade já documentada pelo fabricante."
 
-**Contexto:**
-- Falsificador é um fato concreto que, se acontecer, prova que a previsão estava errada. É o que separa previsão de opinião.
+**Ponte:** "Dependendo de quais desses fatos acontecerem, 2031 fica bem diferente."
 
----
+### Slide 14: 2031, em três versões
 
-## Slide 14: 2031, em três versões
+"Três versões, escritas como se já tivessem acontecido.
 
-**Fale:**
-"Três versões de 2031, escritas como se já tivessem acontecido.
-Provável: o modelo do sistema fez o simples, a nuvem fez o difícil, e cada fabricante manteve a sua API. O sinal de que estamos indo para lá é o Chrome liberar as APIs de escrita sem que os outros navegadores acompanhem.
-Desejável: um padrão comum deixou escrever o app uma vez e rodar em qualquer sistema, e o usuário passou a escolher se o dado sai do aparelho. O sinal é uma API de IA embutida entrar num grupo do W3C com mais de um navegador apoiando.
-Indesejável: o modelo do sistema virou porteiro, com regra que ninguém audita e update usado para forçar a troca de celular. O sinal é as APIs ficarem restritas aos apps do próprio fabricante."
+Provável: o modelo do sistema fez o simples, a nuvem fez o difícil, e cada fabricante manteve a sua própria API.
 
----
+Desejável: um padrão comum deixou escrever o app uma vez e rodar em qualquer sistema, e o usuário passou a escolher se o dado sai do aparelho.
 
-## Slide 15: O experimento (2 cliques)
+Indesejável: o modelo do sistema virou porteiro, com regra que ninguém audita, e update usado para forçar a troca de celular.
 
-**Fale:**
-"Agora é com vocês. Fiz o mesmo pedido para duas IAs: reescrever em tom formal 'galera, o relatório vai atrasar pra sexta porque a coleta de dados deu ruim, foi mal'. Uma rodou na nuvem. A outra rodou no meu notebook, sem internet.
+Embaixo de cada um está o sinal precoce: o que, se aparecer, mostra para qual dos três estamos indo."
+
+**Ponte:** "Só que tudo isso depende de uma coisa: se a IA local é boa o bastante. Então eu testei."
+
+### Slide 15: O experimento (2 cliques)
+
+"Fiz o mesmo pedido para duas IAs: reescrever em tom formal 'galera, o relatório vai atrasar pra sexta porque a coleta de dados deu ruim, foi mal'. Uma rodou na nuvem. A outra rodou no meu notebook, sem internet.
+
 [clique] Primeiro, mão levantada: quem acha que o A veio do aparelho? E o B? Agora votem no botão: qual vocês preferem?
-[clique] O A é da nuvem, o Claude. O B é local: o Qwen, um modelo de 1,5 bilhão de parâmetros rodando na minha CPU. Reparem que o B agradece sem motivo e nem diz que o prazo é sexta. Se vocês acertaram, o meu próprio teste enfraquece o meu mapa: para essa tarefa, a IA local ainda não chegou na qualidade da nuvem. É uma amostra só, mas é dado real."
 
-**Contexto:**
-- Qwen2.5 1.5B é um modelo aberto da equipe Qwen, da Alibaba. Rodou com o llama.cpp, um programa aberto para rodar modelos no computador.
-- O protocolo completo, à direita do slide, prevê 6 parágrafos. Hoje é um par só.
-- A velocidade não aparece no slide de propósito: ela denunciaria qual é o local.
-- A regra do slide: se o acerto ficar perto de 50%, o e3 se sustenta. Se o acerto for alto e a turma preferir a nuvem, o e3.1 perde confiança.
+[clique] O A é da nuvem, o Claude. O B é local: o Qwen, um modelo de 1,5 bilhão de parâmetros que rodou no processador do meu notebook, a partir de um arquivo de 1,1 GB.
 
----
+Reparem: o B agradece sem motivo e nem diz que o prazo é sexta. Se vocês acertaram, o meu próprio teste enfraquece o meu mapa. Para essa tarefa, a IA local pequena ainda não chegou na qualidade da nuvem. É uma amostra só, mas é dado real, e é por isso que o falsificador do slide 13 existe."
 
-## Slide 16: Três ataques prováveis
+**Ponte:** "E isso leva a duas perguntas que eu quero fazer para vocês."
 
-**Fale (use só se perguntarem, ou passe rápido):**
+## Fechamento
+
+### Slide 16: Três ataques prováveis
+
+Use só se o professor perguntar, ou passe rápido.
+
 "Três críticas que eu esperaria.
-'Modelo local é ruim': o mapa não diz que local substitui nuvem. Diz que tarefa curta migra e a nuvem se especializa, e o experimento acabou de mostrar o limite.
-'Apple Intelligence já existe, então isso é maduro': maduro é o modelo pequeno do fabricante. A ruptura é o sistema virar dono do modelo, para qualquer app.
+
+'Modelo local é ruim': o mapa não diz que local substitui nuvem. Diz que tarefa curta migra e a nuvem se especializa. O experimento acabou de mostrar esse limite.
+
+'Apple Intelligence já existe, então é maduro': maduro é o modelo pequeno do fabricante. A ruptura é o sistema virar dono do modelo para todo app.
+
 'Local é privado, então o mapa é otimista': o mapa nega isso. Rodar local não prova que nada sai do aparelho."
 
----
+### Slide 17: Perguntas para a turma
 
-## Slide 17: Perguntas para a turma
+"Duas perguntas.
 
-**Fale:**
-"Para fechar, duas perguntas. Primeira: vocês aceitariam uma IA um pouco pior se ela nunca saísse do celular? Depois do experimento, essa ficou concreta. Segunda: se o celular faz de graça e sem internet, vocês ainda pagariam assinatura de IA?"
+Primeira: vocês aceitariam uma IA um pouco pior, como a do experimento, se ela nunca saísse do celular de vocês?
+
+Segunda: se o celular faz de graça e sem internet, vocês ainda pagariam assinatura de IA?"
 
 **Como conduzir:**
 - Depois de perguntar, espere alguns segundos em silêncio. Alguém sempre fala.
 - Se ninguém falar, chame alguém pelo nome.
-- Ligue cada resposta a um efeito: "isso é o e3.1", "isso é o freio e7".
+- Ligue cada resposta ao mapa: "isso é o e3.1", "isso é o freio e7".
 
----
+### Slide 18: Fim
 
-## Slide 18: Fim
-
-**Fale:**
 "O documento completo, com os 27 efeitos, as 12 fontes e o levantamento, está nesse link. Obrigado."
 
 ---
 
-## Perguntas difíceis do professor
+# Parte 4: Perguntas difíceis
 
 - **"Suas três raízes são o enunciado do tema dividido."**
   "Sim, parti do enunciado e dividi por quem controla o modelo: sistema, navegador e chip. Está declarado no anexo do documento."
 - **"Cadê o Brasil?"**
-  "No freio e9: celular de entrada vendido no Brasil não tem memória para o modelo. Não tenho fonte de vendas para isso, e o documento diz isso."
+  "No freio e9: celular de entrada vendido no Brasil não tem memória para o modelo. Não achei fonte de vendas, e o documento diz isso."
 - **"De onde saíram os prazos, 2027 e 2028?"**
-  "São hipóteses. Não usei comparação com outra tecnologia que levou tanto tempo para se espalhar. É uma limitação do mapa."
+  "São hipóteses. Não comparei com outra tecnologia que levou tanto tempo para se espalhar. É uma limitação do mapa."
+- **"Por que tirou o modelo de 100B do BitNet?"**
+  "O README diz que o programa roda um modelo de 100B a 5 a 7 tokens por segundo numa CPU, mas eu não achei esse modelo publicado, e o repositório tem ferramenta para gerar modelo falso só para medir velocidade. Não dava para sustentar, então troquei pelo modelo oficial de 2B."
 - **"Você rodou a skill de verdade?"**
   "A entrevista usou as respostas que dei no teste de 10/09, no mesmo tema. O anexo diz isso e diz que o levantamento foi reconstruído."
 - **"Qual a diferença para o tema 17?"**
   "No 17, o que fica local são os dados e a conta. Aqui, o que fica local é o modelo."
-
-## Glossário rápido
-
-- **Inferência:** o modelo calculando uma resposta.
-- **Parâmetro:** cada número do modelo. "3B" quer dizer 3 bilhões de parâmetros.
-- **Token:** pedaço de palavra que o modelo lê e escreve.
-- **Quantização:** guardar os números do modelo com menos bits para ocupar menos memória.
-- **Ternário:** cada número só pode valer -1, 0 ou 1.
-- **WebGPU:** API do navegador que deixa o site usar a placa de vídeo.
-- **NPU:** chip dedicado a IA.
-- **AICore:** serviço do Android que guarda e atualiza o Gemini Nano.
-- **1ª, 2ª e 3ª ordem:** a consequência direta, a consequência da consequência, e a seguinte.
-- **Freio:** efeito que segura a própria tendência.
-- **Falsificador:** fato que, se acontecer, prova que a previsão está errada.
+- **"IA local não é mais privada?"**
+  "Rodar local tira o dado do caminho da nuvem, mas não prova que nada sai. O próprio Android baixa e atualiza o modelo por um serviço do sistema. Privacidade depende de quem controla o sistema, e é exatamente essa a pergunta do mapa."
