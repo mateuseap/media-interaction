@@ -1,6 +1,6 @@
 ---
 tema: IA local no dispositivo e no navegador
-slug: ia-local-dispositivo-navegador
+slug: ia-local
 autor_login: meap
 zona_de_interesse: infraestrutura de IA e arquitetura de produto
 data: 2026-10-07
@@ -8,9 +8,9 @@ horizonte: 2031
 publico: desenvolvedores e arquitetos de produto
 recorte_geografico: global
 disrupcoes_raiz: 3
-efeitos_ordem_1: 6
-efeitos_ordem_2: 6
-efeitos_ordem_3: 6
+efeitos_ordem_1: 9
+efeitos_ordem_2: 9
+efeitos_ordem_3: 9
 tecnologias_citadas: [Apple Foundation Models, Gemini Nano, AICore, ML Kit GenAI, Chrome built-in AI, WebGPU, WebLLM, BitNet b1.58, bitnet.cpp]
 fontes: 12
 confianca: media
@@ -21,7 +21,7 @@ publico_ok: false
 
 ## 1. Resumo
 
-Este mapa trata da passagem da inferência de IA do servidor para o aparelho do usuário final: celular, laptop e aba do navegador. Chamar uma API de modelo na nuvem é prática madura e fica como contexto. O que é emergente é o modelo que roda no próprio dispositivo com qualidade suficiente para tarefas reais de produto. Três disrupções-raiz organizam a roda: o modelo de fundação passa a ser serviço do sistema operacional (Apple Foundation Models, Gemini Nano via AICore), o navegador vira runtime de inferência (WebGPU, WebLLM, Chrome built-in AI) e a inferência ternária de 1,58 bit reduz o hardware necessário (BitNet). Os efeitos mais fortes são de arquitetura e distribuição; os mais incertos são de governança: quem atualiza, quem responde e o que o modelo embutido aceita fazer. A confiança geral é média porque as fontes provam viabilidade técnica, não adoção.
+Este mapa trata da passagem da inferência de IA do servidor para o aparelho do usuário final: celular, laptop e aba do navegador. Chamar uma API de modelo na nuvem é prática madura e fica como contexto. Modelo pequeno no celular já existe e também é contexto: a Apple roda um modelo de cerca de 3B no aparelho para resumo e escrita e manda o resto para servidor (fonte 1). O que é emergente, na linha da disciplina, é o modelo no aparelho bom o bastante para agente, voz e visão, aberto a qualquer app. Três disrupções-raiz organizam a roda: o modelo de fundação passa a ser serviço do sistema operacional (Apple Foundation Models, Gemini Nano via AICore), o navegador vira runtime de inferência (WebGPU, WebLLM, Chrome built-in AI) e a inferência ternária de 1,58 bit reduz o hardware necessário (BitNet). Os efeitos mais fortes são de arquitetura e distribuição; os mais incertos são de governança: quem atualiza, quem responde e o que o modelo embutido aceita fazer. A confiança geral é média porque as fontes provam viabilidade técnica, não adoção.
 
 ## 2. O tema
 
@@ -37,13 +37,15 @@ IA local é inferência executada no aparelho de quem usa o produto, sem round-t
 
 **Requisitos reais.** O Chrome exige, para o modelo embutido, Windows 10 ou 11, macOS 13 ou Linux, pelo menos 22 GB livres no volume do perfil, e GPU com mais de 4 GB de VRAM ou CPU com 16 GB de RAM e 4 núcleos; o modelo é apagado se o espaço livre cair abaixo de 10 GB, e celular ainda não é suportado (fonte 10). Das APIs, Translator, Language Detector e Summarizer estão estáveis desde o Chrome 138, enquanto Writer, Rewriter e Proofreader seguem em developer trial (fonte 11). Na Apple, o framework Foundation Models para desenvolvedores aparece a partir do iOS 26 e do macOS 26, para "language understanding, structured output, and tool calling" (fonte 12). IA local hoje é recurso de aparelho recente, não de qualquer aparelho.
 
+**O que a turma trouxe.** O bitnet.cpp foi a escolha nº 1 da varredura de IA da turma, ao lado de jan, gpt4all e expo-ai-kit. Três colegas rodaram o julgamento dos seus 500 itens num modelo local (Ollama, Qwen 27B) depois de bater na cota da API: a tendência aconteceu dentro da própria disciplina (página de temas da disciplina, tema 16).
+
 **Contexto maduro.** APIs de nuvem impõem limites por projeto em RPM, TPM e RPD, retornam `429 RESOURCE_EXHAUSTED` quando excedidos e declaram que a capacidade "pode variar" (fonte 9). Isso é contexto, não disrupção: mostra o custo operacional que a IA local promete remover.
 
 ## 4. As disrupções-raiz
 
 ### 4.1. O modelo de fundação vira serviço do sistema operacional
 
-**O que rompe:** a ideia de que cada produto escolhe, contrata e versiona o próprio modelo. O modelo passa a ser parte do sistema, como câmera ou GPS, e o app pede uma capacidade em vez de chamar um fornecedor.
+**O que já existe:** o modelo no aparelho, usado pelo próprio fabricante e já aberto a apps por framework (fonte 12) e ML Kit (fonte 3). **O que rompe:** a ideia de que cada produto escolhe, contrata e versiona o próprio modelo. O modelo passa a ser parte do sistema, como câmera ou GPS, e o app pede uma capacidade em vez de chamar um fornecedor.
 
 **Por que agora:** só quando um modelo de cerca de 3 bilhões de parâmetros atingiu latência utilizável em celular de consumo (fonte 1) foi viável embutir o modelo no sistema. O AICore já documenta o sistema como dono da distribuição e da atualização do Gemini Nano (fonte 2).
 
@@ -73,7 +75,7 @@ roda:
     efeitos:
       - id: e1
         ordem: 1
-        efeito: Aplicativos passam a pedir uma capacidade de IA ao sistema operacional em vez de empacotar ou contratar o próprio modelo.
+        efeito: A maioria dos apps de consumo troca a chamada de nuvem pelo modelo do sistema em tarefas curtas de texto.
         sinal: forte
         prazo: 2027
         confianca: alta
@@ -108,6 +110,26 @@ roda:
               - id: e2.1.1
                 ordem: 3
                 efeito: Aparelhos que deixam de receber atualização de modelo passam a ser considerados obsoletos mesmo com hardware funcional.
+                sinal: fraco
+                prazo: 2031
+                confianca: baixa
+      - id: e7
+        ordem: 1
+        efeito: Tarefas que pedem raciocínio longo continuam indo para servidor, mesmo em aparelhos com modelo embutido.
+        sinal: forte
+        prazo: 2027
+        confianca: media
+        efeitos:
+          - id: e7.1
+            ordem: 2
+            efeito: Produtos passam a declarar ao usuário quais tarefas rodaram no aparelho e quais foram para a nuvem.
+            sinal: medio
+            prazo: 2029
+            confianca: media
+            efeitos:
+              - id: e7.1.1
+                ordem: 3
+                efeito: A promessa de privacidade local perde força como argumento de venda porque o usuário não distingue as duas rotas.
                 sinal: fraco
                 prazo: 2031
                 confianca: baixa
@@ -153,6 +175,26 @@ roda:
                 sinal: fraco
                 prazo: 2031
                 confianca: baixa
+      - id: e8
+        ordem: 1
+        efeito: Safari e Firefox seguem sem API equivalente ao modelo embutido do Chrome, e a IA no navegador fica restrita a um motor.
+        sinal: forte
+        prazo: 2028
+        confianca: media
+        efeitos:
+          - id: e8.1
+            ordem: 2
+            efeito: Sites que querem alcance amplo continuam chamando a nuvem e tratam o modelo do navegador como extra opcional.
+            sinal: medio
+            prazo: 2029
+            confianca: media
+            efeitos:
+              - id: e8.1.1
+                ordem: 3
+                efeito: A web inteligente sem back-end fica concentrada em ferramentas internas e públicos técnicos.
+                sinal: fraco
+                prazo: 2031
+                confianca: baixa
   - disrupcao: Inferência ternária reduz o hardware necessário
     efeitos:
       - id: e5
@@ -195,9 +237,29 @@ roda:
                 sinal: fraco
                 prazo: 2031
                 confianca: baixa
+      - id: e9
+        ordem: 1
+        efeito: Celulares de entrada vendidos no Brasil seguem sem memória suficiente para o modelo do sistema.
+        sinal: forte
+        prazo: 2028
+        confianca: media
+        efeitos:
+          - id: e9.1
+            ordem: 2
+            efeito: Recursos de IA local chegam primeiro a quem compra aparelho caro, e o resto continua dependendo da nuvem.
+            sinal: medio
+            prazo: 2030
+            confianca: media
+            efeitos:
+              - id: e9.1.1
+                ordem: 3
+                efeito: A diferença de acesso à IA passa a acompanhar a faixa de preço do aparelho e não só a conexão.
+                sinal: fraco
+                prazo: 2031
+                confianca: baixa
 ```
 
-O YAML não mostra um padrão importante. Os efeitos de primeira ordem com confiança alta são de arquitetura (e1, e2, e3): onde o modelo mora e quem o atualiza. Os efeitos de terceira ordem com confiança baixa são de poder (e1.1.1, e2.1.1, e6.1.1): quem governa, quem responde e o que acontece com o modelo pessoal. A parte tecnicamente mais previsível do mapa é a politicamente menos resolvida. A roda responde às três perguntas oficiais do tema: assinatura e nuvem em e3.1 e e3.1.1; atualização, governo e responsabilidade em e1.1 e e2.1; patrimônio, herança e apreensão em e6.1 e e6.1.1.
+O YAML não mostra um padrão importante. Os efeitos de primeira ordem com confiança alta são de arquitetura (e1, e2, e3): onde o modelo mora e quem o atualiza. Os efeitos de terceira ordem com confiança baixa são de poder (e1.1.1, e2.1.1, e6.1.1): quem governa, quem responde e o que acontece com o modelo pessoal. A parte tecnicamente mais previsível do mapa é a politicamente menos resolvida. Cada raiz tem um freio (e7, e8, e9): efeitos que seguram a própria disrupção, para a roda não andar num sentido só. A roda responde às três perguntas oficiais do tema: assinatura e nuvem em e3.1 e e3.1.1; atualização, governo e responsabilidade em e1.1 e e2.1; patrimônio, herança e apreensão em e6.1 e e6.1.1.
 
 ### Âncora de cada efeito
 
@@ -223,6 +285,9 @@ Cada efeito de primeira ordem parte de uma capacidade já documentada. Os de seg
 | e6 | Foundation Models com tool calling no aparelho (fonte 12) | consultado 2026-10-07 | capacidade documentada |
 | e6.1 | adaptadores de modelo carregados e trocados em tempo de execução (fonte 1) | WWDC 2024 | derivação |
 | e6.1.1 | pergunta oficial do tema; nenhuma fonte jurídica | sem fonte | derivação |
+| e7 | modelo maior em servidor ao lado do modelo do aparelho (fonte 1) | WWDC 2024 | capacidade documentada |
+| e8 | celular e outros motores fora do suporte do Chrome (fonte 10) | consultado 2026-10-07 | mecanismo documentado |
+| e9 | requisito de 16 GB de RAM ou GPU acima de 4 GB (fonte 10); nenhuma fonte de vendas no Brasil | consultado 2026-10-07 | derivação |
 
 ## 6. Sinais fracos e wildcards
 
@@ -341,7 +406,9 @@ O que fica constante: tarefa, prompt, texto de entrada, interface, ordem sortead
 | Chrome built-in AI | emergente | Em origin trial; base de 4.2. |
 | BitNet b1.58 e bitnet.cpp | emergente | Viabilidade demonstrada, NPU ainda ausente; base de 4.3. |
 
-### Primeira rodada, antes do adversarial (sem edição)
+**Aviso de transparência.** Este anexo foi reconstruído depois da execução, não é a saída bruta original. A entrevista (fase 1) usou as respostas que dei em 10/09/2026 no teste da skill de colega no mesmo tema, sem nova rodada de perguntas. As três raízes partem da raiz sugerida no enunciado do tema 16 e a dividem por camada de controle; não houve rejeição explícita dessa raiz.
+
+### Primeira rodada, antes do adversarial (reconstruída)
 
 ```
 Disrupções candidatas: 4
