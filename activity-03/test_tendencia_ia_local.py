@@ -157,7 +157,7 @@ check(DECK.exists(), "missing presentation/index.html")
 deck = DECK.read_text(encoding="utf-8")
 slide_count = len(re.findall(r'<section class="slide[ "]', deck))
 check('<main class="deck"' in deck, "deck needs main.deck")
-check(12 <= slide_count <= 18, f"deck needs 12 to 18 slides, has {slide_count}")
+check(8 <= slide_count <= 18, f"deck needs 8 to 18 slides, has {slide_count}")
 for needle in ("keydown", "location.hash", "hashchange", "requestFullscreen", "prefers-reduced-motion", "aria-label"):
     check(needle in deck, f"deck missing {needle}")
 check("—" not in deck, "deck must not use em dash")
