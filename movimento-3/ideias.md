@@ -22,7 +22,13 @@ Parti de três materiais do movimento 2:
    - se o sistema apaga o modelo quando falta espaço, ele pode virar bem com herança?
    - no Brasil, o que trava primeiro: pouca memória ou a IA do Chrome não aceitar português?
 
-Sobre a aula de 08/10: não há resumo publicado na página do tema. Usei a minha própria apresentação e o experimento A e B que fiz ao vivo, em que o texto local (Qwen2.5 1.5B na CPU) saiu visivelmente pior que o da nuvem.
+4. **A aula de 08/10.** Apresentei o mapa inteiro, incluindo o experimento A e B ao vivo, em que o texto local (Qwen2.5 1.5B na CPU) saiu visivelmente pior que o da nuvem. A discussão seguiu as perguntas do material. Os três feedbacks que a turma deixou no site da disciplina apontaram:
+   - que a IA local não precisa substituir a nuvem: tarefas simples migram e as pesadas ficam remotas;
+   - o impacto do hardware no acesso às funções;
+   - a troca entre aceitar um modelo um pouco pior e ganhar privacidade, custo e funcionamento sem internet;
+   - que a parte técnica é a mais previsível, e a de poder é a menos resolvida: quem atualiza o modelo e quem decide o que ele faz.
+
+   Cada um desses pontos virou uma das três ideias selecionadas.
 
 ### Método
 
@@ -37,7 +43,7 @@ Depois passei cada candidata por quatro filtros, nesta ordem:
 
 ### Com que IA
 
-Fiz o brainstorming com o **Claude**, da Anthropic, no Claude Code, em conversa. O Claude gerou e organizou as candidatas, e eu decidi os cortes e a seleção. Os dados técnicos citados abaixo foram conferidos nas fontes, com o link testado.
+Fiz o brainstorming com o **Claude**, da Anthropic, no Claude Code, em conversa. O Claude gerou as candidatas e propôs os cortes, e eu revisei e escolhi as três. Os dados técnicos citados abaixo foram conferidos nas fontes, com o link testado.
 
 ### Quantas ideias saíram
 
@@ -70,7 +76,7 @@ Fiz o brainstorming com o **Claude**, da Anthropic, no Claude Code, em conversa.
 
 Uma página web com um campo de texto e um botão. A pessoa escreve uma tarefa curta, como "deixe este recado formal", e recebe duas respostas, A e B. Uma veio de um modelo rodando no próprio navegador dela. A outra veio de um modelo de nuvem. A ordem é sorteada. A pessoa marca qual prefere e qual acha que rodou no aparelho, e só então a origem é revelada. A página guarda os votos da turma.
 
-É a seção 10 do meu mapa, agora com uma mudança importante: **as duas rotas rodam no aparelho de quem usa**, e não no meu notebook.
+É a seção 10 do meu mapa, agora com uma mudança importante: **o teste roda no aparelho de quem usa**, e não no meu notebook. A rota local roda no navegador da pessoa, e a rota de nuvem roda no servidor do provedor.
 
 **A pergunta sobre o futuro**
 
@@ -85,8 +91,9 @@ Não dá para fazer com tecnologia madura porque a tecnologia madura é justamen
 **O que espero observar**
 
 - Pelo meu teste de 08/10, espero que a turma **acerte a origem bem acima do acaso**, porque o modelo pequeno ainda escreve pior. Se isso acontecer, enfraquece o meu efeito e3.1 (o custo por uso cai e a cobrança por chamada perde espaço) e reforça o contra-mapa.
-- Espero que parte da turma **prefira o local mesmo sabendo que é pior**, quando a tarefa envolve algo pessoal. Isso responderia à pergunta do professor: "se a nuvem barateou, o que sobra ao aparelho?".
+- Espero que parte da turma **prefira o local mesmo sabendo que é pior**, quando a tarefa envolve algo pessoal. Isso responderia à pergunta do professor: "se a nuvem barateou, o que sobra ao aparelho?". É também a troca que apareceu nos feedbacks da aula: um modelo um pouco pior em troca de privacidade e funcionamento sem internet.
 - Espero que algumas pessoas **nem consigam rodar a rota local**, por falta de placa de vídeo compatível. Isso já é dado: mostra quem fica de fora.
+- Risco de construção: a rota de nuvem precisa de um servidor intermediário para não expor a chave da API numa página pública.
 
 ---
 
@@ -164,6 +171,7 @@ Todas abriram com HTTP 200 em 14/10/2026.
 - Meu mapa: `activity-03/tendencia-ia-local.md`
 - Confronto do tema 16: https://tendencias-midia-interacao.vercel.app/futuros/16-ia-local-no-dispositivo-e-no-navegador/confronto-meap/
 - Mapa do professor: https://tendencias-midia-interacao.vercel.app/futuros/16-ia-local-no-dispositivo-e-no-navegador/giordano/documento
+- Feedbacks da aula de 08/10: 3 respostas da turma no site da disciplina, consultadas em 14/10/2026
 - Enunciado do movimento 3: https://tendencias-midia-interacao.vercel.app/materiais/movimento-3-experimento/
 - Prompt API do Chrome, línguas e plataformas: https://developer.chrome.com/docs/ai/prompt-api
 - Requisitos do modelo embutido do Chrome: https://developer.chrome.com/docs/ai/get-started
