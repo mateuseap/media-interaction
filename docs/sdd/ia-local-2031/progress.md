@@ -1,25 +1,30 @@
 # Progresso: IA local em 2031
 
-CURRENT OBJECTIVE: entregar documento de tendência e deck de discussão sobre IA local.
-CURRENT PHASE: ENTREGA, deck visual em revisão.
-CURRENT BRANCH: feature/ia-local-presentation
+CURRENT OBJECTIVE: movimento 3, experimento sobre IA local no tema 16.
+CURRENT PHASE: IDEIAS (versão 2) entregues no GitHub; aguardando construção do experimento.
+CURRENT BRANCH: master
 BASE BRANCH: master (remoto não tem develop).
 
 COMPLETED:
-- `activity-03/tendencia-ia-local.md`: frontmatter canônico, 12 seções literais, 3 disrupções-raiz, 18 efeitos (6 por ordem), 9 fontes com HTTP 200 direto, triagem de maturidade, rodada adversarial, falsificadores, viés declarado e testado, cenários no pretérito, experimento de variável única.
-- `activity-03/presentation/index.html`: 10 slides simples, uma ideia por slide, com votação A/B ao vivo.
-- `activity-03/test_tendencia_ia_local.py`: valida documento, roda, URLs e estrutura do deck; funciona com `python3 -O`.
-
-TESTS PASSED:
-- `python3 activity-03/test_tendencia_ia_local.py`: 9 fontes, 18 efeitos, 12 slides.
-- Screenshots headless do Chromium dos slides 1, 3, 4, 5, 8, 9 e 10, com hash e fragmentos.
+- Movimento 2: documento `activity-03/tendencia-ia-local.md` (12 fontes, 27 efeitos), deck de 18 slides, roteiro e validador. Link do documento salvo no site e entregue no Classroom. Apresentação feita em 08/10.
+- Movimento 3, ideias v1 (14/10): link salvo no site, campo `ideias_url`, login `meap`.
+- Movimento 3, ideias v2 (19/10): `movimento-3/ideias.md` reescrito após orientação do professor (jogo com e sem modelo local). O link no site é o mesmo e não foi reenviado.
 
 DECISIONS MADE:
-- Documento reescrito para 3 disrupções e público da entrevista (desenvolvedores e arquitetos de produto); versão anterior tinha 2 disrupções e público divergente.
-- Fonte OpenAI de rate limits descartada por HTTP 301.
-- Validador exige PyYAML.
+- Ideias v1 descartadas porque mediam desempenho da máquina, que muda com o tempo.
+- Experimento escolhido: jogo de uma cena com guarda roteirizado contra guarda gerado por modelo local no navegador (WebLLM, modelo pequeno da lista oficial), com arquivo de memória no fim. Versão roteirizada é plano B para quem não tem WebGPU.
+- Publicação prevista: página estática no GitHub Pages, sem servidor e sem chave de API.
 
-BLOCKERS: nenhum técnico.
-PR TO DEVELOP: não aplicável; PR para master aberto, não mergeado.
-SITE DA DISCIPLINA: nada enviado. Aguarda "pode enviar" do usuário.
-EXACT NEXT ACTION: usuário revisar PR do deck visual; merge; enviar link do documento até 07/10 23h59.
+OPEN RISKS:
+- Tamanho de download do modelo pequeno ainda não medido.
+- Aparelhos da turma sem WebGPU caem na versão roteirizada.
+- Prompt API do Chrome (ideia 3) só roda em computador e não lista português.
+
+DEADLINES:
+- Experimento + README: 09/11 23h59 (véspera do teste).
+- Teste presencial: 10/11.
+- REGISTRO.md: 30/11 23h59.
+- Apresentação final: 01/12.
+
+SITE DA DISCIPLINA: nada novo a enviar; o link das ideias aponta para o arquivo no GitHub.
+EXACT NEXT ACTION: confirmar a escolha com o professor e começar `movimento-3/experimento/` (jogo + README.md).

@@ -19,7 +19,9 @@ Depois de pronto: me mostrar o resumo e ESPERAR confirmação antes de salvar o 
 Critérios: ideias têm que explorar o TEMA 16, ser experimento sobre para onde as coisas vão (não produto), pequenas, factíveis hoje, com tecnologia emergente. Sem número ou fonte inventada.
 
 ## Tarefa 2: experimento + README (a partir de 15/10, com a pré-análise do professor)
-Só começar depois da aula de 15/10 e da pré-análise publicada na página. Escolher 1 das 3 ideias.
+Direção definida pelo professor: um jogo que roda com e sem modelo local. Ideias refeitas em 19/10 (versão 2 do `ideias.md`).
+Escolha atual: ideia 1 (o guarda que improvisa, versão roteirizada contra modelo local no navegador) com o final da ideia 2 (arquivo de memória: apagar, baixar ou entregar). Ideia 3 é extensão opcional.
+Regra nova: observar o comportamento das pessoas, nunca medir desempenho da máquina.
 Entregar: experimento acessível a quem não é da turma + README.md com: o que é, a pergunta sobre o futuro, a tecnologia emergente E POR QUE NÃO DÁ com tecnologia madura, como usar, o que espera que aconteça.
 Pasta: `movimento-3/experimento/`. Link salvo no site (campo exp_url) só com minha confirmação.
 Critério: a turma tem que conseguir usar sozinha no teste presencial de 10/11. Se precisar de instrução complicada, está errado.

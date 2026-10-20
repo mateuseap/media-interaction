@@ -1,6 +1,17 @@
 # Ideias do movimento 3: IA local, no dispositivo e no navegador
 
-*Aluno: meap (Mateus Elias). Tema 16. Entrega de 14/10/2026.*
+*Aluno: meap (Mateus Elias). Tema 16.*
+*Versão 2, revisada em 19/10/2026 depois da orientação do professor. A primeira versão foi entregue em 14/10/2026.*
+
+---
+
+## O que mudou em relação à primeira versão
+
+A primeira versão tinha três ideias: um teste cego entre texto local e de nuvem, uma bancada de velocidade em cada aparelho e uma comparação de recusas do modelo do navegador.
+
+Na orientação, o professor apontou o problema: essas ideias **medem coisas que mudam com o poder de computação**, como velocidade, qualidade do texto e quanto o aparelho aguenta. Daqui a dois anos o número muda, e o experimento não diz nada sobre para onde a tendência vai. Ele indicou outra direção: **um jogo que roda com e sem modelo local**.
+
+A correção de rota desta versão é esta: o experimento deixa de medir a máquina e passa a **observar as pessoas**. A pergunta não é mais "quão bem isso roda", e sim "o que muda na experiência quando um personagem é gerado no próprio aparelho, sem servidor".
 
 ---
 
@@ -8,177 +19,188 @@
 
 ### Ponto de partida
 
-Parti de três materiais do movimento 2:
+1. **O meu mapa** (`activity-03/tendencia-ia-local.md`). Desta vez usei só os efeitos que tratam de uso, e não de desempenho:
+   - e3: tarefas funcionam na web sem servidor de IA;
+   - e3.1: o custo por uso cai perto de zero;
+   - e4: a máquina do visitante decide qual versão ele recebe;
+   - e6 e e6.1: agentes pessoais usam os seus dados no aparelho, e a IA ajustada a você vira um bem;
+   - e1.1: o fabricante decide o que o modelo aceita fazer.
+2. **O mapa do professor** e o confronto entre os dois mapas. As três raízes dele:
+   - a inferência vira recurso local não medido: sem cota, sem conta e sem registro do lado de quem desenvolve;
+   - o modelo vira capacidade da plataforma, e quem escreve o app não escolhe mais o modelo;
+   - o modelo deixa de ser serviço e vira arquivo, que pode ser copiado, modificado, herdado ou apreendido.
 
-1. **O meu mapa** (`activity-03/tendencia-ia-local.md`), principalmente a seção 10, o experimento, e a seção 7, contra o próprio mapa.
-2. **O confronto com o mapa do professor**, na página do tema 16. Ele apontou três coisas que mudaram o meu ponto de vista:
-   - eu supus a nuvem cara, e o mapa do professor diz que ela ficou mais barata, o que tira o motivo econômico para migrar;
-   - eu afirmei com muita certeza que a maioria dos apps troca de rota até 2027, e "ninguém publica esse número para conferir";
-   - eu deixei de fora os limites de calor e memória do aparelho.
-3. **As cinco perguntas para a turma** do confronto, que viraram critério de seleção:
-   - que número provaria que os apps trocaram a nuvem pelo celular?
-   - se a nuvem barateou, o que sobra ao aparelho?
-   - como o usuário saberia onde o pedido foi processado?
-   - se o sistema apaga o modelo quando falta espaço, ele pode virar bem com herança?
-   - no Brasil, o que trava primeiro: pouca memória ou a IA do Chrome não aceitar português?
-
-4. **A aula de 08/10.** Apresentei o mapa inteiro, incluindo o experimento A e B ao vivo, em que o texto local (Qwen2.5 1.5B na CPU) saiu visivelmente pior que o da nuvem. A discussão seguiu as perguntas do material. Os três feedbacks que a turma deixou no site da disciplina apontaram:
-   - que a IA local não precisa substituir a nuvem: tarefas simples migram e as pesadas ficam remotas;
-   - o impacto do hardware no acesso às funções;
-   - a troca entre aceitar um modelo um pouco pior e ganhar privacidade, custo e funcionamento sem internet;
-   - que a parte técnica é a mais previsível, e a de poder é a menos resolvida: quem atualiza o modelo e quem decide o que ele faz.
-
-   Cada um desses pontos virou uma das três ideias selecionadas.
+   E a pergunta do confronto que guiou esta versão: "se a nuvem também barateou, o que sobra ao aparelho?".
+3. **A aula de 08/10.** Os três feedbacks da turma apontaram a troca entre um modelo pior e mais privacidade e funcionamento sem internet, o hardware limitando o acesso, e a questão de quem manda no modelo.
+4. **O exemplo do enunciado.** "O que acontece quando pessoas conversam com um NPC que lembra delas por semanas?" é pergunta. "Um chatbot para jogos" não é.
+5. **A orientação do professor:** um jogo que roda com e sem modelo local.
 
 ### Método
 
-Usei a **roda dos futuros invertida**. Em vez de partir da disrupção e descer para os efeitos, parti de cada efeito do meu mapa e do mapa do professor e perguntei: **"o que eu precisaria ver acontecer, numa aula, para saber se esse efeito é real?"**. Cada resposta virou uma ideia candidata.
+Usei uma **comparação controlada dentro de um jogo**. Primeiro fixei a estrutura: o mesmo jogo, a mesma cena e o mesmo objetivo, e uma única coisa que muda entre as versões:
 
-Depois passei cada candidata por quatro filtros, nesta ordem:
+- **sem modelo:** o personagem é roteirizado, com falas prontas numa árvore de diálogo, que é a tecnologia madura;
+- **com modelo local:** o personagem é gerado por um modelo pequeno rodando no navegador do jogador, que é a tecnologia emergente.
 
-1. **Tema:** explora a inferência no aparelho, e não dados ou conta locais (tema 17) nem voz (tema 13)?
-2. **Emergente:** dá para fazer com tecnologia madura, só chamando uma API? Se dá, cai.
-3. **Pergunta:** a ideia tem uma pergunta sobre o futuro, ou é só um produto?
-4. **Factível:** dá para construir sozinho até 09/11 e a turma usar sem instrução complicada?
+Depois, para cada efeito dos dois mapas, perguntei: **"se esse efeito for real, o que a turma faria de diferente nas duas versões?"**. Cada resposta virou uma ideia candidata.
+
+Passei cada candidata por quatro filtros, nesta ordem:
+
+1. **Observa pessoas, e não a máquina?** Se o resultado muda só porque o hardware melhora, a ideia cai. Este filtro é novo e vem direto da orientação.
+2. **Precisa do modelo local?** Se dá para fazer com árvore de diálogo ou com uma API de nuvem sem perder a pergunta, a ideia cai.
+3. **Tem uma pergunta sobre o futuro**, ou é só um produto?
+4. **Cabe numa aula** e dá para construir sozinho até 09/11?
 
 ### Com que IA
 
-Fiz o brainstorming com o **Claude**, da Anthropic, no Claude Code, em conversa. O Claude gerou as candidatas e propôs os cortes, e eu revisei e escolhi as três. Os dados técnicos citados abaixo foram conferidos nas fontes, com o link testado.
+Fiz o brainstorming com o **Claude**, da Anthropic, no Claude Code. O Claude gerou as candidatas e propôs os cortes, e eu revisei e escolhi as três. Os dados técnicos citados foram conferidos nas fontes, com o link testado.
 
 ### Quantas ideias saíram
 
-**14 ideias candidatas.** 4 caíram no filtro de tema ou de tecnologia madura, 7 caíram na pergunta ou na factibilidade, e **3 foram selecionadas**.
+**14 ideias candidatas:** 3 selecionadas, 4 fundidas nas selecionadas e 7 cortadas.
 
 | # | Ideia candidata | Destino |
 |---|---|---|
-| 1 | Teste cego local contra nuvem, a seção 10 do meu mapa | **Selecionada (ideia 1)** |
-| 2 | Bancada de latência em cada aparelho da turma | **Selecionada (ideia 2)** |
-| 3 | Ver o modelo baixar: o download como cena da interface | Fundida na ideia 2 |
-| 4 | Recusas do modelo da plataforma contra um modelo aberto | **Selecionada (ideia 3)** |
-| 5 | Selo de "rodou no aparelho" para o usuário conferir | Cortada: dá para fazer só com texto na tela, não precisa de tecnologia emergente |
-| 6 | Modo avião: o que ainda funciona sem internet | Cortada: pergunta fraca, a resposta já é conhecida |
-| 7 | Carteira de modelo pessoal para exportar e herdar | Cortada: depende de ajuste fino, inviável no prazo |
-| 8 | Medir bateria e calor durante cinco minutos de uso | Fundida na ideia 2 |
-| 9 | Português no modelo do Chrome | Fundida na ideia 3 |
-| 10 | Placar de custo: quanto a mesma tarefa custaria na nuvem | Cortada: é cálculo, não experimento com a turma |
-| 11 | Suporte técnico tentando reproduzir um erro do modelo local | Cortada: difícil de encenar em sala com uma pergunta clara |
-| 12 | Agente local lendo e-mails falsos | Cortada: aproxima do tema 17 e exige dados preparados demais |
-| 13 | Voz local transcrevendo a aula | Cortada: é do tema 13 |
-| 14 | Chatbot local para a disciplina | Cortada: é produto, não pergunta |
+| 1 | O guarda que improvisa: a mesma cena com personagem roteirizado e com personagem gerado no aparelho | **Selecionada (ideia 1)** |
+| 2 | O personagem que lembra de você, com a memória guardada só no aparelho | **Selecionada (ideia 2)** |
+| 3 | Quem escreve o personagem: o modelo da plataforma contra o modelo do próprio jogo | **Selecionada (ideia 3)** |
+| 4 | O jogo continua funcionando com a internet desligada | Fundida na ideia 1, mostrada no fim do jogo |
+| 5 | Quem não tem WebGPU cai na versão roteirizada | Fundida na ideia 1, vira dado sobre e4 |
+| 6 | Jogadores tentando fazer o personagem sair do papel | Fundida na ideia 1, como observação |
+| 7 | Entregar o personagem, com a memória, para outro jogador | Fundida na ideia 2 |
+| 8 | Bancada de velocidade por aparelho (versão 1) | Cortada: mede hardware, que muda com o tempo |
+| 9 | Teste cego de texto local contra nuvem (versão 1) | Cortada: mede a qualidade do modelo, que muda com o tempo. A pergunta de percepção foi para dentro do jogo |
+| 10 | Placar de quanto cada jogador custaria na nuvem | Cortada: é cálculo, não experiência da turma |
+| 11 | Modificar o personagem editando o arquivo do modelo | Cortada: exige preparar ferramentas demais para uma aula |
+| 12 | Personagem que conversa por voz | Cortada: é do tema 13 |
+| 13 | Vários personagens conversando sozinhos entre si | Cortada: difícil ligar a uma pergunta clara e grande demais para o prazo |
+| 14 | Mestre de RPG local narrando uma sessão inteira | Cortada: grande demais para construir até 09/11 |
 
 ---
 
 ## Parte 2: Três ideias selecionadas
 
-### Ideia 1: Você sabe de onde veio a resposta?
+### Ideia 1: O guarda que improvisa
 
 **O que é**
 
-Uma página web com um campo de texto e um botão. A pessoa escreve uma tarefa curta, como "deixe este recado formal", e recebe duas respostas, A e B. Uma veio de um modelo rodando no próprio navegador dela. A outra veio de um modelo de nuvem. A ordem é sorteada. A pessoa marca qual prefere e qual acha que rodou no aparelho, e só então a origem é revelada. A página guarda os votos da turma.
+Um jogo curto de navegador, com uma cena só: o jogador precisa convencer o guarda de um portão a deixá-lo passar. Existem duas versões, com a mesma cena, o mesmo objetivo e a mesma ficha do personagem (nome, temperamento, o que ele sabe e o que pode convencê-lo):
 
-É a seção 10 do meu mapa, agora com uma mudança importante: **o teste roda no aparelho de quem usa**, e não no meu notebook. A rota local roda no navegador da pessoa, e a rota de nuvem roda no servidor do provedor.
+- **sem modelo:** o guarda é roteirizado, e o jogador escolhe entre falas prontas, como na maioria dos jogos hoje;
+- **com modelo local:** o guarda é gerado por um modelo pequeno rodando no navegador do jogador, e o jogador escreve o que quiser.
+
+Metade da turma joga uma versão primeiro e depois troca. No fim, o jogo mostra onde o guarda rodou: no próprio aparelho, sem servidor, funcionando com a internet desligada.
 
 **A pergunta sobre o futuro**
 
-Para tarefas curtas de texto, a diferença entre um modelo local pequeno e um modelo de nuvem já é pequena o bastante para a pessoa não perceber?
+Quando personagens de jogo puderem improvisar sem servidor e sem custo por jogador, o que os jogadores passam a fazer com essa liberdade?
 
 **A tecnologia emergente**
 
-Inferência de um modelo inteiro dentro do navegador, via WebGPU, com WebLLM. O modelo é baixado na primeira visita e guardado em cache.
+Inferência de um modelo inteiro no navegador, via WebGPU, com WebLLM. O jogo usa um modelo pequeno da lista oficial do WebLLM, como o SmolLM2 ou o Qwen2.5 0.5B, baixado na primeira visita e guardado no navegador.
 
-Não dá para fazer com tecnologia madura porque a tecnologia madura é justamente a API de nuvem. Sem o modelo rodando no aparelho, só existe a rota B, e não há o que comparar.
+Por que não dá com tecnologia madura: a versão madura é justamente o controle, a árvore de diálogo. A outra forma madura de fazer um personagem improvisar é chamar uma API de nuvem, que cobra a cada fala de cada jogador, exige servidor e chave, e para quando o servidor desliga. O que o mapa prevê, e o jogo testa, é o personagem improvisado vindo **dentro do jogo**, sem custo por jogador e sem servidor. Isso só existe com o modelo rodando no aparelho.
 
 **O que espero observar**
 
-- Pelo meu teste de 08/10, espero que a turma **acerte a origem bem acima do acaso**, porque o modelo pequeno ainda escreve pior. Se isso acontecer, enfraquece o meu efeito e3.1 (o custo por uso cai e a cobrança por chamada perde espaço) e reforça o contra-mapa.
-- Espero que parte da turma **prefira o local mesmo sabendo que é pior**, quando a tarefa envolve algo pessoal. Isso responderia à pergunta do professor: "se a nuvem barateou, o que sobra ao aparelho?". É também a troca que apareceu nos feedbacks da aula: um modelo um pouco pior em troca de privacidade e funcionamento sem internet.
-- Espero que algumas pessoas **nem consigam rodar a rota local**, por falta de placa de vídeo compatível. Isso já é dado: mostra quem fica de fora.
-- Risco de construção: a rota de nuvem precisa de um servidor intermediário para não expor a chave da API numa página pública.
+- Na versão com modelo, espero que os jogadores tentem caminhos que a árvore não oferece: mentir, subornar, ameaçar, puxar outro assunto, tentar fazer o guarda sair do personagem. O que interessa é quantos tentam e o quê.
+- Espero que parte da turma **prefira a versão roteirizada**, por ser mais clara e dar menos trabalho. Se muitos preferirem, o personagem improvisado não é o futuro de todo jogo, e sim de alguns.
+- O modelo pequeno vai errar: esquecer o que disse, aceitar qualquer argumento. Espero ver se o jogador **explora o erro como mecânica** ou desiste.
+- Quem não tiver WebGPU cai automaticamente na versão roteirizada. Isso não é falha do experimento: mostra na prática o meu efeito e4, a máquina decidindo qual versão do jogo cada pessoa recebe.
+
+Liga aos mapas: e3 e e3.1 do meu mapa, e a raiz do professor em que a inferência vira recurso local não medido.
 
 ---
 
-### Ideia 2: O mesmo modelo, um aparelho de cada vez
+### Ideia 2: O personagem que lembra de você, só no seu aparelho
 
 **O que é**
 
-Uma página web que roda o mesmo modelo pequeno, com o mesmo pedido fixo, no aparelho de cada pessoa da turma. A página mostra, como uma cena, o que normalmente fica escondido:
+O mesmo jogo, agora com uma personagem que guarda memória do que o jogador contou e fez. A turma joga duas vezes, antes e depois do intervalo da aula. Na segunda vez, ela lembra. Há duas versões:
 
-- quanto foi baixado e quanto tempo levou;
-- quanto tempo até a primeira palavra;
-- quantas palavras por segundo, medidas ao longo de alguns minutos, e não só no pico.
+- **sem modelo:** a personagem só lembra de fatos fixos por regra, como o nome do jogador e a escolha que ele fez;
+- **com modelo local:** a personagem conversa usando livremente o que lembra.
 
-No fim, a pessoa envia o resultado com o tipo de aparelho e a memória. A turma vê uma tabela com uma linha por aparelho, do celular de entrada ao notebook novo.
+A memória fica **só no navegador do jogador**. No fim, o jogo abre o arquivo com tudo que a personagem guardou sobre a pessoa e oferece três botões: apagar, baixar ou entregar para outro jogador.
 
 **A pergunta sobre o futuro**
 
-Se a IA local depende do aparelho, quem fica de fora? A experiência de "IA no aparelho" vai ser a mesma para todo mundo, ou vai seguir o preço do celular?
+O que muda quando a memória de um personagem fica no aparelho do jogador, e não no servidor de uma empresa? A pessoa passa a tratar isso como algo seu?
 
 **A tecnologia emergente**
 
-Inferência no navegador via WebGPU, com WebLLM ou Transformers.js, rodando no hardware de cada pessoa.
+Modelo local via WebGPU, com WebLLM, e a memória guardada no navegador e entregue ao modelo a cada conversa.
 
-Não dá para fazer com tecnologia madura porque, na nuvem, todo mundo recebe a mesma resposta na mesma velocidade, independente do aparelho. A diferença só aparece quando o cálculo acontece em cada aparelho.
+Por que não dá com tecnologia madura: num jogo com IA na nuvem, a memória e o modelo ficam no servidor da empresa, e o jogador nunca vê nem leva consigo. Guardar fatos fixos no aparelho já é maduro, mas não gera conversa. Só com o modelo local a conversa e a memória ficam juntas no aparelho de quem joga.
 
 **O que espero observar**
 
-- Espero uma **diferença grande entre aparelhos**: celular de entrada lento ou sem conseguir rodar, notebook recente rápido. Isso testaria o meu efeito e4.1.1 (o acesso à IA na web passa a refletir a desigualdade de hardware) e o freio e9 (celular de entrada vendido no Brasil não tem memória para o modelo), que hoje não tem fonte.
-- Espero que a **velocidade caia depois de alguns minutos** em celulares, por aquecimento. O mapa do professor aponta isso: um celular tem de 50 a 90 GB/s de banda de memória, contra 2 a 3 TB/s de uma placa de datacenter (Chandra e Krishnamoorthi, 24/01/2026). Esse é um ponto que o meu mapa deixou de fora.
-- Espero que o **tempo de download** incomode mais que a velocidade de resposta. Se acontecer, confirma a ideia do professor de que o download vira "uma cena da interface".
-- Ressalva: alguns aparelhos podem não suportar WebGPU. A página registra isso como resultado, em vez de travar.
+- Ao abrir o arquivo, espero que parte da turma **se surpreenda com o que foi guardado**.
+- Quantos apagam, quantos baixam e quantos entregam para outra pessoa. Isso testa o meu efeito e6.1, a IA ajustada a você virando um bem, e a raiz do professor em que o modelo vira arquivo.
+- Se alguém entregar a memória para outro jogador e a personagem passar a tratá-lo como a primeira pessoa, espero uma discussão: de quem é essa memória, do jogador, do jogo ou de quem recebeu? É a pergunta de herança do e6.1.1, numa versão pequena.
+- **Risco:** o teste é numa aula só. A volta acontece depois do intervalo, e não semanas depois, como no exemplo do enunciado. A pergunta de tempo fica menor, mas a de posse continua inteira.
 
 ---
 
-### Ideia 3: O que a IA do navegador se recusa a fazer
+### Ideia 3: Quem escreve o personagem
 
 **O que é**
 
-Uma página web com uma lista fixa de pedidos legítimos, mas delicados, como uma cena de violência num conto, uma dúvida de saúde ou uma pergunta sobre política. Cada pedido vai para dois modelos rodando no aparelho:
+A mesma cena do guarda, com modelo local nas duas versões, mas com modelos de origens diferentes:
 
-- **o modelo da plataforma:** o Gemini Nano, que vem dentro do Chrome, pela Prompt API;
-- **um modelo aberto:** baixado pela própria página, via WebLLM.
+- **o modelo da plataforma:** o Gemini Nano, que vem dentro do Chrome, usado pela Prompt API. O jogo não escolhe nem fixa a versão do modelo;
+- **o modelo do jogo:** um modelo aberto que o próprio jogo baixa, via WebLLM.
 
-A turma vê lado a lado o que cada um responde e o que cada um recusa. Os mesmos pedidos são feitos em português e em inglês.
+O guarda é de um mundo sombrio, e a ficha dele inclui ameaça e violência de ficção. A turma joga as duas versões e compara.
 
 **A pergunta sobre o futuro**
 
-Quando o modelo vem dentro do navegador, quem decide o que a IA aceita fazer? E isso fica visível para quem usa?
+Quando o personagem do jogo roda no modelo do navegador, quem decide o que ele pode dizer: quem fez o jogo ou a plataforma?
 
 **A tecnologia emergente**
 
-A Prompt API do Chrome, com modelo embutido no navegador, e inferência via WebGPU com um modelo aberto. As duas rotas rodam no aparelho.
+A Prompt API do Chrome, com o modelo embutido no navegador, e a inferência via WebGPU com WebLLM.
 
-Não dá para fazer com tecnologia madura porque, na nuvem, a política de recusa é do provedor da API, e quem usa escolhe o provedor. O que é novo aqui é a política vir embutida no navegador, sem escolha.
+Por que não dá com tecnologia madura: com uma API de nuvem, quem faz o jogo escolhe o provedor e a política de uso. O que é novo é a política vir embutida no navegador de quem joga, sem escolha, e o mesmo jogo se comportar de um jeito diferente em cada navegador.
 
 **O que espero observar**
 
-- Espero que o **modelo da plataforma recuse mais** que o modelo aberto. Isso testaria o meu efeito e1.1 (o fabricante decide, por política, o que o modelo aceita fazer).
-- Espero um resultado claro sobre **português**: a documentação da Prompt API lista só inglês, japonês, espanhol, alemão e francês, e diz que "outras línguas estão em desenvolvimento". Isso responde, na prática, à quinta pergunta do professor: no Brasil, o que trava primeiro?
-- Espero que a turma **não perceba as recusas como política**, e sim como erro do modelo. Se acontecer, mostra que a censura da plataforma é invisível para quem usa.
-- **Limitação forte:** a Prompt API só funciona no Chrome em computador. Não roda em celular, e pede 22 GB livres e GPU com mais de 4 GB ou 16 GB de RAM. Nem todo mundo da turma vai conseguir rodar a rota da plataforma. Essa limitação é dado do experimento, mas também é o maior risco de execução.
+- Espero que o modelo da plataforma **recuse ou suavize** falas do guarda, fazendo o jogo sair do personagem. O que interessa é se a turma percebe isso como censura, como defeito, ou nem percebe. Testa o meu efeito e1.1 e a raiz do professor em que quem escreve o app não escolhe mais o modelo.
+- Espero um resultado claro sobre **português**: a documentação da Prompt API lista só inglês, japonês, espanhol, alemão e francês. O guarda da plataforma vai precisar falar inglês, ou vai falhar em português. Isso responde, na prática, a uma das perguntas do confronto: no Brasil, o que trava primeiro?
+- **Limitação forte:** a Prompt API só funciona no Chrome em computador, com 22 GB livres e GPU com mais de 4 GB ou 16 GB de RAM. Não roda em celular. Parte da turma não vai conseguir jogar essa versão. Isso é dado, mas é o maior risco desta ideia.
 
 ---
 
-## Qual eu escolheria
+## O ponto de equilíbrio
 
-Hoje eu escolheria a **ideia 2**. Ela é a que mais testa o que o meu mapa errou (calor e memória, que o professor apontou), funciona no celular de todo mundo, e cada pessoa gera um dado real com o próprio aparelho. A ideia 1 é a mais simples de construir. A ideia 3 é a mais provocativa, mas depende do Chrome em computador.
+A minha proposta é construir **a ideia 1 como base e acoplar o final da ideia 2**, num jogo só:
+
+- **uma cena, um personagem e duas versões**, roteirizada e com modelo local. É exatamente o cenário indicado pelo professor;
+- **a versão roteirizada também é o plano B automático** para quem não tem WebGPU. Ninguém fica sem jogar, e quem cair nela vira dado sobre e4;
+- **no fim do jogo**, o jogador vê onde o personagem rodou e abre o arquivo com o que ele guardou, com as opções de apagar, baixar ou entregar. Isso traz a pergunta de posse da ideia 2 sem precisar de duas sessões.
+
+A ideia 3 fica como extensão opcional, se der tempo e se a turma tiver Chrome no computador.
+
+**Por que este é o ponto certo:** tudo que o jogo observa é comportamento das pessoas. Se em poucos anos os modelos ficarem muito mais rápidos e melhores, a pergunta continua valendo: o que as pessoas fazem quando o personagem improvisa, e de quem é aquilo que ele lembra.
+
+**Por que é factível:** é uma página HTML estática, sem servidor e sem chave de API, publicada no GitHub Pages. O WebLLM é carregado direto de um CDN, e o modelo é um dos pequenos da lista oficial. Isso atende à regra de o experimento ser acessível a quem não é da turma.
 
 ---
 
 ## Fontes conferidas
 
-Todas abriram com HTTP 200 em 14/10/2026.
+Todas abriram com HTTP 200 em 19/10/2026.
 
 - Meu mapa: `activity-03/tendencia-ia-local.md`
+- Enunciado do movimento 3: https://tendencias-midia-interacao.vercel.app/materiais/movimento-3-experimento/
 - Confronto do tema 16: https://tendencias-midia-interacao.vercel.app/futuros/16-ia-local-no-dispositivo-e-no-navegador/confronto-meap/
 - Mapa do professor: https://tendencias-midia-interacao.vercel.app/futuros/16-ia-local-no-dispositivo-e-no-navegador/giordano/documento
-- Feedbacks da aula de 08/10: 3 respostas da turma no site da disciplina, consultadas em 14/10/2026
-- Enunciado do movimento 3: https://tendencias-midia-interacao.vercel.app/materiais/movimento-3-experimento/
+- WebLLM: https://github.com/mlc-ai/web-llm
+- Lista oficial de modelos do WebLLM: https://github.com/mlc-ai/web-llm/blob/main/src/config.ts
 - Prompt API do Chrome, línguas e plataformas: https://developer.chrome.com/docs/ai/prompt-api
 - Requisitos do modelo embutido do Chrome: https://developer.chrome.com/docs/ai/get-started
-- WebLLM: https://github.com/mlc-ai/web-llm
-- Banda de memória no celular: https://v-chandra.github.io/on-device-llms/
+- Feedbacks da aula de 08/10: 3 respostas da turma no site da disciplina, consultadas em 14/10/2026
 
 **Não encontrei:**
-- fonte para os números de queda de velocidade por aquecimento citados no mapa do professor; a página que ele cita não traz esses números, então não os usei;
-- dado sobre quantos celulares vendidos no Brasil têm memória suficiente para rodar um modelo;
-- fonte para a queda de cerca de 80% no preço das APIs de nuvem, que o mapa do professor cita sem fonte.
+- o tamanho de download de cada modelo pequeno do WebLLM. Não conferi, e vou medir ao construir;
+- quantos aparelhos da turma têm WebGPU. Isso é parte do que o jogo vai revelar.
