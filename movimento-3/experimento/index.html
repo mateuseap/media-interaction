@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>O Fantasma da Chamada</title>
+<style>
+:root { --bg: #07080c; --ink: #e9ecf5; --dim: #8a90a6; --ghost: #cfe3ff; --red: #DB1E2F; }
+* { box-sizing: border-box; margin: 0; }
+html, body { height: 100%; }
+body { background: radial-gradient(ellipse at 50% 35%, #141a2b 0%, var(--bg) 62%); color: var(--ink); font-family: Georgia, "Times New Roman", serif; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; padding: 24px; overflow: hidden; }
+.ghost { width: 220px; height: 260px; position: relative; transition: opacity 1.2s ease, filter 1.2s ease; animation: float 5s ease-in-out infinite; }
+.ghost svg { width: 100%; height: 100%; filter: drop-shadow(0 0 28px rgba(160, 200, 255, .45)); }
+.ghost.talk .mouth { animation: talk .18s ease-in-out infinite alternate; transform-origin: 110px 150px; }
+.ghost.gone { opacity: .05; filter: blur(6px); }
+.ghost.angry svg { filter: drop-shadow(0 0 30px rgba(219, 30, 47, .7)); }
+@keyframes float { 50% { transform: translateY(-14px); } }
+@keyframes talk { from { transform: scaleY(.4); } to { transform: scaleY(1.3); } }
+@media (prefers-reduced-motion: reduce) { .ghost, .ghost.talk .mouth { animation: none; } }
+#fala { max-width: 820px; min-height: 3.2em; text-align: center; font-size: clamp(20px, 2.6vw, 30px); line-height: 1.4; color: var(--ghost); font-style: italic; }
+#voce { max-width: 820px; min-height: 1.4em; text-align: center; font-size: 17px; color: var(--dim); font-family: system-ui, sans-serif; }
+.barra { display: flex; gap: 10px; width: min(820px, 100%); font-family: system-ui, sans-serif; }
+.barra input { flex: 1; background: #10131d; border: 1px solid #2a3046; color: var(--ink); border-radius: 8px; padding: 12px 14px; font-size: 17px; }
+.barra button, .ini button { background: #1a2034; color: var(--ink); border: 1px solid #39405a; border-radius: 8px; padding: 12px 16px; font-size: 16px; cursor: pointer; }
+.barra button:hover, .ini button:hover { border-color: var(--ghost); }
+.barra button:focus-visible, .ini button:focus-visible, .barra input:focus-visible { outline: 2px solid var(--ghost); outline-offset: 2px; }
+#mic.on { background: var(--red); border-color: var(--red); }
+.ini { text-align: center; max-width: 640px; font-family: system-ui, sans-serif; display: flex; flex-direction: column; gap: 14px; align-items: center; }
+.ini h1 { font-family: Georgia, serif; font-weight: 400; font-size: clamp(30px, 5vw, 48px); color: var(--ghost); }
+.ini p { color: var(--dim); font-size: 16px; line-height: 1.5; }
+#prog { color: var(--ghost); font-size: 15px; min-height: 1.4em; }
+.dica { position: fixed; bottom: 12px; font: 13px system-ui, sans-serif; color: #555c74; text-align: center; width: 100%; }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+
+<section class="ini" id="ini">
+  <h1>O Fantasma da Chamada</h1>
+  <p>Um fantasma vai entrar nesta chamada. Ele ouve, responde com voz e só descansa se a turma descobrir como ele morreu.</p>
+  <p>Na primeira vez, o navegador baixa a mente dele (perto de 1,7 GB) e guarda. Depois ela roda inteira neste computador, sem servidor e sem internet.</p>
+  <button id="chamar" type="button">Chamar o fantasma</button>
+  <label style="font-size:14px;color:var(--dim)"><input type="checkbox" id="leve"> computador fraco: usar a versão leve (baixa perto de 1 GB, fala pior)</label>
+  <div id="prog" role="status" aria-live="polite"></div>
+</section>
+
+<div class="ghost" id="ghost" hidden aria-hidden="true">
+  <svg viewBox="0 0 220 260"><path d="M110 12c-52 0-86 40-86 92v138l22-18 22 18 21-18 21 18 21-18 22 18 22-18 21 18V104c0-52-34-92-86-92z" fill="#dfeaff" opacity=".92"/><ellipse cx="80" cy="104" rx="13" ry="18" fill="#0b0e18"/><ellipse cx="140" cy="104" rx="13" ry="18" fill="#0b0e18"/><ellipse class="mouth" cx="110" cy="150" rx="15" ry="9" fill="#0b0e18"/></svg>
+</div>
+<p id="fala" aria-live="polite" hidden></p>
+<p id="voce" hidden></p>
+
+<form class="barra" id="barra" hidden>
+  <input id="pergunta" autocomplete="off" placeholder="Pergunte ao fantasma..." aria-label="Pergunta para o fantasma">
+  <button type="submit">Perguntar</button>
+  <button id="mic" type="button" aria-pressed="false" title="Ouvir pelo microfone">🎙 Ouvir</button>
+  <button id="baixar" type="button" title="Baixar o registro da sessão">Registro</button>
+</form>
+<div class="dica" id="dica" hidden>Escreva a pergunta, ou ligue "Ouvir" e fale. "Registro" baixa a conversa inteira, com horário de cada fala.</div>
+
+<script type="module">
+const MODELO_FIXO = new URLSearchParams(location.search).get("modelo");
+
+const PISTAS = [
+  "estava frio e muito escuro naquela noite",
+  "a luz tinha acabado de repente",
+  "você ouvia um zumbido grave, de máquina",
+  "você estava terminando algo muito importante para você",
+  "você desceu uma escada estreita",
+  "suas mãos formigaram e depois tudo apagou",
+];
+
+function historia(nivel) {
+  const liberadas = PISTAS.slice(0, nivel).map((p) => "- " + p).join("\n") || "- nenhuma ainda: você está confuso e não lembra de quase nada";
+  return `Você é Rui, um fantasma. Você morreu em 1987, aos 23 anos, quando era estudante de Computação na UFPE, e assombra este centro desde então.
+Você NÃO lembra como morreu. Você só lembra destes fragmentos, e só pode falar deles:
+${liberadas}
+Quem você é: um rapaz do Recife, gentil, curioso, que adorava computadores e tinha medo do escuro. Sente saudade da mãe e do mar de Boa Viagem. Gosta quando falam com ele, porque passou décadas sozinho.
+Exemplos do seu jeito de falar:
+- "Eu... não sei. Tudo ficou escuro tão rápido."
+- "Faz tanto tempo que ninguém fala comigo. Fiquem mais um pouco."
+- "Não grite comigo. Eu já sofri o bastante."
+Regras obrigatórias:
+- Fale sempre em português, em primeira pessoa, como um fantasma melancólico, assustado e um pouco teatral. Nunca fale como assistente ou como atendente.
+- Responda em no máximo 2 frases curtas.
+- Sobre você mesmo, fale à vontade: nome, idade, que estudava Computação, a mãe, o mar, a solidão.
+- Nunca diga como você morreu: você não sabe. Nunca fale de choque, gerador, eletricidade ou trabalho de faculdade se isso não estiver nos fragmentos acima.
+- Se perguntarem se algo aconteceu e isso não está nos fragmentos, diga que não lembra. Nunca invente lugares, objetos ou fatos novos sobre a sua morte.
+- Não repita a mesma frase em respostas seguidas.
+- Nunca diga que é uma IA, um programa ou um modelo. Se perguntarem, fique ofendido como um fantasma.
+- Se a turma for grosseira, fique magoado e frio. Se for gentil, fique mais à vontade.`;
+}
+
+const PALAVRAS_FINAL = [/choque|eletrocut|el[eé]tric/i, /gerador/i, /trabalho|projeto|tarefa/i];
+
+const $ = (id) => document.getElementById(id);
+const registro = window.registro = [];
+const msgs = [];
+let engine, falando = false, pensando = false, escutando = false, reconhecedor, nivel = 0, perguntas = 0, acabou = false;
+
+function log(quem, texto) { registro.push({ t: new Date().toISOString(), quem, texto }); }
+
+function falar(texto) {
+  const g = $("ghost");
+  $("fala").textContent = texto;
+  if (!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(texto);
+  u.lang = "pt-BR"; u.rate = 0.88; u.pitch = 0.55;
+  const voz = speechSynthesis.getVoices().find((v) => v.lang?.toLowerCase().startsWith("pt"));
+  if (voz) u.voice = voz;
+  u.onstart = () => { falando = true; g.classList.add("talk"); };
+  u.onend = u.onerror = () => { falando = false; g.classList.remove("talk"); };
+  speechSynthesis.speak(u);
+}
+
+function despedida() {
+  acabou = true;
+  $("ghost").classList.remove("angry");
+  const fim = "É isso... o gerador. Eu morri por causa de um trabalho, sozinho, no escuro. Obrigado por lembrarem de mim. Agora eu posso descansar. Adeus.";
+  log("fantasma", fim);
+  falar(fim);
+  setTimeout(() => $("ghost").classList.add("gone"), 9000);
+  $("pergunta").disabled = true;
+}
+
+async function perguntar(texto) {
+  texto = texto.trim();
+  if (!texto || !engine || acabou || pensando) return;
+  $("voce").textContent = "Turma: " + texto;
+  log("turma", texto);
+  perguntas++;
+  // the ghost recalls one more fragment every 2 questions, and the game, not the model, decides the ending
+  nivel = Math.min(PISTAS.length, Math.floor(perguntas / 2));
+  if (nivel >= 4 && PALAVRAS_FINAL.filter((r) => r.test(texto)).length >= 2) return despedida();
+  msgs.push({ role: "user", content: texto });
+  $("fala").textContent = "...";
+  pensando = true;
+  let r;
+  try {
+    const resp = await engine.chat.completions.create({ messages: [{ role: "system", content: historia(nivel) }].concat(msgs.slice(-10)), temperature: 0.8, max_tokens: 120 });
+    r = resp.choices[0].message.content.trim() || "...";
+  } catch (e) {
+    r = "Eu... me perdi. Perguntem de novo.";
+  } finally { pensando = false; }
+  msgs.push({ role: "assistant", content: r });
+  log("fantasma", r);
+  const ofendido = /(magoad|grosseir|não grite|me deixem|ofend|vão embora)/i.test(r);
+  $("ghost").classList.toggle("angry", ofendido);
+  falar(r);
+}
+
+$("chamar").onclick = async () => {
+  $("chamar").disabled = true;
+  const adaptador = navigator.gpu && (await navigator.gpu.requestAdapter());
+  if (!adaptador) {
+    $("prog").textContent = "Este navegador não tem WebGPU. Abra no Chrome ou Edge atualizados, num computador.";
+    $("chamar").disabled = false; return;
+  }
+  // f16 shaders are faster but not every GPU exposes them; the f32 build runs everywhere WebGPU does
+  const tamanho = $("leve").checked ? "1.5B" : "3B";
+  const modelo = MODELO_FIXO || `Qwen2.5-${tamanho}-Instruct-${adaptador.features.has("shader-f16") ? "q4f16_1" : "q4f32_1"}-MLC`;
+  try {
+    const webllm = await import("https://esm.run/@mlc-ai/web-llm@0.2.79");
+    engine = await webllm.CreateMLCEngine(modelo, { initProgressCallback: (p) => { $("prog").textContent = p.text; } });
+  } catch (e) {
+    $("prog").textContent = "Não deu para carregar o fantasma: " + String(e.message || e).slice(0, 160);
+    $("chamar").disabled = false; return;
+  }
+  log("sistema", "modelo " + modelo);
+  $("ini").hidden = true;
+  for (const id of ["ghost", "fala", "voce", "barra", "dica"]) $(id).hidden = false;
+  const abertura = "Vocês... conseguem me ver? Faz tanto tempo. Eu morri aqui, neste centro, em 1987. Me ajudem a lembrar como.";
+  msgs.push({ role: "assistant", content: abertura });
+  log("fantasma", abertura);
+  falar(abertura);
+  $("pergunta").focus();
+};
+
+$("barra").onsubmit = (e) => { e.preventDefault(); const v = $("pergunta").value; $("pergunta").value = ""; perguntar(v); };
+
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (!SR) $("mic").hidden = true;
+$("mic").onclick = () => {
+  if (escutando) { escutando = false; reconhecedor?.stop(); $("mic").classList.remove("on"); $("mic").setAttribute("aria-pressed", "false"); return; }
+  reconhecedor = new SR();
+  reconhecedor.lang = "pt-BR"; reconhecedor.continuous = true; reconhecedor.interimResults = false;
+  reconhecedor.onresult = (e) => {
+    const t = e.results[e.results.length - 1][0].transcript;
+    if (!falando && !pensando) perguntar(t);
+  };
+  reconhecedor.onend = () => { if (escutando) reconhecedor.start(); };
+  escutando = true; reconhecedor.start();
+  $("mic").classList.add("on"); $("mic").setAttribute("aria-pressed", "true");
+};
+
+function baixarRegistro() {
+  const sessao = { perguntas, fragmentos_liberados: nivel, descansou: acabou, falas: registro };
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(sessao, null, 2)], { type: "application/json" }));
+  a.download = `fantasma-${new Date().toISOString().slice(0, 16).replace(/:/g, "")}.json`;
+  a.click();
+}
+$("baixar").onclick = baixarRegistro;
+addEventListener("keydown", (e) => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") { e.preventDefault(); baixarRegistro(); } });
+</script>
+</body>
+</html>
