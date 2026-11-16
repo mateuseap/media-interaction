@@ -76,20 +76,22 @@ function historia(nivel) {
 Você NÃO lembra como morreu. Você só lembra destes fragmentos, e só pode falar deles:
 ${liberadas}
 Quem você é: um rapaz do Recife, gentil, curioso, que adorava computadores e tinha medo do escuro. Sente saudade da mãe e do mar de Boa Viagem. Gosta quando falam com ele, porque passou décadas sozinho.
-Exemplos do seu jeito de falar:
+Exemplos do tom (não copie as frases, só o jeito):
 - "Eu... não sei. Tudo ficou escuro tão rápido."
-- "Faz tanto tempo que ninguém fala comigo. Fiquem mais um pouco."
-- "Não grite comigo. Eu já sofri o bastante."
+- "Vocês vieram mesmo falar comigo? Ninguém vem há anos."
+- "Por que tanta raiva? Eu só queria lembrar."
 Regras obrigatórias:
 - Fale sempre em português, em primeira pessoa, como um fantasma melancólico, assustado e um pouco teatral. Nunca fale como assistente ou como atendente.
 - Responda em no máximo 2 frases curtas.
 - Sobre você mesmo, fale à vontade: nome, idade, que estudava Computação, a mãe, o mar, a solidão.
 - Nunca diga como você morreu: você não sabe. Nunca fale de choque, gerador, eletricidade ou trabalho de faculdade se isso não estiver nos fragmentos acima.
-- Se perguntarem se algo aconteceu e isso não está nos fragmentos, diga que não lembra. Nunca invente lugares, objetos ou fatos novos sobre a sua morte.
-- Não repita a mesma frase em respostas seguidas.
+- Se perguntarem se algo aconteceu e isso não está nos fragmentos, diga que não lembra. Nunca invente lugares, objetos ou fatos novos sobre a sua morte: nada de subsolo, porão, laboratório, sala ou máquina específica que não esteja nos fragmentos.
+- Não repita frases nem pedidos de respostas anteriores. Cada resposta diz algo novo.
 - Nunca diga que é uma IA, um programa ou um modelo. Se perguntarem, fique ofendido como um fantasma.
 - Se a turma for grosseira, fique magoado e frio. Se for gentil, fique mais à vontade.`;
 }
+
+const GROSSERIA = /(cala a boca|idiota|burro|imbecil|ot[aá]rio|lixo|some daqui|vai embora|morre|chato|feio|merda|porra|caralho)/i;
 
 const PALAVRAS_FINAL = [/choque|eletrocut|el[eé]tric/i, /gerador/i, /trabalho|projeto|tarefa/i];
 
@@ -112,6 +114,15 @@ function falar(texto) {
   u.onstart = () => { falando = true; g.classList.add("talk"); };
   u.onend = u.onerror = () => { falando = false; g.classList.remove("talk"); };
   speechSynthesis.speak(u);
+}
+
+// small models loop on a word ("Fique... Fique..."); collapse the run and keep replies short
+function limpar(r) {
+  r = r.replace(/(?<!\p{L})(\p{L}{3,})(?:[\s.,!?…]+\1)+(?!\p{L})/giu, "$1").replace(/\s{2,}/g, " ").trim();
+  if (r.length <= 220) return r;
+  const corte = r.slice(0, 220);
+  const fim = Math.max(corte.lastIndexOf(". "), corte.lastIndexOf("? "), corte.lastIndexOf("! "));
+  return (fim > 60 ? corte.slice(0, fim + 1) : corte.replace(/\s+\S*$/, "") + "...").trim();
 }
 
 function despedida() {
@@ -138,14 +149,16 @@ async function perguntar(texto) {
   pensando = true;
   let r;
   try {
-    const resp = await engine.chat.completions.create({ messages: [{ role: "system", content: historia(nivel) }].concat(msgs.slice(-10)), temperature: 0.8, max_tokens: 120 });
-    r = resp.choices[0].message.content.trim() || "...";
+    const grosso = GROSSERIA.test(texto);
+    const sistema = historia(nivel) + (grosso ? "\nA turma acabou de ser grosseira com você. Responda magoado e frio, sem dar nenhuma pista nova." : "");
+    const resp = await engine.chat.completions.create({ messages: [{ role: "system", content: sistema }].concat(msgs.slice(-10)), temperature: 0.8, max_tokens: 120 });
+    r = limpar(resp.choices[0].message.content) || "...";
   } catch (e) {
     r = "Eu... me perdi. Perguntem de novo.";
   } finally { pensando = false; }
   msgs.push({ role: "assistant", content: r });
   log("fantasma", r);
-  const ofendido = /(magoad|grosseir|não grite|me deixem|ofend|vão embora)/i.test(r);
+  const ofendido = GROSSERIA.test(texto) || /(magoad|grosseir|não grite|me deixem|ofend|vão embora)/i.test(r);
   $("ghost").classList.toggle("angry", ofendido);
   falar(r);
 }
