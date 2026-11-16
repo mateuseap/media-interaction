@@ -59,7 +59,18 @@ Escrito antes do teste:
 
 - **Só o "cérebro" é local.** O reconhecimento de voz do Chrome envia o áudio para o Google. A alternativa sem isso é escrever as perguntas na caixa.
 - **O modelo é pequeno.** Às vezes erra concordância ou se repete. Quem decide o fim do jogo é o código, não o modelo, para o mistério não se resolver por acaso.
-- **Precisa de WebGPU e de uma placa de vídeo razoável.** Testado no Chromium 152 com uma RTX 4060. Celulares, em geral, não rodam.
+- **Precisa de WebGPU e de uma placa de vídeo razoável.** Celulares, em geral, não rodam.
+
+## Como foi testado antes da aula
+
+Em 16/11/2026, no link publicado, no Chromium 152 com uma RTX 4060, a sessão inteira foi jogada por um script: abertura, nove perguntas (incluindo uma grosseria e "você é uma inteligência artificial?") e o acerto final. Nas duas versões, a padrão (Qwen2.5 3B) e a leve (Qwen2.5 1.5B), o fantasma:
+
+- não revelou a causa da morte antes do fim;
+- liberou os fragmentos aos poucos, a cada duas perguntas;
+- ficou magoado com a grosseria e negou ser uma IA;
+- se despediu e sumiu quando a turma acertou.
+
+O primeiro carregamento levou cerca de 25 segundos numa conexão doméstica rápida. Cada resposta levou de meio segundo a 2 segundos.
 
 ## Arquivos
 

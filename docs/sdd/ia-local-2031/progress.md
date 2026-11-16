@@ -1,30 +1,41 @@
 # Progresso: IA local em 2031
 
-CURRENT OBJECTIVE: movimento 3, experimento sobre IA local no tema 16.
-CURRENT PHASE: IDEIAS (versão 2) entregues no GitHub; aguardando construção do experimento.
+CURRENT OBJECTIVE: movimento 3, experimento "O Fantasma da Chamada".
+CURRENT PHASE: EXPERIMENTO publicado e testado; falta o usuário salvar o link no site.
 CURRENT BRANCH: master
 BASE BRANCH: master (remoto não tem develop).
 
 COMPLETED:
-- Movimento 2: documento `activity-03/tendencia-ia-local.md` (12 fontes, 27 efeitos), deck de 18 slides, roteiro e validador. Link do documento salvo no site e entregue no Classroom. Apresentação feita em 08/10.
-- Movimento 3, ideias v1 (14/10): link salvo no site, campo `ideias_url`, login `meap`.
-- Movimento 3, ideias v2 (19/10): `movimento-3/ideias.md` reescrito após orientação do professor (jogo com e sem modelo local). O link no site é o mesmo e não foi reenviado.
+- Movimento 2: documento, deck, roteiro e validador. Apresentação em 08/10.
+- Movimento 3, ideias v1 (14/10) e v2 (19/10). Link salvo no site em 14/10 (`ideias_url`).
+- Movimento 3, experimento (16/11): `movimento-3/experimento/index.html` e `README.md`.
+  - Jogo de página única. Um fantasma (Rui, morto em 1987) entra na chamada do Meet; a turma descobre como ele morreu.
+  - Modelo Qwen2.5 3B Instruct no navegador via WebLLM/WebGPU; versão leve 1.5B opcional; variante f16 ou f32 conforme a GPU.
+  - O código libera um fragmento a cada 2 perguntas, detecta grosseria e decide o final; o modelo só interpreta o personagem.
+  - Voz pelo navegador; botão "Registro" baixa a sessão em JSON.
+- Publicado no homelab: https://fantasma.lab.mateuseap.com (homelab PRs #262 e #263, pin atualizado em #264 e #265). TLS Let's Encrypt ok.
+
+TESTS PASSED:
+- Sessão completa jogada por script no link publicado, nos modelos 3B e 1.5B: segredo protegido, pistas no ritmo, reação à grosseria, negação de ser IA, despedida e sumiço.
+- Screenshots da tela inicial, do fantasma e do estado magoado.
 
 DECISIONS MADE:
-- Ideias v1 descartadas porque mediam desempenho da máquina, que muda com o tempo.
-- Experimento escolhido: jogo de uma cena com guarda roteirizado contra guarda gerado por modelo local no navegador (WebLLM, modelo pequeno da lista oficial), com arquivo de memória no fim. Versão roteirizada é plano B para quem não tem WebGPU.
-- Publicação prevista: página estática no GitHub Pages, sem servidor e sem chave de API.
+- Ideias v1 descartadas por medirem desempenho; ideia do guarda descartada pelo usuário por ser pouco interessante.
+- Direção final inspirada no experimento da bvga: personagem num mundo compartilhado, turma inteira junta, resultado imprevisível.
+- Hospedagem no homelab por preferência do usuário (subdomínio `.lab.mateuseap.com`), no padrão estático do `fj-presentation`.
+- Modelo 3B como padrão: português muito melhor que o 1.5B nos testes.
 
 OPEN RISKS:
-- Tamanho de download do modelo pequeno ainda não medido.
-- Aparelhos da turma sem WebGPU caem na versão roteirizada.
-- Prompt API do Chrome (ideia 3) só roda em computador e não lista português.
+- Primeiro download de cerca de 1,7 GB: pedir para abrir o link na véspera.
+- O reconhecimento de voz do Chrome envia áudio ao Google; alternativa é escrever na caixa.
+- O enunciado fala em teste presencial; o do meap é online pelo Meet (confirmar com o professor, se ainda não confirmado).
 
 DEADLINES:
-- Experimento + README: 09/11 23h59 (véspera do teste).
-- Teste presencial: 10/11.
+- Experimento + README: 16/11 23h59.
+- Teste: 17/11 (Meet).
 - REGISTRO.md: 30/11 23h59.
 - Apresentação final: 01/12.
 
-SITE DA DISCIPLINA: nada novo a enviar; o link das ideias aponta para o arquivo no GitHub.
-EXACT NEXT ACTION: confirmar a escolha com o professor e começar `movimento-3/experimento/` (jogo + README.md).
+SITE DA DISCIPLINA: `exp_url` ainda vazio. NÃO salvo por regra do usuário: aguarda "pode enviar".
+Link a salvar: https://github.com/mateuseap/media-interaction/tree/master/movimento-3/experimento
+EXACT NEXT ACTION: usuário confirmar; salvar `exp_url` até 16/11 23h59; no dia 17/11, rodar o teste e depois escrever `movimento-3/experimento/REGISTRO.md`.

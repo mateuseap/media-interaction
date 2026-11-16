@@ -2,11 +2,12 @@
 
 Aluno: meap | Tema 16: IA local, no dispositivo e no navegador | Etapa 2: 100% entregue
 
-## Datas (código da página, não chute)
-- Ideias: **14/10 23h59 (HOJE)** — mostrar na aula de 15/10. Zero ponto, mas sem isso não há orientação.
-- Teste presencial do experimento: **10/11** (posição 12 no sorteio, mesma ordem das apresentações).
-- Experimento + README: **09/11 23h59** (véspera do teste). Vale 1,5.
-- REGISTRO.md: **30/11 23h59** (véspera da final). Vale 1,0.
+## Datas (atualizadas em 16/11 pelo código da página do movimento 3)
+O professor refez a ordem dos testes em 15/10 pela ordem real das apresentações (TMI-0148). As datas antigas (teste em 10/11) não valem mais.
+- Ideias: entregues em 14/10 (v1) e revisadas em 19/10 (v2).
+- Experimento + README: **16/11 23h59** (véspera do teste). Vale 1,5.
+- Teste do experimento: **17/11**, online pelo Meet.
+- REGISTRO.md: **30/11 23h59**. Vale 1,0.
 - Apresentação final: **01/12**. Vale 0,5. Teste em si vale 1,0.
 
 ## Tarefa 1 (URGENTE, hoje): ideias
@@ -20,8 +21,8 @@ Critérios: ideias têm que explorar o TEMA 16, ser experimento sobre para onde 
 
 ## Tarefa 2: experimento + README (a partir de 15/10, com a pré-análise do professor)
 Direção definida pelo professor: um jogo que roda com e sem modelo local. Ideias refeitas em 19/10 (versão 2 do `ideias.md`).
-Escolha atual: ideia 1 (o guarda que improvisa, versão roteirizada contra modelo local no navegador) com o final da ideia 2 (arquivo de memória: apagar, baixar ou entregar). Ideia 3 é extensão opcional.
-Regra nova: observar o comportamento das pessoas, nunca medir desempenho da máquina.
+Experimento construído em 16/11: **O Fantasma da Chamada** (`movimento-3/experimento/`), no ar em https://fantasma.lab.mateuseap.com (homelab). Substitui o guarda: um personagem com modelo local entra numa chamada do Meet e a turma descobre como ele morreu.
+Pergunta: quando personagens saem do jogo e entram nos espaços reais (uma chamada), as pessoas os tratam como brincadeira, como gente ou como invasão?
 Entregar: experimento acessível a quem não é da turma + README.md com: o que é, a pergunta sobre o futuro, a tecnologia emergente E POR QUE NÃO DÁ com tecnologia madura, como usar, o que espera que aconteça.
 Pasta: `movimento-3/experimento/`. Link salvo no site (campo exp_url) só com minha confirmação.
 Critério: a turma tem que conseguir usar sozinha no teste presencial de 10/11. Se precisar de instrução complicada, está errado.
