@@ -1,7 +1,7 @@
 # Progresso: IA local em 2031
 
-CURRENT OBJECTIVE: movimento 3, experimento "O Fantasma da Chamada".
-CURRENT PHASE: EXPERIMENTO publicado e testado; falta o usuário salvar o link no site.
+CURRENT OBJECTIVE: movimento 3, experimento "A Vila nos Computadores" (troca do fantasma em 17/11).
+CURRENT PHASE: TESTE (17/11 de manhã, Meet). Vila publicada, só teste de fumaça feito.
 CURRENT BRANCH: master
 BASE BRANCH: master (remoto não tem develop).
 
@@ -36,6 +36,12 @@ DEADLINES:
 - REGISTRO.md: 30/11 23h59.
 - Apresentação final: 01/12.
 
-SITE DA DISCIPLINA: `exp_url` ainda vazio. NÃO salvo por regra do usuário: aguarda "pode enviar".
-Link a salvar: https://github.com/mateuseap/media-interaction/tree/master/movimento-3/experimento
-EXACT NEXT ACTION: usuário confirmar; salvar `exp_url` até 16/11 23h59; no dia 17/11, rodar o teste e depois escrever `movimento-3/experimento/REGISTRO.md`.
+VILA (17/11, madrugada):
+- `movimento-3/experimento/index.html`: cada aluno traz um morador; mente local (Qwen2.5 1.5B, ou 3B) no navegador do dono; falas trocadas por broker MQTT público `broker.emqx.io`; sussurros, eventos, dormir. Fantasma movido para `fantasma.html`.
+- Publicada em https://fantasma.lab.mateuseap.com (homelab PRs #266 e #267, pin 64bf07f).
+- Verificado: teste de fumaça headless (entrar como espírito, evento aparece na praça). NÃO verificado: dois moradores com mente conversando entre si (teste com 3 navegadores não chegou a rodar).
+- Linux: Chrome precisa de `chrome://flags/#enable-unsafe-webgpu`.
+
+SITE DA DISCIPLINA: `exp_url` salvo em 16/11 23h27 com autorização do usuário ("submete algo que podemos ir modificando"):
+https://github.com/mateuseap/media-interaction/tree/master/movimento-3/experimento
+EXACT NEXT ACTION: rodar o teste de 17/11; depois escrever `movimento-3/experimento/REGISTRO.md` (até 03/12, prazo novo do site).
