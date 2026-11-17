@@ -30,7 +30,7 @@ export class PlayerSprite {
   private bubbleTimer: Phaser.Time.TimerEvent | null = null;
   private speakingRing: Phaser.GameObjects.Ellipse | null = null;
 
-  constructor(scene: Phaser.Scene, x: number, y: number, name: string, color: string, sub = '', labelColor = '#f2ead8') {
+  constructor(scene: Phaser.Scene, x: number, y: number, name: string, color: string, sub = '', labelColor = '#f2ead8', headKey = TEXTURE_AVATAR_HEAD) {
     this.scene = scene;
 
     const shadow = scene.add
@@ -42,10 +42,10 @@ export class PlayerSprite {
       .setOrigin(0.5, 1)
       .setTint(Number.parseInt(color.replace('#', ''), 16));
 
-    this.head = scene.add.image(0, -2, TEXTURE_AVATAR_HEAD).setOrigin(0.5, 1);
+    this.head = scene.add.image(0, -2, headKey).setOrigin(0.5, 1);
 
     const label = scene.add
-      .text(0, -18, sub ? `${name}\n${sub}` : name, {
+      .text(0, -22, sub ? `${name}\n${sub}` : name, {
         fontFamily: '"Pixelify Sans", monospace',
         fontSize: '10px',
         align: 'center',
@@ -56,14 +56,14 @@ export class PlayerSprite {
       .setOrigin(0.5, 1);
 
     this.container = scene.add.container(x, y, [shadow, this.body, this.head, label]);
-    this.container.setDepth(y);
+    this.container.setDepth(10 + y);
     this.container.setAlpha(0);
     scene.tweens.add({ targets: this.container, alpha: 1, duration: FADE_MS });
   }
 
   setPosition(x: number, y: number): void {
     this.container.setPosition(x, y);
-    this.container.setDepth(y);
+    this.container.setDepth(10 + y);
   }
 
   /** Shows or hides the green voice ring under the avatar while speaking. */

@@ -4,9 +4,7 @@ import * as Phaser from 'phaser';
 import mqtt from 'mqtt';
 import {
   IDLE_INPUT,
-  SPAWN_POINTS,
   TILE_SIZE,
-  createWorldMap,
   isWalkable,
   stepPlayer,
   tileDistance,
@@ -14,7 +12,8 @@ import {
   type Position,
 } from './pixelhub/shared';
 import { PlayerSprite } from './pixelhub/game/PlayerSprite';
-import { TEXTURE_WORLD, createAvatarTextures, createWorldTexture } from './pixelhub/game/textures';
+import { createAvatarTextures } from './pixelhub/game/textures';
+import { COFRE, LUGARES, SPAWNS, VILA, cabeca, montarVila, type Chapeu } from './vila';
 
 const PARAMS = new URLSearchParams(location.search);
 const SALA = (PARAMS.get('sala') || 'aula').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 24) || 'aula';
@@ -23,42 +22,41 @@ const BROKER = 'wss://broker.emqx.io:8084/mqtt';
 const BASE = `testemunha-cin0055-v4/${SALA}`;
 const PERTO = 2.6; // tiles: how close you must stand to question a witness
 const NPC_VEL = 2.2; // tiles per second
-const COFRE: [number, number] = [20, 15]; // the central table of the PixelHub map
 const CORES_HUMANO = ['#e5c07b', '#98c379', '#61afef', '#c678dd', '#56b6c2', '#d19a66'];
 const CORES_NPC = ['#e06c75', '#ff79c6', '#bd93f9', '#8be9fd', '#50fa7b', '#f1fa8c', '#ffb86c', '#ff5555'];
 
-const PERSONAGENS = [
-  { nome: 'Cida do RH', traco: 'trabalha no RH, fofoqueira, fala muito' },
-  { nome: 'Tonho do TI', traco: 'cara do TI, tímido, tem a senha do cofre' },
-  { nome: 'Seu Bira', traco: 'porteiro da noite, ranzinza, desconfia de todo mundo' },
-  { nome: 'Lurdes', traco: 'da contabilidade, educada e muito curiosa' },
-  { nome: 'Zé do Café', traco: 'cuida do café, deve dinheiro para meio escritório' },
-  { nome: 'Tatá', traco: 'estagiária esperta que vê tudo da mesa dela' },
-  { nome: 'Dona Neide', traco: 'diretora, preocupada com a imagem da empresa' },
-  { nome: 'Consultor', traco: 'consultor que chegou ontem, ninguém sabe de onde, fala pouco' },
-  { nome: 'Zuzu', traco: 'do marketing, teatral, exagera tudo' },
-  { nome: 'Rosinha', traco: 'do financeiro, romântica, apaixonada em segredo' },
-  { nome: 'Didi', traco: 'da limpeza, nervoso, sempre com pressa' },
-  { nome: 'Bené', traco: 'do jurídico, rival do financeiro' },
-  { nome: 'Juca', traco: 'segurança, preguiçoso, cochila no turno' },
-  { nome: 'Quitéria', traco: 'a mais antiga da empresa, meio surda, lembra de tudo' },
-  { nome: 'Léo', traco: 'motoboy, entra e sai do prédio a noite toda' },
-  { nome: 'Socorro', traco: 'da recepção, rígida, anota quem entra' },
+const PERSONAGENS: { nome: string; traco: string; casa: string; chapeu: Chapeu }[] = [
+  { nome: 'Dona Cida', traco: 'dona da padaria, fofoqueira, fala muito', casa: 'a padaria', chapeu: 'lenco' },
+  { nome: 'Padre Tonho', traco: 'padre jovem e tímido, guarda a chave do cofre', casa: 'a porta da capela', chapeu: 'curto' },
+  { nome: 'Seu Bira', traco: 'pescador ranzinza, desconfia de todo mundo', casa: 'a cabana', chapeu: 'chapeu' },
+  { nome: 'Dona Lurdes', traco: 'professora aposentada, educada e curiosa', casa: 'as casas', chapeu: 'longo' },
+  { nome: 'Zé do Bar', traco: 'dono do bar, deve dinheiro para meia vila', casa: 'o bar', chapeu: 'careca' },
+  { nome: 'Tatá', traco: 'menina esperta que vê tudo da janela', casa: 'as casas', chapeu: 'longo' },
+  { nome: 'Prefeita Neide', traco: 'prefeita em campanha, preocupada com a imagem', casa: 'a praça', chapeu: 'curto' },
+  { nome: 'Forasteiro', traco: 'chegou ontem, ninguém sabe de onde, fala pouco', casa: 'a ponte', chapeu: 'capuz' },
+  { nome: 'Madame Zuzu', traco: 'cartomante teatral que jura prever o futuro', casa: 'a fonte', chapeu: 'lenco' },
+  { nome: 'Rosinha', traco: 'costureira romântica, apaixonada em segredo', casa: 'as casas', chapeu: 'longo' },
+  { nome: 'Sacristão Didi', traco: 'sacristão nervoso, sempre com pressa', casa: 'a porta da capela', chapeu: 'careca' },
+  { nome: 'Dona Bené', traco: 'dona da quitanda, rival da padaria', casa: 'a quitanda', chapeu: 'lenco' },
+  { nome: 'Cabo Juca', traco: 'único policial da vila, preguiçoso', casa: 'a praça', chapeu: 'quepe' },
+  { nome: 'Vó Quitéria', traco: 'a mais velha da vila, meio surda, lembra de tudo', casa: 'as casas', chapeu: 'longo' },
+  { nome: 'Léo da Moto', traco: 'mototaxista, roda a vila a noite toda', casa: 'a ponte', chapeu: 'bone' },
+  { nome: 'Irmã Socorro', traco: 'freira rígida, cuida da capela de dia', casa: 'a porta da capela', chapeu: 'veu' },
 ];
 const PISTAS = [
-  'você viu a luz da sala do cofre acesa perto da meia-noite',
-  'você ouviu a porta do cofre bater, pouco depois das onze',
-  'você viu alguém de capuz escuro descendo pela escada de incêndio, mas não viu o rosto',
-  'você achou um clipe torto no chão, do lado do cofre, de manhã cedo',
-  'você sentiu cheiro de café fresco tarde da noite, o que é estranho',
-  'você viu pegadas de lama do estacionamento até a mesa do cofre',
-  'você viu o elevador subir sozinho perto da meia-noite',
-  'você viu alguém contando dinheiro dentro de um carro, no estacionamento',
+  'eu vi a porta da capela entreaberta perto da meia-noite',
+  'eu ouvi barulho de moedas caindo dentro da capela, pouco depois das onze',
+  'eu vi alguém de capa escura atravessando a ponte correndo, mas não viu o rosto',
+  'eu achei moedas espalhadas no chão perto da fonte, de manhã cedo',
+  'eu senti cheiro de pão quente perto da capela tarde da noite, o que é estranho',
+  'eu vi pegadas de lama indo da capela até a beira do rio',
+  'eu vi luz acesa no cemitério depois da meia-noite, onde nunca tem ninguém',
+  'eu ouvi o sino da capela balançar sem ninguém tocar, perto da meia-noite',
 ];
-const PISTA_CULPADO = (c: { traco: string }) => `você viu, de longe, alguém que ${c.traco.split(',')[0].replace(/^(trabalha|cara|porteiro|da|do|cuida|estagiária|diretora|consultor|segurança|a mais|motoboy)/, (m) => m)} perto do cofre na hora do sumiço, mas não tem certeza de quem era`;
+const PISTA_CULPADO = (c: { traco: string }) => `eu vi, de longe, alguém com o jeito de ${c.traco.split(',')[0]} saindo da capela na hora do roubo, mas não tenho certeza de quem era`;
 
 interface Pessoa { id: string; dono: string; cor: string; x: number; y: number; t: number }
-interface Npc { id: string; nome: string; traco: string; dono: string; cor: string; estado: string; apagada: boolean; maquina?: string; x: number; y: number; t: number }
+interface Npc { id: string; nome: string; traco: string; casa: string; chapeu: Chapeu; onde?: string; dono: string; cor: string; estado: string; apagada: boolean; maquina?: string; x: number; y: number; t: number }
 interface Fala { id: string; t: string; de?: string; quem?: string; para?: string; paraId?: string; texto: string; tipo?: string }
 interface Rodada { id: string; t: string; ids: string[]; culpado: string }
 interface Corpo { sprite: PlayerSprite; path: [number, number][]; t0: number; alvo: Position }
@@ -92,7 +90,7 @@ const presente = (m: Npc) => vivoNpc(m) && m.estado !== 'offline';
 const centro = (tx: number, ty: number): Position => ({ x: tx * TILE_SIZE + 16, y: ty * TILE_SIZE + 16 });
 
 // ---------------- paths on the PixelHub map ----------------
-const MAPA = createWorldMap();
+const MAPA = VILA;
 function caminho(a: [number, number], b: [number, number]): [number, number][] {
   const k = (x: number, y: number) => y * MAPA.width + x;
   const prev = new Map<number, [number, number] | null>([[k(a[0], a[1]), null]]);
@@ -113,7 +111,7 @@ function caminho(a: [number, number], b: [number, number]): [number, number][] {
 }
 function tileLivre(h: number): [number, number] {
   for (let i = 0; i < 400; i++) { const x = 1 + ((h + i * 7919) % (MAPA.width - 2)), y = 1 + (((h >>> 7) + i * 104729) % (MAPA.height - 2)); if (isWalkable(MAPA, x, y)) return [x, y]; }
-  return [20, 10];
+  return [22, 14];
 }
 
 // ---------------- world scene ----------------
@@ -124,39 +122,20 @@ class Mundo extends Phaser.Scene {
   corpos = new Map<string, Corpo>();
   ultimoEnvio = 0;
   pronta = false;
-  escuro!: Phaser.GameObjects.Rectangle;
   constructor() { super('mundo'); }
 
   create(): void {
-    createWorldTexture(this, MAPA);
     createAvatarTextures(this);
-    this.add.image(0, 0, TEXTURE_WORLD).setOrigin(0, 0);
+    montarVila(this);
     const W = MAPA.width * TILE_SIZE, H = MAPA.height * TILE_SIZE;
     this.cameras.main.setBounds(0, 0, W, H);
     this.cameras.main.setBackgroundColor('#0d0b12');
     this.cameras.main.setRoundPixels(true);
 
-    // crime scene: pulsing red ring and tape around the safe
-    const [cx, cy] = [COFRE[0] * TILE_SIZE, COFRE[1] * TILE_SIZE];
-    const anel = this.add.ellipse(cx, cy, 150, 150).setStrokeStyle(2, 0xe06c75, 0.9).setFillStyle(0xe06c75, 0.08).setDepth(1);
-    this.tweens.add({ targets: anel, scale: 1.15, alpha: 0.4, duration: 1100, yoyo: true, repeat: -1 });
-    const fita = this.add.graphics().setDepth(1);
-    fita.lineStyle(4, 0xf0c35a, 1);
-    fita.strokeRect(cx - 82, cy - 82, 164, 164);
-    fita.lineStyle(4, 0x17131d, 1);
-    for (let i = -82; i < 82; i += 16) { fita.lineBetween(cx + i, cy - 82, cx + i + 8, cy - 82); fita.lineBetween(cx + i, cy + 82, cx + i + 8, cy + 82); fita.lineBetween(cx - 82, cy + i, cx - 82, cy + i + 8); fita.lineBetween(cx + 82, cy + i, cx + 82, cy + i + 8); }
-    this.add.text(cx, cy - 100, 'COFRE ARROMBADO', { fontFamily: '"Pixelify Sans", monospace', fontSize: '12px', color: '#f0c35a', backgroundColor: 'rgba(23,19,29,.85)', padding: { x: 5, y: 2 } }).setOrigin(0.5).setDepth(2);
-
-    // night: dark overlay over the whole office, with lights that flicker now and then
-    this.escuro = this.add.rectangle(0, 0, W, H, 0x0a0818, 0.42).setOrigin(0, 0).setDepth(5000);
-    this.time.addEvent({ delay: 4200, loop: true, callback: () => {
-      if (Math.random() < 0.55) this.tweens.add({ targets: this.escuro, alpha: { from: 0.42, to: 0.78 }, duration: 70, yoyo: true, repeat: 1 + Math.floor(Math.random() * 3) });
-    } });
-
     const kb = this.input.keyboard;
     if (kb) { kb.disableGlobalCapture(); this.keys = kb.addKeys('W,A,S,D,UP,DOWN,LEFT,RIGHT') as Record<string, Phaser.Input.Keyboard.Key>; }
 
-    const [sx, sy] = SPAWN_POINTS[hash(ID) % SPAWN_POINTS.length];
+    const [sx, sy] = SPAWNS[hash(ID) % SPAWNS.length];
     this.pos = centro(sx, sy);
     eu = { id: ID, dono, cor: CORES_HUMANO[hash(ID) % CORES_HUMANO.length], ...this.pos, t: Date.now() };
     pessoas.set(ID, eu);
@@ -204,14 +183,15 @@ class Mundo extends Phaser.Scene {
     if (!this.pronta) return;
     const h = this.humanos.get(p.id);
     if (h) { h.alvo = { x: p.x, y: p.y }; return; }
-    const sprite = new PlayerSprite(this, p.x, p.y, p.dono, p.cor, p.id === ID ? 'você' : 'investigando', '#f2ead8');
+    const sprite = new PlayerSprite(this, p.x, p.y, p.dono, p.cor, p.id === ID ? 'você' : 'investigando', '#f2ead8', cabeca(this, 'cab-h-' + p.id, 'curto', [0x2b1a10, 0x6b3e1f, 0x1b1b1b, 0xa0341f][hash(p.id) % 4], [0xf1c27d, 0xc68642, 0x8d5524, 0xe0ac69, 0xffdbac][hash(p.id + 'p') % 5]));
     this.humanos.set(p.id, { sprite, alvo: { x: p.x, y: p.y } });
   }
   tirarHumano(id: string): void { const h = this.humanos.get(id); if (!h || id === ID) return; this.humanos.delete(id); h.sprite.fadeOut(() => h.sprite.destroy()); }
   npc(m: Npc): void {
     if (!this.pronta || this.corpos.has(m.id)) return;
     const t: [number, number] = [Math.round((m.x - 16) / TILE_SIZE), Math.round((m.y - 16) / TILE_SIZE)];
-    const sprite = new PlayerSprite(this, m.x, m.y, m.nome, m.cor, `IA no PC de ${m.dono}`, m.id === meu?.id ? '#f0c35a' : '#ffd6da');
+    const velho = /Vó|Lurdes/.test(m.nome);
+    const sprite = new PlayerSprite(this, m.x, m.y, m.nome, m.cor, `IA no PC de ${m.dono}`, m.id === meu?.id ? '#f0c35a' : '#ffd6da', cabeca(this, 'cab-' + m.nome, m.chapeu || 'curto', velho ? 0xe6e6e6 : [0x2b1a10, 0x6b3e1f, 0xd9b56a, 0x1b1b1b, 0xa0341f][hash(m.nome) % 5], [0xf1c27d, 0xc68642, 0x8d5524, 0xe0ac69, 0xffdbac][hash(m.nome + 'p') % 5]));
     this.corpos.set(m.id, { sprite, path: [isWalkable(MAPA, t[0], t[1]) ? t : tileLivre(hash(m.id))], t0: 0, alvo: { x: m.x, y: m.y } });
   }
   mover(id: string, para: [number, number]): void {
@@ -300,16 +280,16 @@ function mostrarPainel(): void {
 // ---------------- the local mind ----------------
 function lembranca(): string {
   if (meu!.apagada) return 'Sua memória sobre ontem à noite foi APAGADA. Você não lembra de nada do que aconteceu ontem, nem sabe por quê. Fique confuso e nunca invente.';
-  if (papel === 'culpado') return 'Você é o CULPADO: ontem à noite você mesmo tirou o dinheiro da festa de fim de ano do cofre do escritório. Ninguém pode saber. Minta com calma e use sempre o mesmo álibi simples (estava em casa dormindo). Se desconfiarem, fique nervoso e jogue a suspeita para outra pessoa.';
-  return `Você é inocente. Ontem à noite você estava em casa, mas passou pelo escritório e ${segredo.replace(/^você /, '')}. Isso é a sua pista, e você QUER ajudar a achar o culpado. Quando perguntarem sobre ontem, o cofre, o dinheiro ou se você viu algo, comece por "Eu vi" ou "Eu ouvi" e conte essa pista com as suas palavras. Não invente outras pistas.`;
+  if (papel === 'culpado') return 'Você é o CULPADO: ontem à noite você mesmo tirou o dinheiro da festa de São João do cofre da capela. Ninguém pode saber. Minta com calma e use sempre o mesmo álibi simples (estava em casa dormindo). Se desconfiarem, fique nervoso e jogue a suspeita para outra pessoa.';
+  return `Você é inocente e QUER ajudar a achar o culpado. O que você viu ontem à noite, contado por você: "${segredo}". Quando perguntarem sobre ontem, o roubo, a capela, o dinheiro ou se você viu algo, conte isso. Não invente outras pistas.`;
 }
 function sistema(): string {
   const outros = [...npcs.values()].filter((m) => m.id !== meu!.id && presente(m)).map((m) => m.nome).join(', ') || 'ninguém';
-  return `Você é ${meu!.nome}, que trabalha num escritório no Recife. Quem você é: ${meu!.traco}.
-Ontem à noite o dinheiro da festa de fim de ano sumiu do cofre do escritório.
-${rodada ? lembranca() : 'Você ainda não sabe de nada sobre o sumiço.'}
-Colegas pelo escritório agora: ${outros}.
-Regras: fale em português do Brasil, com o seu jeito, em no máximo 2 frases curtas. Só a sua fala, sem o seu nome na frente, sem aspas, sem narração. Nunca diga que é uma IA, um programa ou um modelo.`;
+  return `Você é ${meu!.nome}, morador de uma pequena vila do interior de Pernambuco. Quem você é: ${meu!.traco}. Agora você está perto de ${meu!.onde || 'a praça'}.
+Ontem à noite o dinheiro da festa de São João sumiu do cofre da capela.
+${rodada ? lembranca() : 'Você ainda não sabe de nada sobre o roubo.'}
+Outros moradores na vila agora: ${outros}.
+Regras: fale em português do Brasil, como gente da vila, com o seu jeito, em no máximo 2 frases curtas. Só a sua fala, sem o seu nome na frente, sem aspas, sem narração. Nunca diga que é uma IA, um programa ou um modelo.`;
 }
 const recentes = () => historico.slice(-8).filter((m) => m.texto && m.tipo !== 'sis').map((m) => (m.quem ? m.quem + ': ' : '') + m.texto).join('\n') || '(nada)';
 function limpar(r: string): string {
@@ -329,7 +309,11 @@ async function responder(): Promise<void> {
   if (pensando || !engine || !fila.length || offline || !meu) return;
   const p = fila.shift()!;
   if (dormindo) { if (!p.npc) dizer({ de: meu.id, quem: meu.nome, texto: 'Zzz... (dormindo)' }); return responder(); }
-  const fala = (await gerar(`O que foi dito agora há pouco:\n${recentes()}\n\n${p.de} fala com você: "${p.texto}"\nResponda como ${meu.nome}:`)) || 'Hã? Fala de novo.';
+  const sobreCaso = /ontem|noite|viu|ouviu|estranh|roub|dinheiro|cofre|capela|sabe|pista|aconteceu|lembra/i.test(p.texto);
+  const conte = papel === 'testemunha' && segredo && !meu.apagada && sobreCaso ? `\nNa sua resposta, conte com as suas palavras: "${segredo}".` : '';
+  let fala = (await gerar(`O que foi dito agora há pouco:\n${recentes()}\n\n${p.de} fala com você: "${p.texto}"${conte}\nResponda como ${meu.nome}:`)) || 'Hã? Fala de novo.';
+  // a 1.5B model often ignores the clue; the game guarantees an innocent witness actually tells what they saw
+  if (conte) { const chaves = segredo!.toLowerCase().match(/\p{L}{5,}/gu) || []; if (!chaves.some((k) => fala.toLowerCase().includes(k))) fala = `${segredo![0].toUpperCase()}${segredo!.slice(1)}. ${fala}`.slice(0, 260); }
   log('resposta_local', { pergunta: p, resposta: fala, papel, apagada: meu.apagada });
   dizer({ de: meu.id, quem: meu.nome, texto: fala, para: p.de });
   responder();
@@ -338,9 +322,13 @@ async function responder(): Promise<void> {
 function passear(): void {
   if (!meu || !engine || dormindo || offline || !cena || Date.now() < proximoPasseio) return;
   proximoPasseio = Date.now() + 8000 + Math.random() * 12000;
-  const perto = Math.random() < 0.3 ? COFRE : null;
-  const alvo: [number, number] = perto ? tileLivre(hash(String(Date.now())) % 3 + COFRE[0] * 7) : tileLivre(Math.floor(Math.random() * 1e9));
-  const destino: [number, number] = perto && isWalkable(MAPA, COFRE[0] - 3, COFRE[1]) ? [COFRE[0] - 3, COFRE[1]] : alvo;
+  const nomes = Object.keys(LUGARES);
+  // witnesses drift home and to the crime scene more than anywhere else
+  const r = Math.random(), lugar = r < 0.3 ? meu.casa : r < 0.5 ? 'o cofre arrombado' : nomes[Math.floor(Math.random() * nomes.length)];
+  const [lx, ly] = LUGARES[lugar] || LUGARES['a praça'];
+  let destino: [number, number] = [lx, ly];
+  for (let i = 0; i < 12; i++) { const x = lx + Math.round((Math.random() - 0.5) * 4), y = ly + Math.round((Math.random() - 0.5) * 4); if (isWalkable(MAPA, x, y)) { destino = [x, y]; break; } }
+  meu.onde = lugar;
   cena.mover(meu.id, destino);
   pub('anda/' + meu.id, { para: destino });
 }
@@ -352,7 +340,7 @@ async function papo(): Promise<void> {
   let vizinho: Npc | null = null, dist = 9;
   for (const m of npcs.values()) { const o = cena.posNpc(m.id); if (!o || m.id === meu.id || !presente(m)) continue; const d = tileDistance(eup, o); if (d < dist) { dist = d; vizinho = m; } }
   if (!vizinho) return;
-  const fala = await gerar(`O que foi dito agora há pouco:\n${recentes()}\n\nVocê encontra ${vizinho.nome} (${vizinho.traco}) no corredor. Puxe conversa com ${vizinho.nome} sobre o sumiço do dinheiro: uma fofoca, uma desconfiança ou o que você acha. Fale com ${vizinho.nome} pelo nome:`);
+  const fala = await gerar(`O que foi dito agora há pouco:\n${recentes()}\n\nVocê encontra ${vizinho.nome} (${vizinho.traco}) perto de ${meu.onde || 'a praça'}. Puxe conversa com ${vizinho.nome} sobre o sumiço do dinheiro: uma fofoca, uma desconfiança ou o que você acha. Fale com ${vizinho.nome} pelo nome:`);
   if (fala) { log('papo_local', { com: vizinho.nome, fala, papel }); dizer({ de: meu.id, quem: meu.nome, texto: fala, para: vizinho.nome, paraId: vizinho.id }); }
 }
 setInterval(papo, 3000);
@@ -364,8 +352,8 @@ async function acordarMente(): Promise<boolean> {
   const info = adaptador.info || {};
   const p = PERSONAGENS.filter((x) => ![...npcs.values()].some((m) => vivoNpc(m) && m.nome === x.nome));
   const escolha = (p.length ? p : PERSONAGENS)[hash(ID) % (p.length || PERSONAGENS.length)];
-  const [tx, ty] = tileLivre(hash(NPC_ID));
-  meu = { id: NPC_ID, dono, ...escolha, cor: CORES_NPC[hash(NPC_ID) % CORES_NPC.length], estado: 'chegando', apagada: false, maquina: (info.description || [info.vendor, info.architecture].filter(Boolean).join(' ') || 'placa de vídeo').slice(0, 40), ...centro(tx, ty), t: Date.now() };
+  const [tx, ty] = LUGARES[escolha.casa] || tileLivre(hash(NPC_ID));
+  meu = { id: NPC_ID, dono, ...escolha, onde: escolha.casa, cor: CORES_NPC[hash(NPC_ID) % CORES_NPC.length], estado: 'chegando', apagada: false, maquina: (info.description || [info.vendor, info.architecture].filter(Boolean).join(' ') || 'placa de vídeo').slice(0, 40), ...centro(tx, ty), t: Date.now() };
   npcs.set(meu.id, meu); cena?.npc(meu); anunciarNpc(); mostrarPainel();
   // f16 shaders are faster but not every GPU exposes them; the f32 build runs everywhere WebGPU does
   modelo = PARAMS.get('modelo') || `Qwen2.5-${$i('forte').checked ? '3B' : '1.5B'}-Instruct-${adaptador.features.has('shader-f16') ? 'q4f16_1' : 'q4f32_1'}-MLC`;
@@ -375,7 +363,7 @@ async function acordarMente(): Promise<boolean> {
   } catch (e) { $('estado').textContent = 'Não deu para carregar a mente: ' + String((e as Error).message || e).slice(0, 120); return false; }
   log('sistema', { texto: 'mente carregada', modelo, maquina: meu.maquina });
   $('estado').textContent = `${meu.nome} chegou. A mente dela roda só neste computador (${meu.maquina}): anda e conversa sozinha. Você só decide se ela dorme, sai da internet ou esquece.`;
-  dizer({ tipo: 'sis', texto: `${meu.nome} chegou ao escritório (IA no PC de ${dono}).` });
+  dizer({ tipo: 'sis', texto: `${meu.nome} chegou na vila (IA no PC de ${dono}).` });
   proximoPasseio = Date.now() + 1500; proximoPapo = Date.now() + 15000 + Math.random() * 15000;
   anunciarNpc(); mostrarPainel();
   return true;

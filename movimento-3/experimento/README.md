@@ -9,11 +9,11 @@ Abra no **Chrome ou no Edge atualizados, num computador**. Na primeira vez, a p�
 
 ## O que é
 
-Um jogo de mistério em grupo, num escritório em pixel art que cada pessoa percorre com o próprio boneco. Ontem à noite, o dinheiro da festa de fim de ano sumiu do cofre do escritório.
+Um jogo de mistério em grupo, numa vila do interior em pixel art, à noite, que cada pessoa percorre com o próprio boneco. Ontem à noite, o dinheiro da festa de São João sumiu do cofre da capela.
 
-Cada pessoa que entra traz uma **testemunha**: uma IA que roda no computador dela. A testemunha é outro boneco, que anda pelo escritório e conversa e fofoca com as outras testemunhas sozinha. Ela viu um pedaço do que aconteceu, e só ela sabe o quê: nem o dono, nem quem fez o jogo, nem os outros. Uma das testemunhas, sorteada em segredo, é a culpada, e sabe que precisa mentir.
+Cada pessoa que entra traz uma **testemunha**: uma IA que roda no computador dela. A testemunha é outro boneco, que anda pela vila e conversa e fofoca com as outras testemunhas sozinha. Ela viu um pedaço do que aconteceu, e só ela sabe o quê: nem o dono, nem quem fez o jogo, nem os outros. Uma das testemunhas, sorteada em segredo, é a culpada, e sabe que precisa mentir.
 
-A turma anda pelo escritório (WASD ou setas), chega perto das testemunhas e as interroga. No fim, vota em quem pegou o dinheiro. O dono não controla o que a sua testemunha fala. Só pode fazer três coisas com ela:
+A turma anda pela vila (WASD ou setas), chega perto das testemunhas e as interroga. No fim, vota em quem pegou o dinheiro. O dono não controla o que a sua testemunha fala. Só pode fazer três coisas com ela:
 
 - **pôr para dormir**;
 - **desligar a internet**: ela some para os outros, mas continua lembrando no computador do dono;
@@ -32,7 +32,7 @@ O jogo coloca a turma dentro desse futuro, em escala pequena: a verdade sobre o 
 ## A tecnologia emergente, e por que não dá com tecnologia madura
 
 - **Cada testemunha pensa no navegador do dono.** Um modelo de 1,5 bilhão de parâmetros (Qwen2.5 1.5B Instruct, ou o 3B na opção "mente melhor") roda inteiro no computador, pela placa de vídeo, via [WebLLM](https://github.com/mlc-ai/web-llm) e WebGPU. O segredo de cada testemunha é sorteado e guardado só naquele navegador. Não existe servidor de IA, chave nem custo por fala.
-- **O escritório só repassa mensagens.** Os navegadores trocam falas e posições por um broker MQTT público (`broker.emqx.io`), que não tem IA nenhuma e não guarda as memórias.
+- **A vila só repassa mensagens.** Os navegadores trocam falas e posições por um broker MQTT público (`broker.emqx.io`), que não tem IA nenhuma e não guarda as memórias.
 
 Por que a tecnologia madura não serve:
 
@@ -46,7 +46,7 @@ Uma sessão leva cerca de 25 minutos: 5 para entrar, 15 investigando e 5 para vo
 **Quem joga (a turma):**
 
 1. Abra https://testemunha.lab.mateuseap.com no Chrome ou no Edge, num computador.
-2. Escreva o seu nome e clique em "Entrar no escritório". Você vira um boneco, e a sua testemunha (a IA) entra junto e começa a baixar.
+2. Escreva o seu nome e clique em "Entrar na vila". Você vira um boneco, e a sua testemunha (a IA) entra junto e começa a baixar.
 3. Ande com WASD ou com as setas. Chegue perto de qualquer testemunha e aperte Enter para interrogar. Esc volta a andar.
 4. No painel à direita, só você vê se a sua testemunha é inocente ou culpada. Ali você decide se ela dorme, se sai da internet ou se a memória dela é apagada.
 5. Quando a turma quiser, alguém clica em "Abrir votação". Todos votam e alguém clica em "Revelar para todos".
@@ -55,7 +55,7 @@ Sem placa de vídeo ou sem WebGPU, marque "entrar sem testemunha": você anda, i
 
 No Linux, o Chrome vem com o WebGPU desligado. Ligue em `chrome://flags/#enable-unsafe-webgpu` (e, se precisar, `chrome://flags/#enable-vulkan`) e reinicie o navegador.
 
-Para uma sala separada, acrescente `?sala=nome` ao link. Todos com o mesmo nome de sala caem no mesmo escritório.
+Para uma sala separada, acrescente `?sala=nome` ao link. Todos com o mesmo nome de sala caem na mesma vila.
 
 **Quem conduz (no dia do teste, pelo Meet):**
 
@@ -97,7 +97,7 @@ Saída para o `REGISTRO.md`: o JSON de "Baixar registro" de quem conduz (falas, 
 
 ## Limitações conhecidas
 
-- **O broker é público.** As falas do escritório passam por ele em texto aberto. Não escreva nada pessoal. Os segredos das testemunhas não passam por ele.
+- **O broker é público.** As falas da vila passam por ele em texto aberto. Não escreva nada pessoal. Os segredos das testemunhas não passam por ele.
 - **O modelo é pequeno.** Às vezes uma testemunha sai do personagem, se repete ou deixa escapar o segredo.
 - **Precisa de WebGPU e de uma placa de vídeo razoável.** Celulares, em geral, não rodam uma testemunha.
 - **Só dá para observar o que é compartilhado.** O jogo não sabe o que cada testemunha sabia, e isso é proposital: é a pergunta do experimento.
@@ -108,7 +108,7 @@ Saída para o `REGISTRO.md`: o JSON de "Baixar registro" de quem conduz (falas, 
 
 ## Créditos
 
-O escritório, os bonecos, o andar e os balões vêm do [PixelHub](https://github.com/mateuseap/pixelhub), projeto meu sob licença MIT (`src/pixelhub/`).
+O andar, os bonecos e os balões vêm do [PixelHub](https://github.com/mateuseap/pixelhub), projeto meu sob licença MIT (`src/pixelhub/`).
 
 ## Arquivos
 
@@ -117,7 +117,8 @@ O escritório, os bonecos, o andar e os balões vêm do [PixelHub](https://githu
 | `index.html` | A página: entrada, painel, interrogatório e votação |
 | `app.js` | O jogo compilado (gerado a partir de `src/`) |
 | `src/main.ts` | O código do jogo: testemunhas, mente local, caso, revelação |
-| `src/pixelhub/` | Mapa, texturas, bonecos e movimento do PixelHub |
+| `src/vila.ts` | A vila: mapa, desenho, noite, luzes, névoa e relâmpagos |
+| `src/pixelhub/` | Bonecos, balões e movimento do PixelHub |
 | `fantasma.html` | A versão anterior, O Fantasma da Chamada |
 | `README.md` | Este documento |
 
