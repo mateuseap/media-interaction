@@ -243,8 +243,8 @@ export function montarVila(scene: Phaser.Scene): void {
 }
 
 // ---------------- heads ----------------
-export type Chapeu = 'chapeu' | 'bone' | 'veu' | 'capuz' | 'lenco' | 'quepe' | 'longo' | 'careca' | 'curto';
-const CABECAS: Record<Chapeu, string[]> = {
+export type Chapeu = 'chapeu' | 'bone' | 'veu' | 'capuz' | 'lenco' | 'quepe' | 'longo' | 'careca' | 'curto' | 'coque' | 'trancas' | 'rabo' | 'franja';
+export const CABECAS: Record<Chapeu, string[]> = {
   curto: ['..........', '..........', '..hhhhhh..', '.hhhhhhhh.', '.hsssssss.', '.hsessseh.', '.ssssssss.', '..ssssss..'],
   longo: ['..........', '..........', '..hhhhhh..', '.hhhhhhhh.', 'hhsssssshh', 'hhsessseshh'.slice(0, 10), 'hhsssssshh', 'hh.ssss.hh'],
   careca: ['..........', '..........', '..........', '..ssssss..', '.ssssssss.', '.ssessses.', '.ssssssss.', '..shhhhs..'],
@@ -254,10 +254,66 @@ const CABECAS: Record<Chapeu, string[]> = {
   veu: ['..........', '..vvvvvv..', '.vvvvvvvv.', 'vvwwwwwwvv', 'vvssssssvv', 'vvsesseevv'.replace('ee', 'se'), 'vvssssssvv', 'vv.ssss.vv'],
   capuz: ['..........', '..pppppp..', '.pppppppp.', 'pppppppppp', 'pp.ssss.pp', 'pp.esse.pp', 'pp.ssss.pp', '.pp....pp.'],
   lenco: ['..........', '..........', '.llllllll.', 'llllllllll', '.hsssssss.', '.hsessseh.', '.ssssssss.', '..ssssss..'],
+  coque: ['....hh....', '...hhhh...', '..hhhhhh..', '.hhhhhhhh.', '.hsssssss.', '.hsessseh.', '.ssssssss.', '..ssmmss..'],
+  trancas: ['..........', '..........', '..hhhhhh..', '.hhhhhhhh.', 'hhsssssshh', 'hhsesssehh', 'hhssmmsshh', 'h..ssss..h'],
+  rabo: ['..........', '..........', '..hhhhhh..', '.hhhhhhhhh', '.hsssssshh', '.hsesssehh', '.sssmmsssh', '..ssssss.h'],
+  franja: ['..........', '..........', '..hhhhhh..', '.hhhhhhhh.', 'hhhhhhhhhh', 'hhsesssehh', 'hhssmmsshh', 'hh.ssss.hh'],
 };
+export type Corpo = 'calca' | 'vestido';
+// 12x8 bodies, drawn white and tinted with the outfit color; d = shoes
+export const CORPOS: Record<Corpo, [string[], string[]]> = {
+  calca: [
+    ['..bbbbbbbb..', '.bbbbbbbbbb.', '.bbbbbbbbbb.', '.bbbbbbbbbb.', '..bbbbbbbb..', '...gg..gg...', '...gg..gg...', '...dd..dd...'],
+    ['..bbbbbbbb..', '.bbbbbbbbbb.', '.bbbbbbbbbb.', '.bbbbbbbbbb.', '..bbbbbbbb..', '..gg....gg..', '..gg....gg..', '..dd....dd..'],
+  ],
+  vestido: [
+    ['..bbbbbbbb..', '.bbbbbbbbbb.', '.bbbbbbbbbb.', '..bbbbbbbb..', '..bbbbbbbb..', '.bbbbbbbbbb.', 'bbbbbbbbbbbb', '...dd..dd...'],
+    ['..bbbbbbbb..', '.bbbbbbbbbb.', '.bbbbbbbbbb.', '..bbbbbbbb..', '..bbbbbbbb..', '.bbbbbbbbbb.', '.bbbbbbbbbbb', '..dd....dd..'],
+  ],
+};
+// b tinted by the outfit color; g is a darker trouser shade so legs read even when tinted
+const COR_CORPO: Record<string, number> = { b: 0xffffff, g: 0x9a9aa6, d: 0x2a2233 };
+export function corpos(scene: Phaser.Scene): void {
+  for (const tipo of Object.keys(CORPOS) as Corpo[]) CORPOS[tipo].forEach((mapa, q) => {
+    const chave = `corpo-${tipo}-${q}`;
+    if (scene.textures.exists(chave)) return;
+    const g = scene.add.graphics();
+    mapa.forEach((linha, y) => { for (let x = 0; x < linha.length; x++) { const c = COR_CORPO[linha[x]]; if (c !== undefined) { g.fillStyle(c, 1); g.fillRect(x * 2, y * 2, 2, 2); } } });
+    g.generateTexture(chave, 24, 16); g.destroy();
+  });
+}
+export interface Visual { cab: Chapeu; corpo: Corpo; cabelo: number; pele: number; roupa: number }
+export const VISUAIS: Visual[] = [
+  { cab: 'longo', corpo: 'vestido', cabelo: 0x2b1a10, pele: 0xc68642, roupa: 0xe06c75 },
+  { cab: 'coque', corpo: 'vestido', cabelo: 0x6b3e1f, pele: 0xffdbac, roupa: 0x61afef },
+  { cab: 'trancas', corpo: 'vestido', cabelo: 0x1b1b1b, pele: 0x8d5524, roupa: 0xe5c07b },
+  { cab: 'rabo', corpo: 'calca', cabelo: 0xa0341f, pele: 0xf1c27d, roupa: 0x98c379 },
+  { cab: 'franja', corpo: 'vestido', cabelo: 0xd9b56a, pele: 0xe0ac69, roupa: 0xc678dd },
+  { cab: 'lenco', corpo: 'vestido', cabelo: 0x2b1a10, pele: 0x8d5524, roupa: 0x56b6c2 },
+  { cab: 'curto', corpo: 'calca', cabelo: 0x2b1a10, pele: 0xc68642, roupa: 0x61afef },
+  { cab: 'bone', corpo: 'calca', cabelo: 0x1b1b1b, pele: 0x8d5524, roupa: 0xe5c07b },
+  { cab: 'chapeu', corpo: 'calca', cabelo: 0x6b3e1f, pele: 0xffdbac, roupa: 0xd19a66 },
+  { cab: 'careca', corpo: 'calca', cabelo: 0x2b1a10, pele: 0xe0ac69, roupa: 0xe06c75 },
+  { cab: 'capuz', corpo: 'calca', cabelo: 0x2e2e36, pele: 0xf1c27d, roupa: 0x5c6370 },
+  { cab: 'curto', corpo: 'vestido', cabelo: 0xa0341f, pele: 0xf1c27d, roupa: 0xff79c6 },
+];
+const css = (n: number) => '#' + n.toString(16).padStart(6, '0');
+const mistura = (a: number, b: number) => { const r = (((a >> 16) & 255) * ((b >> 16) & 255)) / 255, g = (((a >> 8) & 255) * ((b >> 8) & 255)) / 255, bl = ((a & 255) * (b & 255)) / 255; return (Math.round(r) << 16) | (Math.round(g) << 8) | Math.round(bl); };
+/** Draws a villager onto a 2D canvas (24x30 px), the same pixels the game uses; for the picker. */
+export function desenharVisual(cv: HTMLCanvasElement, v: Visual): void {
+  cv.width = 24; cv.height = 30;
+  const c = cv.getContext('2d')!;
+  c.clearRect(0, 0, 24, 30);
+  CORPOS[v.corpo][0].forEach((linha, y) => { for (let x = 0; x < linha.length; x++) { const k = COR_CORPO[linha[x]]; if (k === undefined) continue; c.fillStyle = css(linha[x] === 'd' ? k : mistura(k, v.roupa)); c.fillRect(x * 2, 14 + y * 2, 2, 2); } });
+  const cores = coresCabeca(v.cabelo, v.pele);
+  CABECAS[v.cab].forEach((linha, y) => { for (let x = 0; x < linha.length; x++) { const k = cores[linha[x]]; if (k === undefined) continue; c.fillStyle = css(k); c.fillRect(2 + x * 2, y * 2, 2, 2); } });
+}
+function coresCabeca(cabelo: number, pele: number): Record<string, number> {
+  return { h: cabelo, s: pele, e: 0x1b1426, m: 0xb5525f, c: 0xc9a25a, k: 0xd9534f, q: 0x22344f, y: 0xf0c35a, v: 0x1f1f26, w: 0xf5f0e6, p: 0x2e2e36, l: 0x8e3bd6 };
+}
 export function cabeca(scene: Phaser.Scene, chave: string, chapeu: Chapeu, cabelo: number, pele: number): string {
   if (scene.textures.exists(chave)) return chave;
-  const cores: Record<string, number> = { h: cabelo, s: pele, e: 0x1b1426, c: 0xc9a25a, k: 0xd9534f, q: 0x22344f, y: 0xf0c35a, v: 0x1f1f26, w: 0xf5f0e6, p: 0x2e2e36, l: 0x8e3bd6 };
+  const cores = coresCabeca(cabelo, pele);
   const g = scene.add.graphics(), u = 2;
   CABECAS[chapeu].forEach((linha, y) => { for (let x = 0; x < linha.length; x++) { const c = cores[linha[x]]; if (c !== undefined) { g.fillStyle(c, 1); g.fillRect(x * u, y * u, u, u); } } });
   g.generateTexture(chave, 10 * u, 8 * u); g.destroy();

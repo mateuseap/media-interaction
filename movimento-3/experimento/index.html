@@ -30,6 +30,12 @@ button.ok { background: #3c6e3f; }
 .entrada label { display: flex; flex-direction: column; gap: 4px; color: var(--dim); font-size: 14px; }
 .check { flex-direction: row !important; align-items: center; gap: 8px !important; }
 #aviso { color: var(--sol); font-size: 14px; min-height: 1.4em; }
+.escolha { display: flex; flex-direction: column; gap: 6px; color: var(--dim); font-size: 14px; }
+#visuais { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.visual { padding: 8px 0 4px; background: #18151f; box-shadow: none; display: flex; justify-content: center; }
+.visual canvas { width: 48px; height: 60px; image-rendering: pixelated; }
+.visual[aria-pressed="true"] { background: #43395a; border-color: var(--sol); box-shadow: 0 0 0 2px var(--sol); }
+@media (max-width: 520px) { #visuais { grid-template-columns: repeat(4, 1fr); } }
 
 .jogo { display: flex; flex-direction: column; height: 100vh; }
 header { padding: 8px 16px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; background: var(--ui); border-bottom: 3px solid var(--borda); }
@@ -89,6 +95,7 @@ aside { width: 330px; background: var(--ui); border-left: 3px solid var(--borda)
   <label>Seu nome
     <input id="dono" maxlength="20" autocomplete="off" placeholder="ex.: Ana">
   </label>
+  <div class="escolha"><span>Sua aparência</span><div id="visuais" role="group" aria-label="Escolha a aparência do seu boneco"></div></div>
   <label class="check"><input type="checkbox" id="forte"> mente melhor (baixa perto de 1,7 GB, em vez de 1 GB)</label>
   <label class="check"><input type="checkbox" id="espirito"> entrar sem testemunha: só investigar e votar (para quem não tem WebGPU)</label>
   <button type="button" id="entrar">Entrar na vila</button>

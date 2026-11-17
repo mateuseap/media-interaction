@@ -23,6 +23,7 @@ export class PlayerSprite {
   private readonly body: Phaser.GameObjects.Image;
   private readonly head: Phaser.GameObjects.Image;
   private currentFrame = 0;
+  private readonly bodyKeys: [string, string];
 
   private bubble: Phaser.GameObjects.Container | null = null;
   private bubbleBg: Phaser.GameObjects.Graphics | null = null;
@@ -30,15 +31,16 @@ export class PlayerSprite {
   private bubbleTimer: Phaser.Time.TimerEvent | null = null;
   private speakingRing: Phaser.GameObjects.Ellipse | null = null;
 
-  constructor(scene: Phaser.Scene, x: number, y: number, name: string, color: string, sub = '', labelColor = '#f2ead8', headKey = TEXTURE_AVATAR_HEAD) {
+  constructor(scene: Phaser.Scene, x: number, y: number, name: string, color: string, sub = '', labelColor = '#f2ead8', headKey = TEXTURE_AVATAR_HEAD, bodyKeys: [string, string] = [TEXTURE_AVATAR_BODY_0, TEXTURE_AVATAR_BODY_1]) {
     this.scene = scene;
+    this.bodyKeys = bodyKeys;
 
     const shadow = scene.add
       .image(0, FEET_Y + 1, TEXTURE_AVATAR_SHADOW)
       .setAlpha(0.25);
 
     this.body = scene.add
-      .image(0, FEET_Y, TEXTURE_AVATAR_BODY_0)
+      .image(0, FEET_Y, bodyKeys[0])
       .setOrigin(0.5, 1)
       .setTint(Number.parseInt(color.replace('#', ''), 16));
 
@@ -93,7 +95,7 @@ export class PlayerSprite {
       return;
     }
     this.currentFrame = frame;
-    this.body.setTexture(frame === 0 ? TEXTURE_AVATAR_BODY_0 : TEXTURE_AVATAR_BODY_1);
+    this.body.setTexture(this.bodyKeys[frame]);
     const hop = frame === 1 ? -1 : 0;
     this.body.setY(FEET_Y + hop);
     this.head.setY(-2 + hop);

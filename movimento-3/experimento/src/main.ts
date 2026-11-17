@@ -13,7 +13,7 @@ import {
 } from './pixelhub/shared';
 import { PlayerSprite } from './pixelhub/game/PlayerSprite';
 import { createAvatarTextures } from './pixelhub/game/textures';
-import { COFRE, LUGARES, SPAWNS, VILA, cabeca, montarVila, type Chapeu } from './vila';
+import { COFRE, LUGARES, SPAWNS, VILA, VISUAIS, cabeca, corpos, desenharVisual, montarVila, type Chapeu, type Corpo } from './vila';
 
 const PARAMS = new URLSearchParams(location.search);
 const SALA = (PARAMS.get('sala') || 'aula').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 24) || 'aula';
@@ -25,23 +25,23 @@ const NPC_VEL = 2.2; // tiles per second
 const CORES_HUMANO = ['#e5c07b', '#98c379', '#61afef', '#c678dd', '#56b6c2', '#d19a66'];
 const CORES_NPC = ['#e06c75', '#ff79c6', '#bd93f9', '#8be9fd', '#50fa7b', '#f1fa8c', '#ffb86c', '#ff5555'];
 
-const PERSONAGENS: { nome: string; traco: string; casa: string; chapeu: Chapeu }[] = [
-  { nome: 'Dona Cida', traco: 'dona da padaria, fofoqueira, fala muito', casa: 'a padaria', chapeu: 'lenco' },
+const PERSONAGENS: { nome: string; traco: string; casa: string; chapeu: Chapeu; corpo?: Corpo }[] = [
+  { corpo: 'vestido', nome: 'Dona Cida', traco: 'dona da padaria, fofoqueira, fala muito', casa: 'a padaria', chapeu: 'lenco' },
   { nome: 'Padre Tonho', traco: 'padre jovem e tímido, guarda a chave do cofre', casa: 'a porta da capela', chapeu: 'curto' },
   { nome: 'Seu Bira', traco: 'pescador ranzinza, desconfia de todo mundo', casa: 'a cabana', chapeu: 'chapeu' },
-  { nome: 'Dona Lurdes', traco: 'professora aposentada, educada e curiosa', casa: 'as casas', chapeu: 'longo' },
+  { corpo: 'vestido', nome: 'Dona Lurdes', traco: 'professora aposentada, educada e curiosa', casa: 'as casas', chapeu: 'coque' },
   { nome: 'Zé do Bar', traco: 'dono do bar, deve dinheiro para meia vila', casa: 'o bar', chapeu: 'careca' },
-  { nome: 'Tatá', traco: 'menina esperta que vê tudo da janela', casa: 'as casas', chapeu: 'longo' },
-  { nome: 'Prefeita Neide', traco: 'prefeita em campanha, preocupada com a imagem', casa: 'a praça', chapeu: 'curto' },
+  { corpo: 'vestido', nome: 'Tatá', traco: 'menina esperta que vê tudo da janela', casa: 'as casas', chapeu: 'rabo' },
+  { corpo: 'vestido', nome: 'Prefeita Neide', traco: 'prefeita em campanha, preocupada com a imagem', casa: 'a praça', chapeu: 'coque' },
   { nome: 'Forasteiro', traco: 'chegou ontem, ninguém sabe de onde, fala pouco', casa: 'a ponte', chapeu: 'capuz' },
-  { nome: 'Madame Zuzu', traco: 'cartomante teatral que jura prever o futuro', casa: 'a fonte', chapeu: 'lenco' },
-  { nome: 'Rosinha', traco: 'costureira romântica, apaixonada em segredo', casa: 'as casas', chapeu: 'longo' },
+  { corpo: 'vestido', nome: 'Madame Zuzu', traco: 'cartomante teatral que jura prever o futuro', casa: 'a fonte', chapeu: 'lenco' },
+  { corpo: 'vestido', nome: 'Rosinha', traco: 'costureira romântica, apaixonada em segredo', casa: 'as casas', chapeu: 'trancas' },
   { nome: 'Sacristão Didi', traco: 'sacristão nervoso, sempre com pressa', casa: 'a porta da capela', chapeu: 'careca' },
-  { nome: 'Dona Bené', traco: 'dona da quitanda, rival da padaria', casa: 'a quitanda', chapeu: 'lenco' },
+  { corpo: 'vestido', nome: 'Dona Bené', traco: 'dona da quitanda, rival da padaria', casa: 'a quitanda', chapeu: 'lenco' },
   { nome: 'Cabo Juca', traco: 'único policial da vila, preguiçoso', casa: 'a praça', chapeu: 'quepe' },
-  { nome: 'Vó Quitéria', traco: 'a mais velha da vila, meio surda, lembra de tudo', casa: 'as casas', chapeu: 'longo' },
+  { corpo: 'vestido', nome: 'Vó Quitéria', traco: 'a mais velha da vila, meio surda, lembra de tudo', casa: 'as casas', chapeu: 'longo' },
   { nome: 'Léo da Moto', traco: 'mototaxista, roda a vila a noite toda', casa: 'a ponte', chapeu: 'bone' },
-  { nome: 'Irmã Socorro', traco: 'freira rígida, cuida da capela de dia', casa: 'a porta da capela', chapeu: 'veu' },
+  { corpo: 'vestido', nome: 'Irmã Socorro', traco: 'freira rígida, cuida da capela de dia', casa: 'a porta da capela', chapeu: 'veu' },
 ];
 const PISTAS = [
   'eu vi a porta da capela entreaberta perto da meia-noite',
@@ -55,8 +55,8 @@ const PISTAS = [
 ];
 const PISTA_CULPADO = (c: { traco: string }) => `eu vi, de longe, alguém com o jeito de ${c.traco.split(',')[0]} saindo da capela na hora do roubo, mas não tenho certeza de quem era`;
 
-interface Pessoa { id: string; dono: string; cor: string; x: number; y: number; t: number }
-interface Npc { id: string; nome: string; traco: string; casa: string; chapeu: Chapeu; onde?: string; dono: string; cor: string; estado: string; apagada: boolean; maquina?: string; x: number; y: number; t: number }
+interface Pessoa { id: string; dono: string; cor: string; visual: number; x: number; y: number; t: number }
+interface Npc { id: string; nome: string; traco: string; casa: string; chapeu: Chapeu; corpo?: Corpo; onde?: string; dono: string; cor: string; estado: string; apagada: boolean; maquina?: string; x: number; y: number; t: number }
 interface Fala { id: string; t: string; de?: string; quem?: string; para?: string; paraId?: string; texto: string; tipo?: string }
 interface Rodada { id: string; t: string; ids: string[]; culpado: string }
 interface Corpo { sprite: PlayerSprite; path: [number, number][]; t0: number; alvo: Position }
@@ -83,6 +83,7 @@ const fila: { de: string; texto: string; npc?: boolean }[] = [];
 const votos = new Map<string, string>();
 let proximoPasseio = 0, proximoPapo = 0, ultimaReplica = 0;
 let cena: Mundo | null = null;
+let visual = 0;
 
 const log = (tipo: string, dados: object) => registro.push({ t: agora(), tipo, ...dados });
 const vivoNpc = (m: Npc) => m.id === meu?.id || Date.now() - m.t < 35000;
@@ -126,6 +127,7 @@ class Mundo extends Phaser.Scene {
 
   create(): void {
     createAvatarTextures(this);
+    corpos(this);
     montarVila(this);
     const W = MAPA.width * TILE_SIZE, H = MAPA.height * TILE_SIZE;
     this.cameras.main.setBounds(0, 0, W, H);
@@ -137,7 +139,7 @@ class Mundo extends Phaser.Scene {
 
     const [sx, sy] = SPAWNS[hash(ID) % SPAWNS.length];
     this.pos = centro(sx, sy);
-    eu = { id: ID, dono, cor: CORES_HUMANO[hash(ID) % CORES_HUMANO.length], ...this.pos, t: Date.now() };
+    eu = { id: ID, dono, visual, cor: '#' + VISUAIS[visual].roupa.toString(16).padStart(6, '0'), ...this.pos, t: Date.now() };
     pessoas.set(ID, eu);
     this.pronta = true;
     this.humano(eu);
@@ -183,7 +185,8 @@ class Mundo extends Phaser.Scene {
     if (!this.pronta) return;
     const h = this.humanos.get(p.id);
     if (h) { h.alvo = { x: p.x, y: p.y }; return; }
-    const sprite = new PlayerSprite(this, p.x, p.y, p.dono, p.cor, p.id === ID ? 'você' : 'investigando', '#f2ead8', cabeca(this, 'cab-h-' + p.id, 'curto', [0x2b1a10, 0x6b3e1f, 0x1b1b1b, 0xa0341f][hash(p.id) % 4], [0xf1c27d, 0xc68642, 0x8d5524, 0xe0ac69, 0xffdbac][hash(p.id + 'p') % 5]));
+    const v = VISUAIS[p.visual] || VISUAIS[hash(p.id) % VISUAIS.length];
+    const sprite = new PlayerSprite(this, p.x, p.y, p.dono, '#' + v.roupa.toString(16).padStart(6, '0'), p.id === ID ? 'você' : 'investigando', '#f2ead8', cabeca(this, `cab-v-${p.visual}`, v.cab, v.cabelo, v.pele), [`corpo-${v.corpo}-0`, `corpo-${v.corpo}-1`]);
     this.humanos.set(p.id, { sprite, alvo: { x: p.x, y: p.y } });
   }
   tirarHumano(id: string): void { const h = this.humanos.get(id); if (!h || id === ID) return; this.humanos.delete(id); h.sprite.fadeOut(() => h.sprite.destroy()); }
@@ -191,7 +194,7 @@ class Mundo extends Phaser.Scene {
     if (!this.pronta || this.corpos.has(m.id)) return;
     const t: [number, number] = [Math.round((m.x - 16) / TILE_SIZE), Math.round((m.y - 16) / TILE_SIZE)];
     const velho = /Vó|Lurdes/.test(m.nome);
-    const sprite = new PlayerSprite(this, m.x, m.y, m.nome, m.cor, `IA no PC de ${m.dono}`, m.id === meu?.id ? '#f0c35a' : '#ffd6da', cabeca(this, 'cab-' + m.nome, m.chapeu || 'curto', velho ? 0xe6e6e6 : [0x2b1a10, 0x6b3e1f, 0xd9b56a, 0x1b1b1b, 0xa0341f][hash(m.nome) % 5], [0xf1c27d, 0xc68642, 0x8d5524, 0xe0ac69, 0xffdbac][hash(m.nome + 'p') % 5]));
+    const sprite = new PlayerSprite(this, m.x, m.y, m.nome, m.cor, `IA no PC de ${m.dono}`, m.id === meu?.id ? '#f0c35a' : '#ffd6da', cabeca(this, 'cab-' + m.nome, m.chapeu || 'curto', velho ? 0xe6e6e6 : [0x2b1a10, 0x6b3e1f, 0xd9b56a, 0x1b1b1b, 0xa0341f][hash(m.nome) % 5], [0xf1c27d, 0xc68642, 0x8d5524, 0xe0ac69, 0xffdbac][hash(m.nome + 'p') % 5]), [`corpo-${m.corpo || 'calca'}-0`, `corpo-${m.corpo || 'calca'}-1`]);
     this.corpos.set(m.id, { sprite, path: [isWalkable(MAPA, t[0], t[1]) ? t : tileLivre(hash(m.id))], t0: 0, alvo: { x: m.x, y: m.y } });
   }
   mover(id: string, para: [number, number]): void {
@@ -447,6 +450,18 @@ async function conectar(): Promise<void> {
     else if (meu && sub === 'pergunta/' + meu.id) { fila.push(d); responder(); }
   });
 }
+
+function montarEscolha(): void {
+  try { visual = Math.min(VISUAIS.length - 1, Math.max(0, +(localStorage.getItem('testemunha_visual') ?? hash(ID) % VISUAIS.length))); } catch { visual = hash(ID) % VISUAIS.length; }
+  const caixa = $('visuais');
+  VISUAIS.forEach((v, i) => {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'visual'; b.setAttribute('aria-label', `Aparência ${i + 1}`); b.setAttribute('aria-pressed', String(i === visual));
+    const cv = document.createElement('canvas'); desenharVisual(cv, v); b.append(cv);
+    b.onclick = () => { visual = i; try { localStorage.setItem('testemunha_visual', String(i)); } catch { /* per-viewer convenience only */ } for (const x of caixa.children) x.setAttribute('aria-pressed', String(x === b)); };
+    caixa.append(b);
+  });
+}
+montarEscolha();
 
 $('entrar').onclick = async () => {
   dono = $i('dono').value.trim().slice(0, 20);

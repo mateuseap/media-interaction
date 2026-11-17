@@ -46,7 +46,7 @@ Uma sessão leva cerca de 25 minutos: 5 para entrar, 15 investigando e 5 para vo
 **Quem joga (a turma):**
 
 1. Abra https://testemunha.lab.mateuseap.com no Chrome ou no Edge, num computador.
-2. Escreva o seu nome e clique em "Entrar na vila". Você vira um boneco, e a sua testemunha (a IA) entra junto e começa a baixar.
+2. Escreva o seu nome, escolha a aparência do seu boneco e clique em "Entrar na vila". Você vira um boneco, e a sua testemunha (a IA) entra junto e começa a baixar.
 3. Ande com WASD ou com as setas. Chegue perto de qualquer testemunha e aperte Enter para interrogar. Esc volta a andar.
 4. No painel à direita, só você vê se a sua testemunha é inocente ou culpada. Ali você decide se ela dorme, se sai da internet ou se a memória dela é apagada.
 5. Quando a turma quiser, alguém clica em "Abrir votação". Todos votam e alguém clica em "Revelar para todos".
