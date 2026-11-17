@@ -3,338 +3,139 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A Vila nos Computadores</title>
+<title>A Testemunha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root { --bg: #0e0d0b; --card: #1a1814; --line: #332f27; --ink: #f1ebe0; --dim: #9a917f; --sol: #f2b14c; --verde: #7bc47f; --cinza: #5d574b; --vermelho: #DB1E2F; }
+:root { --bg: #14121a; --ui: #221e2b; --borda: #0c0a10; --ink: #f3ecdc; --dim: #a79fb6; --sol: #f0c35a; --vermelho: #e5636f; --verde: #8fd17e; }
 * { box-sizing: border-box; margin: 0; }
 html, body { height: 100%; }
-body { background: var(--bg); color: var(--ink); font: 16px/1.45 system-ui, sans-serif; }
-button, input, select { font: inherit; color: var(--ink); background: #24211b; border: 1px solid #4a4438; border-radius: 8px; padding: 9px 12px; }
-button { cursor: pointer; }
-button:hover:not(:disabled) { border-color: var(--sol); }
-button:disabled { opacity: .45; cursor: default; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+h1, h2, button, .px { font-family: "Pixelify Sans", system-ui, sans-serif; }
+button, input, select { font: inherit; color: var(--ink); background: #342d42; border: 2px solid var(--borda); border-radius: 6px; padding: 9px 12px; }
+button { font-family: "Pixelify Sans", system-ui, sans-serif; font-size: 15px; cursor: pointer; box-shadow: 0 3px 0 var(--borda); }
+button:hover:not(:disabled) { background: #43395a; }
+button:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 1px 0 var(--borda); }
+button:disabled { opacity: .4; cursor: default; }
 button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--sol); outline-offset: 2px; }
-.entrada { max-width: 620px; margin: 6vh auto; padding: 0 16px; display: flex; flex-direction: column; gap: 14px; }
-.entrada h1, header h1 { font: 400 clamp(30px, 5vw, 44px) Georgia, serif; color: var(--sol); }
+input, select { background: #18151f; }
+button.perigo { background: #7a2e38; }
+button.ok { background: #3c6e3f; }
+[hidden] { display: none !important; }
+
+.entrada { max-width: 660px; margin: 5vh auto; padding: 0 16px 40px; display: flex; flex-direction: column; gap: 14px; }
+.entrada h1 { font-size: clamp(36px, 7vw, 56px); font-weight: 600; color: var(--sol); text-shadow: 3px 3px 0 var(--borda); }
 .entrada p { color: var(--dim); }
+.entrada p b { color: var(--ink); font-weight: 600; }
 .entrada label { display: flex; flex-direction: column; gap: 4px; color: var(--dim); font-size: 14px; }
-.entrada .linha { display: flex; gap: 8px; }
-.entrada .linha input { flex: 1; }
 .check { flex-direction: row !important; align-items: center; gap: 8px !important; }
 #aviso { color: var(--sol); font-size: 14px; min-height: 1.4em; }
-.vila { display: grid; grid-template-columns: 1fr 320px; grid-template-rows: auto 1fr auto; height: 100vh; }
-header { grid-column: 1 / -1; padding: 12px 20px; border-bottom: 1px solid var(--line); display: flex; gap: 20px; align-items: baseline; flex-wrap: wrap; }
-header h1 { font-size: 26px; }
-#cenario { color: var(--dim); flex: 1; min-width: 260px; }
-#contagem { color: var(--sol); font-weight: 600; }
-#praca { overflow-y: auto; padding: 18px 22px; display: flex; flex-direction: column; gap: 10px; }
-.fala { max-width: 820px; }
-.fala .quem { font-weight: 700; margin-right: 6px; }
-.fala .onde { color: var(--cinza); font-size: 12px; margin-left: 6px; }
-.fala.evento { color: var(--sol); font-style: italic; font-family: Georgia, serif; font-size: 18px; border-left: 3px solid var(--sol); padding-left: 10px; }
-.fala.sistema { color: var(--cinza); font-size: 14px; }
-.fala.nova { animation: chega .6s ease-out; }
-@keyframes chega { from { opacity: 0; transform: translateY(6px); } }
-@media (prefers-reduced-motion: reduce) { .fala.nova { animation: none; } }
-aside { border-left: 1px solid var(--line); padding: 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-aside h2 { font: 400 13px system-ui; color: var(--dim); text-transform: uppercase; letter-spacing: .05em; }
-.morador { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; }
-.morador .nome { font-weight: 700; }
-.morador .traco { color: var(--dim); font-size: 13px; }
-.morador .maquina { color: var(--cinza); font-size: 12px; }
-.morador.meu { border-color: var(--sol); }
-.ponto { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; background: var(--cinza); }
-.ponto.acordado { background: var(--verde); }
-.ponto.pensando { background: var(--sol); animation: pulsa 1s infinite; }
-@keyframes pulsa { 50% { opacity: .3; } }
-.dormindo { opacity: .5; }
-.controles { grid-column: 1 / -1; border-top: 1px solid var(--line); padding: 10px 20px; display: flex; flex-direction: column; gap: 8px; }
+
+.jogo { display: flex; flex-direction: column; height: 100vh; }
+header { padding: 8px 16px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; background: var(--ui); border-bottom: 3px solid var(--borda); }
+header h1 { font-size: 22px; font-weight: 600; color: var(--sol); }
+#caso { color: var(--dim); flex: 1; min-width: 220px; font-size: 14px; }
+#contagem { color: var(--sol); font: 15px "Pixelify Sans", sans-serif; }
+#rede { font: 15px "Pixelify Sans", sans-serif; color: var(--verde); }
+#rede.off { color: var(--vermelho); }
+.meio { flex: 1; display: flex; min-height: 0; }
+#game { flex: 1; min-width: 0; position: relative; overflow: hidden; background: #0d0b12; }
+#game canvas { image-rendering: pixelated; display: block; }
+#perto { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); z-index: 3; pointer-events: none; white-space: nowrap; font: 600 16px "Pixelify Sans", sans-serif; background: rgba(13,11,18,.85); border: 2px solid #0c0a10; border-radius: 6px; padding: 5px 12px; color: var(--dim); }
+#perto.pronto { color: #17131d; background: var(--sol); animation: chama .9s ease-in-out infinite alternate; }
+@keyframes chama { to { transform: translateX(-50%) scale(1.06); } }
+@media (prefers-reduced-motion: reduce) { #perto.pronto { animation: none; } }
+aside { width: 330px; background: var(--ui); border-left: 3px solid var(--borda); display: flex; flex-direction: column; min-height: 0; }
+.painel { padding: 12px 14px; border-bottom: 3px solid var(--borda); display: flex; flex-direction: column; gap: 8px; }
+.painel h2 { font-size: 13px; font-weight: 400; color: var(--dim); letter-spacing: .06em; }
+#meuNome { font: 600 18px "Pixelify Sans", sans-serif; }
+#segredo { background: #4a1f27; border: 2px solid var(--borda); border-radius: 6px; padding: 8px 10px; color: #ffd9dd; font-size: 14px; }
+#segredo.inocente { background: #1d3a25; color: #d9ffe1; }
+.botoes { display: flex; gap: 6px; flex-wrap: wrap; }
+.botoes button { font-size: 14px; padding: 7px 10px; }
+#memoriaTxt { color: var(--dim); font-size: 13px; }
+#historico { flex: 1; overflow-y: auto; padding: 10px 14px; display: flex; flex-direction: column; gap: 5px; font-size: 14px; }
+#historico .q { font-weight: 700; margin-right: 4px; }
+#historico .sis { color: #857b97; font-style: italic; }
+#historico .ev { color: var(--sol); }
+.controles { background: var(--ui); border-top: 3px solid var(--borda); padding: 10px 16px; display: flex; flex-direction: column; gap: 6px; }
 .controles form { display: flex; gap: 8px; flex-wrap: wrap; }
 .controles input { flex: 1; min-width: 200px; }
 #estado { color: var(--dim); font-size: 13px; }
-@media (max-width: 860px) { .vila { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto auto; height: auto; min-height: 100vh; } aside { border-left: 0; border-top: 1px solid var(--line); max-height: 40vh; } #praca { max-height: 55vh; } }
-[hidden] { display: none !important; }
+
+.fim { position: fixed; inset: 0; background: rgba(12, 10, 16, .94); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 20; }
+.fim > div { max-width: 740px; display: flex; flex-direction: column; gap: 14px; text-align: center; align-items: center; }
+.fim h2 { font-size: clamp(26px, 5vw, 40px); font-weight: 600; color: var(--sol); }
+.fim p { font-size: 18px; color: #d8d1e4; }
+.fim .votos { color: var(--dim); font-size: 15px; }
+.fim .pergunta { font: 600 24px/1.35 "Pixelify Sans", sans-serif; color: var(--sol); }
+#voto { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+
+@media (max-width: 880px) {
+  .jogo { height: auto; min-height: 100vh; }
+  .meio { flex-direction: column; }
+  #game { min-height: 55vh; }
+  aside { width: auto; border-left: 0; border-top: 3px solid var(--borda); max-height: 50vh; }
+}
 </style>
 </head>
 <body>
 
 <section class="entrada" id="entrada">
-  <h1>A Vila nos Computadores</h1>
-  <p>Esta vila não tem servidor. Cada pessoa que entra traz um morador, e a mente dele roda no computador dessa pessoa, pela placa de vídeo. Os moradores conversam sozinhos na praça. Você não controla o seu: só pode sussurrar coisas para ele, e para os outros.</p>
-  <p>Se você fechar o computador, o seu morador dorme. A vila só existe enquanto vocês estiverem aqui.</p>
-  <label>Seu nome (aparece só como "dono" do morador)
+  <h1>A Testemunha</h1>
+  <p><b>2031.</b> Cada pessoa tem uma IA que roda no próprio aparelho. Nenhum servidor guarda o que ela viu: a memória dela mora só no computador do dono.</p>
+  <p>Ontem à noite, <b>o dinheiro da festa de fim de ano sumiu do cofre do escritório.</b> Cada um de vocês entra no escritório e traz uma testemunha: uma IA que roda no seu computador, anda e conversa sozinha, e viu <b>um pedaço</b> do que aconteceu. Só ela sabe o quê. Nem você, nem quem fez o jogo.</p>
+  <p>Uma das testemunhas, sorteada em segredo, é a culpada, e mente. Andem pelo escritório, cheguem perto das testemunhas e interroguem. No fim, votem. Mas cada dono pode <b>pôr a sua testemunha para dormir, tirá-la da internet ou apagar a memória dela</b>, sem ninguém saber.</p>
+  <label>Seu nome
     <input id="dono" maxlength="20" autocomplete="off" placeholder="ex.: Ana">
   </label>
-  <label>Nome do seu morador
-    <input id="nome" maxlength="18" autocomplete="off" placeholder="ex.: Dona Cida">
-  </label>
-  <label>Quem ele é, em uma frase
-    <span class="linha"><input id="traco" maxlength="120" autocomplete="off" placeholder="ex.: dona da padaria, sabe de tudo e conta tudo"><button type="button" id="sortear">Sortear</button></span>
-  </label>
   <label class="check"><input type="checkbox" id="forte"> mente melhor (baixa perto de 1,7 GB, em vez de 1 GB)</label>
-  <label class="check"><input type="checkbox" id="espirito"> sem morador: entrar só como espírito, que observa e sussurra</label>
-  <button type="button" id="entrar">Entrar na vila</button>
+  <label class="check"><input type="checkbox" id="espirito"> entrar sem testemunha: só investigar e votar (para quem não tem WebGPU)</label>
+  <button type="button" id="entrar">Entrar no escritório</button>
   <div id="aviso" role="status" aria-live="polite"></div>
 </section>
 
-<main class="vila" id="vila" hidden>
+<main class="jogo" id="jogo" hidden>
   <header>
-    <h1>A Vila</h1>
-    <span id="cenario"></span>
+    <h1>A Testemunha</h1>
+    <span id="caso">O dinheiro da festa de fim de ano sumiu do cofre do escritório. Quem pegou?</span>
     <span id="contagem"></span>
+    <span id="rede">online</span>
   </header>
-  <section id="praca" aria-live="polite" aria-label="Praça da vila"></section>
-  <aside>
-    <h2>Quem mora aqui, e em qual computador</h2>
-    <div id="moradores"></div>
-  </aside>
+  <div class="meio">
+    <div id="game"><div id="perto" aria-live="polite"></div></div>
+    <aside>
+      <div class="painel" id="meuPainel" hidden>
+        <h2>SUA TESTEMUNHA (IA NESTE COMPUTADOR)</h2>
+        <div id="meuNome"></div>
+        <div id="segredo"></div>
+        <div id="memoriaTxt"></div>
+        <div class="botoes">
+          <button type="button" id="dormir">Dormir</button>
+          <button type="button" id="internet">Desligar internet</button>
+          <button type="button" id="apagar" class="perigo">Apagar memória</button>
+        </div>
+      </div>
+      <div class="painel">
+        <div class="botoes">
+          <button type="button" id="votar" class="ok">Abrir votação</button>
+          <button type="button" id="baixar">Baixar registro</button>
+        </div>
+      </div>
+      <div id="historico" aria-live="polite" aria-label="O que foi dito na vila"></div>
+    </aside>
+  </div>
   <div class="controles">
-    <form id="fSussurro">
-      <select id="alvo" aria-label="Para qual morador sussurrar"></select>
-      <input id="sussurro" maxlength="200" autocomplete="off" placeholder="Sussurre algo para um morador (só ele ouve)...">
-      <button type="submit">Sussurrar</button>
-    </form>
-    <form id="fEvento">
-      <input id="evento" maxlength="200" autocomplete="off" placeholder="Ou faça algo acontecer na vila (todos veem)... ex.: começa a chover forte">
-      <button type="submit">Acontecer</button>
-      <button type="button" id="dormir" hidden>Pôr meu morador para dormir</button>
-      <button type="button" id="baixar">Registro</button>
+    <form id="fPergunta">
+      <input id="pergunta" maxlength="200" autocomplete="off" placeholder="Chegue perto de uma testemunha para interrogar" aria-label="Pergunta">
+      <button type="submit">Perguntar</button>
     </form>
     <div id="estado" role="status" aria-live="polite"></div>
   </div>
 </main>
 
-<script type="module">
-const PARAMS = new URLSearchParams(location.search);
-const SALA = (PARAMS.get("sala") || "cin0055").toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 24) || "cin0055";
-// ponytail: public MQTT broker as a dumb message relay (no AI there, no account); upgrade to a self-hosted broker if the room gets abused
-const BROKER = "wss://broker.emqx.io:8084/mqtt";
-const BASE = `vila-cin0055-v1/${SALA}`;
-const CENARIO = "A festa da vila é hoje à noite. Mas o dinheiro da festa sumiu do cofre da capela, e todo mundo tem uma opinião sobre quem pegou.";
+<div class="fim" id="fim" hidden><div id="fimConteudo"></div></div>
 
-const SUGESTOES = [
-  "dona da padaria, sabe de tudo e conta tudo", "padre jovem, tímido, guarda a chave do cofre", "pescador ranzinza que desconfia de todo mundo",
-  "professora aposentada, muito educada e muito curiosa", "dono do bar, deve dinheiro para meia vila", "criança esperta que vê tudo da janela",
-  "prefeita em campanha, quer ser reeleita a qualquer custo", "forasteiro que chegou ontem e ninguém sabe de onde", "cartomante que jura que prevê o futuro",
-  "costureira apaixonada em segredo pelo pescador", "sacristão nervoso, sempre com pressa", "dona da quitanda, rival da padaria",
-];
-
-const $ = (id) => document.getElementById(id);
-const ID = (() => { try { return localStorage.getItem("vila_id") || (localStorage.setItem("vila_id", crypto.randomUUID().slice(0, 8)), localStorage.getItem("vila_id")); } catch (e) { return crypto.randomUUID().slice(0, 8); } })();
-const moradores = new Map();
-const praca = [];
-const vistos = new Set();
-const sussurros = [];
-const registro = window.registro = [];
-let cliente, eu = null, engine = null, maquina = "", modelo = "", pensando = false, dormindo = false, proxima = 0;
-
-const cor = (s) => `hsl(${[...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) % 360, 7)} 70% 68%)`;
-const agora = () => new Date().toISOString();
-function log(tipo, dados) { registro.push({ t: agora(), tipo, ...dados }); }
-
-$("sortear").onclick = () => { $("traco").value = SUGESTOES[Math.floor(Math.random() * SUGESTOES.length)]; };
-
-// ---------- shared square ----------
-function mostrar(m, nova = true) {
-  if (vistos.has(m.id)) return;
-  vistos.add(m.id);
-  praca.push(m);
-  praca.sort((a, b) => a.t.localeCompare(b.t));
-  log("praca", m);
-  const div = document.createElement("div");
-  div.className = "fala " + (m.tipo || "") + (nova ? " nova" : "");
-  if (m.tipo === "evento") div.textContent = (m.quem ? m.quem + " fez acontecer: " : "") + m.texto;
-  else if (m.tipo === "sistema") div.textContent = m.texto;
-  else {
-    const q = document.createElement("span"); q.className = "quem"; q.style.color = cor(m.quem); q.textContent = m.quem;
-    const o = document.createElement("span"); o.className = "onde"; o.textContent = m.onde ? "· pensou no computador de " + m.onde : "";
-    div.append(q, document.createTextNode(m.texto), o);
-  }
-  const p = $("praca");
-  const fim = p.scrollHeight - p.scrollTop - p.clientHeight < 80;
-  const depois = [...p.children].find((x) => x.dataset.t > m.t);
-  div.dataset.t = m.t;
-  p.insertBefore(div, depois || null);
-  if (fim) p.scrollTop = p.scrollHeight;
-  // being mentioned makes my villager answer sooner
-  if (eu && engine && m.quem !== eu.nome && m.texto.toLowerCase().includes(eu.nome.toLowerCase())) adiantar(4000);
-}
-function publicar(m) {
-  m = { id: crypto.randomUUID().slice(0, 12), t: agora(), ...m };
-  mostrar(m);
-  cliente.publish(`${BASE}/praca`, JSON.stringify(m));
-  // late joiners read the last lines from this retained snapshot; any client may overwrite it, the views are nearly equal
-  cliente.publish(`${BASE}/ultimas`, JSON.stringify(praca.slice(-40)), { retain: true });
-}
-
-// ---------- roster ----------
-function anunciar() {
-  if (!eu) return;
-  const estado = dormindo ? "dormindo" : pensando ? "pensando" : engine ? "acordado" : "chegando";
-  const ficha = { ...eu, maquina, modelo, estado, t: Date.now() };
-  moradores.set(eu.id, ficha);
-  cliente.publish(`${BASE}/morador/${eu.id}`, JSON.stringify(ficha), { retain: true });
-  desenharMoradores();
-}
-function desenharMoradores() {
-  const vivos = [...moradores.values()].map((m) => ({ ...m, estado: Date.now() - m.t > 30000 ? "dormindo" : m.estado }));
-  vivos.sort((a, b) => (a.estado === "dormindo") - (b.estado === "dormindo") || a.nome.localeCompare(b.nome));
-  $("moradores").innerHTML = "";
-  for (const m of vivos) {
-    const d = document.createElement("div");
-    d.className = "morador" + (m.id === eu?.id ? " meu" : "") + (m.estado === "dormindo" ? " dormindo" : "");
-    const n = document.createElement("div"); n.className = "nome";
-    const ponto = document.createElement("span"); ponto.className = "ponto " + m.estado;
-    n.append(ponto, document.createTextNode(m.nome)); n.style.color = cor(m.nome);
-    const t = document.createElement("div"); t.className = "traco"; t.textContent = m.traco;
-    const q = document.createElement("div"); q.className = "maquina";
-    q.textContent = { dormindo: "dormindo", chegando: "chegando: a mente está baixando" }[m.estado] || `no computador de ${m.dono}` + (m.maquina ? ` · ${m.maquina}` : "");
-    d.append(n, t, q);
-    $("moradores").append(d);
-  }
-  const acordados = vivos.filter((m) => m.estado !== "dormindo" && m.estado !== "chegando").length;
-  $("contagem").textContent = acordados ? `a vila está rodando em ${acordados} computador${acordados > 1 ? "es" : ""}` : "a vila está dormindo";
-  const sel = $("alvo"), atual = sel.value;
-  sel.innerHTML = "";
-  for (const m of vivos) { const o = document.createElement("option"); o.value = m.id; o.textContent = "para " + m.nome; sel.append(o); }
-  if (atual) sel.value = atual;
-}
-setInterval(desenharMoradores, 5000);
-
-// ---------- the villager's mind (runs only in its owner's browser) ----------
-function prompt() {
-  const outros = [...moradores.values()].filter((m) => m.id !== eu.id && Date.now() - m.t < 30000).map((m) => `- ${m.nome}: ${m.traco}`).join("\n") || "- ninguém por enquanto";
-  const ultimas = praca.slice(-14).map((m) => m.tipo === "evento" ? `[ACONTECEU: ${m.texto}]` : m.tipo === "sistema" ? null : `${m.quem}: ${m.texto}`).filter(Boolean).join("\n") || "(a praça está vazia)";
-  const segredos = sussurros.slice(-4).map((s) => `- "${s.texto}"`).join("\n");
-  const sistema = `Você é ${eu.nome}, morador de uma pequena vila do interior de Pernambuco. Quem você é: ${eu.traco}.
-${CENARIO}
-Outros moradores na praça agora:
-${outros}
-Regras:
-- Fale como gente da vila, em português do Brasil, com o seu jeito. Uma ou duas frases curtas, no máximo.
-- Reaja ao que acabou de ser dito na praça. Pode concordar, discordar, fofocar, acusar, se defender, mudar de assunto, falar com alguém pelo nome.
-- Não repita o que você ou outros já disseram.
-- Escreva só a sua fala, sem o seu nome na frente, sem aspas e sem narração.
-- Nunca diga que é uma IA, um programa ou um modelo.`;
-  const pedido = `O que aconteceu na praça (mais recente por último):
-${ultimas}
-${segredos ? `\nCoisas que alguém sussurrou só para você (você decide se conta, distorce ou guarda):\n${segredos}\n` : ""}
-Agora fala ${eu.nome}:`;
-  return [{ role: "system", content: sistema }, { role: "user", content: pedido }];
-}
-function limpar(r) {
-  r = r.split("\n").map((x) => x.trim()).find(Boolean) || "";
-  r = r.replace(new RegExp("^\\**" + eu.nome.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\**\\s*:\\s*", "i"), "").replace(/^["“'«]+|["”'»]+$/g, "").trim();
-  r = r.replace(/(?<!\p{L})(\p{L}{3,})(?:[\s.,!?…]+\1)+(?!\p{L})/giu, "$1");
-  if (r.length > 240) { const c = r.slice(0, 240); const f = Math.max(c.lastIndexOf(". "), c.lastIndexOf("? "), c.lastIndexOf("! ")); r = f > 60 ? c.slice(0, f + 1) : c.replace(/\s+\S*$/, "") + "..."; }
-  return r;
-}
-function adiantar(ms) { proxima = Math.min(proxima, Date.now() + ms); }
-async function agir() {
-  if (!engine || pensando || dormindo || Date.now() < proxima) return;
-  // ponytail: fixed pacing (25 to 45 s, sooner when mentioned or whispered to); upgrade to load-based pacing if the room is large
-  proxima = Date.now() + 25000 + Math.random() * 20000;
-  pensando = true; anunciar();
-  const t0 = performance.now();
-  try {
-    const r = await engine.chat.completions.create({ messages: prompt(), temperature: 0.9, max_tokens: 90 });
-    const fala = limpar(r.choices[0].message.content);
-    if (fala && !dormindo) publicar({ quem: eu.nome, onde: eu.dono, texto: fala, ms: Math.round(performance.now() - t0) });
-  } catch (e) { $("estado").textContent = "A mente do seu morador travou: " + String(e.message || e).slice(0, 100); }
-  pensando = false; anunciar();
-}
-setInterval(agir, 1500);
-
-async function acordarMente() {
-  const adaptador = navigator.gpu && (await navigator.gpu.requestAdapter().catch(() => null));
-  if (!adaptador) { $("estado").textContent = "Este computador não tem WebGPU, então o seu morador não consegue pensar aqui. Você continua como espírito: observa, sussurra e faz coisas acontecerem."; return false; }
-  const info = adaptador.info || {};
-  maquina = (info.description || [info.vendor, info.architecture].filter(Boolean).join(" ") || "placa de vídeo").slice(0, 40);
-  // f16 shaders are faster but not every GPU exposes them; the f32 build runs everywhere WebGPU does
-  modelo = PARAMS.get("modelo") || `Qwen2.5-${$("forte").checked ? "3B" : "1.5B"}-Instruct-${adaptador.features.has("shader-f16") ? "q4f16_1" : "q4f32_1"}-MLC`;
-  anunciar();
-  try {
-    const webllm = await import("https://esm.run/@mlc-ai/web-llm@0.2.79");
-    engine = await webllm.CreateMLCEngine(modelo, { initProgressCallback: (p) => { $("estado").textContent = `Baixando a mente de ${eu.nome} para este computador: ${p.text}`; } });
-  } catch (e) { $("estado").textContent = "Não deu para carregar a mente: " + String(e.message || e).slice(0, 120); return false; }
-  log("sistema", { texto: "mente carregada", modelo, maquina });
-  $("estado").textContent = `A mente de ${eu.nome} está rodando neste computador (${maquina}). Ela fala sozinha; você só sussurra.`;
-  publicar({ tipo: "sistema", texto: `${eu.nome} chegou na praça.` });
-  proxima = Date.now() + 3000 + Math.random() * 5000;
-  anunciar();
-  return true;
-}
-
-// ---------- joining ----------
-async function conectar() {
-  const { default: mqtt } = await import("https://cdn.jsdelivr.net/npm/mqtt@5.16.1/dist/mqtt.esm.js");
-  const will = eu ? { topic: `${BASE}/morador/${eu.id}`, payload: JSON.stringify({ ...eu, estado: "dormindo", t: 0 }), retain: true } : undefined;
-  cliente = mqtt.connect(BROKER, { clientId: "vila-" + ID + "-" + Math.random().toString(16).slice(2, 6), will, reconnectPeriod: 2000 });
-  cliente.on("connect", () => { cliente.subscribe([`${BASE}/praca`, `${BASE}/ultimas`, `${BASE}/morador/+`, `${BASE}/sussurro/+`]); anunciar(); $("estado").textContent ||= "Conectado à vila."; });
-  cliente.on("offline", () => { $("estado").textContent = "Sem conexão com a vila. Tentando de novo..."; });
-  cliente.on("message", (topico, buf) => {
-    let d; try { d = JSON.parse(buf.toString()); } catch (e) { return; }
-    if (topico.endsWith("/praca")) mostrar(d);
-    else if (topico.endsWith("/ultimas") && Array.isArray(d)) d.forEach((m) => mostrar(m, false));
-    else if (topico.includes("/morador/")) { if (d?.id && d.id !== eu?.id && d.nome) { moradores.set(d.id, d); desenharMoradores(); } }
-    else if (topico.includes("/sussurro/") && eu && topico.endsWith("/" + eu.id)) {
-      sussurros.push(d); log("sussurro_recebido", d);
-      $("estado").textContent = `Alguém sussurrou para ${eu.nome}: "${d.texto}"`;
-      adiantar(5000);
-    }
-  });
-}
-
-$("entrar").onclick = async () => {
-  const espirito = $("espirito").checked;
-  const dono = $("dono").value.trim().slice(0, 20), nome = $("nome").value.trim().replace(/\s+/g, " ").slice(0, 18), traco = $("traco").value.trim().slice(0, 120);
-  if (!dono) return ($("aviso").textContent = "Escreva o seu nome.");
-  if (!espirito && (!nome || !traco)) return ($("aviso").textContent = "Dê um nome ao seu morador e diga quem ele é (ou clique em Sortear).");
-  $("entrar").disabled = true;
-  $("aviso").textContent = "Entrando...";
-  if (!espirito) eu = { id: ID, nome, traco, dono };
-  try { await conectar(); } catch (e) { $("aviso").textContent = "Não deu para conectar à vila: " + String(e.message || e).slice(0, 120); $("entrar").disabled = false; return; }
-  log("entrada", { dono, morador: eu, sala: SALA });
-  $("entrada").hidden = true; $("vila").hidden = false;
-  $("cenario").textContent = CENARIO;
-  $("dormir").hidden = !eu;
-  $("estado").textContent = eu ? `Preparando ${eu.nome}...` : "Você entrou como espírito: observa, sussurra e faz coisas acontecerem.";
-  if (eu && !(await acordarMente())) { eu = null; $("dormir").hidden = true; }
-  setInterval(anunciar, 10000);
-};
-
-$("fSussurro").onsubmit = (e) => {
-  e.preventDefault();
-  const texto = $("sussurro").value.trim(), alvo = $("alvo").value;
-  if (!texto || !alvo || !cliente) return;
-  const s = { de: $("dono").value.trim() || "um espírito", texto, t: agora() };
-  cliente.publish(`${BASE}/sussurro/${alvo}`, JSON.stringify(s));
-  log("sussurro_enviado", { para: moradores.get(alvo)?.nome, ...s });
-  $("sussurro").value = "";
-  $("estado").textContent = `Você sussurrou para ${moradores.get(alvo)?.nome}. Só ele ouviu. Veja o que ele faz com isso.`;
-};
-$("fEvento").onsubmit = (e) => {
-  e.preventDefault();
-  const texto = $("evento").value.trim();
-  if (!texto || !cliente) return;
-  publicar({ tipo: "evento", quem: $("dono").value.trim(), texto });
-  $("evento").value = "";
-};
-$("dormir").onclick = () => {
-  dormindo = !dormindo;
-  $("dormir").textContent = dormindo ? "Acordar meu morador" : "Pôr meu morador para dormir";
-  publicar({ tipo: "sistema", texto: dormindo ? `${eu.nome} foi dormir.` : `${eu.nome} acordou e voltou para a praça.` });
-  anunciar();
-};
-addEventListener("pagehide", () => { if (eu && cliente) cliente.publish(`${BASE}/morador/${eu.id}`, JSON.stringify({ ...moradores.get(eu.id), estado: "dormindo", t: 0 }), { retain: true }); });
-
-function baixarRegistro() {
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([JSON.stringify({ sala: SALA, eu, modelo, maquina, moradores: [...moradores.values()], eventos: registro }, null, 2)], { type: "application/json" }));
-  a.download = `vila-${SALA}-${new Date().toISOString().slice(0, 16).replace(/:/g, "")}.json`;
-  a.click();
-}
-$("baixar").onclick = baixarRegistro;
-</script>
+<script type="module" src="./app.js"></script>
 </body>
 </html>

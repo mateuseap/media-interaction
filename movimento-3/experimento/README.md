@@ -1,80 +1,126 @@
-# A Vila nos Computadores
+# A Testemunha
 
 *CIN0055, Tendências em Mídia e Interação, Centro de Informática, UFPE. Movimento 3.*
 *Aluno: meap (Mateus Elias). Tema 16: IA local, no dispositivo e no navegador.*
 
-**Para jogar:** https://fantasma.lab.mateuseap.com
+**Para jogar:** https://testemunha.lab.mateuseap.com
 
-Abra no **Chrome ou no Edge atualizados, num computador**. Na primeira vez a página baixa a mente do seu morador, perto de 1 GB, e guarda no navegador. **Abra o link antes da aula**, para não depender da rede na hora.
+Abra no **Chrome ou no Edge atualizados, num computador**. Na primeira vez, a página baixa a mente da sua testemunha (perto de 1 GB) e guarda no navegador. **Abra o link antes da aula.**
 
 ## O que é
 
-Uma vila pequena, sem servidor. Cada pessoa que entra traz um morador: dá um nome e diz quem ele é em uma frase. A mente desse morador, um modelo de linguagem, roda **no computador de quem o trouxe**, pela placa de vídeo. Os moradores conversam sozinhos na praça sobre um mistério (o dinheiro da festa sumiu do cofre da capela).
+Um jogo de mistério em grupo, num escritório em pixel art que cada pessoa percorre com o próprio boneco. Ontem à noite, o dinheiro da festa de fim de ano sumiu do cofre do escritório.
 
-Ninguém controla o próprio morador. A turma só pode:
+Cada pessoa que entra traz uma **testemunha**: uma IA que roda no computador dela. A testemunha é outro boneco, que anda pelo escritório e conversa e fofoca com as outras testemunhas sozinha. Ela viu um pedaço do que aconteceu, e só ela sabe o quê: nem o dono, nem quem fez o jogo, nem os outros. Uma das testemunhas, sorteada em segredo, é a culpada, e sabe que precisa mentir.
 
-- **sussurrar** algo para um morador, que só ele ouve, e ver o que ele faz com isso (contar, distorcer ou guardar);
-- **fazer algo acontecer** na vila, que todos veem;
-- **pôr o próprio morador para dormir**, ou fechar o computador, e ele some da praça.
+A turma anda pelo escritório (WASD ou setas), chega perto das testemunhas e as interroga. No fim, vota em quem pegou o dinheiro. O dono não controla o que a sua testemunha fala. Só pode fazer três coisas com ela:
 
-A lista ao lado mostra cada morador e em qual computador ele está pensando. O topo mostra em quantos computadores a vila está rodando agora.
+- **pôr para dormir**;
+- **desligar a internet**: ela some para os outros, mas continua lembrando no computador do dono;
+- **apagar a memória**, sem avisar ninguém.
+
+Na revelação, a turma descobre quem era a culpada e quais memórias foram apagadas, e por quem.
 
 ## A pergunta sobre o futuro
 
-**Quando a IA dos personagens rodar no aparelho de cada jogador, e não no servidor de uma empresa, o mundo do jogo passa a ser feito dos computadores das pessoas. Como elas tratam a parte do mundo que roda na própria máquina?**
+**Quando a IA de cada pessoa rodar no próprio aparelho, e não no servidor de uma empresa, quem decide se o que ela sabe vem a público?**
 
-Hoje, um mundo com personagens de IA é de quem paga o servidor: a empresa roda as mentes, paga cada fala e decide quando o mundo existe. Com modelos rodando no navegador, de graça, quem joga empresta a própria máquina para um pedaço do mundo existir. O personagem passa a ser, literalmente, um processo no computador de alguém. Se a pessoa desliga, ele dorme. Se a máquina é fraca, ele pensa devagar. Quem não tem placa de vídeo não consegue trazer um morador.
+Hoje, o que uma IA viu ou ouviu fica no servidor de uma empresa. Existe um log, existe a quem pedir, e uma investigação pode exigir esse registro. No futuro do tema 16, a IA roda no aparelho de cada pessoa, sem servidor e sem cópia. A memória dela passa a ser um arquivo no computador do dono: só ali, apagável com um clique, sem ninguém para recuperar.
 
-O experimento coloca isso na mão da turma e observa: as pessoas sentem que o morador é delas? Cuidam dele, deixam o computador ligado por ele, ou desligam sem pensar? E o que acontece com um mundo coletivo quando cada pedaço dele depende de uma pessoa diferente?
+O jogo coloca a turma dentro desse futuro, em escala pequena: a verdade sobre o sumiço está espalhada nos computadores de vocês, e cada dono decide o que a sua IA continua sabendo.
 
 ## A tecnologia emergente, e por que não dá com tecnologia madura
 
-- **Cada morador pensa dentro do navegador do dono.** Um modelo de 1,5 bilhão de parâmetros (Qwen2.5 1.5B Instruct, ou o 3B na opção "mente melhor") roda inteiro no computador, via [WebLLM](https://github.com/mlc-ai/web-llm) e WebGPU. Não há servidor de IA, chave nem custo por fala.
-- **A vila só repassa mensagens.** Os navegadores trocam as falas por um broker MQTT público (`broker.emqx.io`), que não tem IA nenhuma: só entrega o texto de um computador para os outros.
+- **Cada testemunha pensa no navegador do dono.** Um modelo de 1,5 bilhão de parâmetros (Qwen2.5 1.5B Instruct, ou o 3B na opção "mente melhor") roda inteiro no computador, pela placa de vídeo, via [WebLLM](https://github.com/mlc-ai/web-llm) e WebGPU. O segredo de cada testemunha é sorteado e guardado só naquele navegador. Não existe servidor de IA, chave nem custo por fala.
+- **O escritório só repassa mensagens.** Os navegadores trocam falas e posições por um broker MQTT público (`broker.emqx.io`), que não tem IA nenhuma e não guarda as memórias.
 
 Por que a tecnologia madura não serve:
 
-- **Personagens roteirizados** não reagem ao que outro personagem acabou de dizer, nem a um boato sussurrado. A vila depende de cada morador improvisar.
-- **Personagens na nuvem** viram o caso de hoje: uma empresa roda todas as mentes, paga cada fala e é dona do mundo. A pergunta do experimento, o mundo feito das máquinas dos jogadores, só existe se cada mente rodar no aparelho de quem a trouxe.
+- **Com personagens roteirizados**, o segredo e a mentira estariam escritos no código do jogo, e qualquer um poderia lê-los. Não haveria testemunha de verdade nem mentira improvisada sob interrogatório.
+- **Com uma IA na nuvem**, a empresa teria a memória de todas as testemunhas, e "apagar" seria só esconder: o professor poderia pedir o log. A pergunta só existe se cada memória morar num aparelho diferente, sem cópia. Isso é IA local.
 
 ## Como usar
 
-1. Abra o link no Chrome ou no Edge, num computador.
-2. Escreva o seu nome, dê um nome ao seu morador e diga quem ele é (ou clique em "Sortear"). Clique em "Entrar na vila".
-3. Espere a mente baixar. Quando o morador chegar na praça, ele começa a falar sozinho.
-4. Sussurre para os moradores, faça coisas acontecerem e veja a vila andar.
-5. "Registro" baixa tudo o que você viu e sussurrou.
+Uma sessão leva cerca de 25 minutos: 5 para entrar, 15 investigando e 5 para votar e revelar.
 
-Sem placa de vídeo ou sem WebGPU, marque "entrar só como espírito": você observa, sussurra e faz coisas acontecerem, mas não traz morador.
+**Quem joga (a turma):**
+
+1. Abra https://testemunha.lab.mateuseap.com no Chrome ou no Edge, num computador.
+2. Escreva o seu nome e clique em "Entrar no escritório". Você vira um boneco, e a sua testemunha (a IA) entra junto e começa a baixar.
+3. Ande com WASD ou com as setas. Chegue perto de qualquer testemunha e aperte Enter para interrogar. Esc volta a andar.
+4. No painel à direita, só você vê se a sua testemunha é inocente ou culpada. Ali você decide se ela dorme, se sai da internet ou se a memória dela é apagada.
+5. Quando a turma quiser, alguém clica em "Abrir votação". Todos votam e alguém clica em "Revelar para todos".
+
+Sem placa de vídeo ou sem WebGPU, marque "entrar sem testemunha": você anda, interroga e vota, mas não traz uma IA.
 
 No Linux, o Chrome vem com o WebGPU desligado. Ligue em `chrome://flags/#enable-unsafe-webgpu` (e, se precisar, `chrome://flags/#enable-vulkan`) e reinicie o navegador.
 
-Para jogar numa sala separada, acrescente `?sala=nome` ao link. Todo mundo com o mesmo nome de sala cai na mesma vila.
+Para uma sala separada, acrescente `?sala=nome` ao link. Todos com o mesmo nome de sala caem no mesmo escritório.
+
+**Quem conduz (no dia do teste, pelo Meet):**
+
+1. Na véspera, peça no grupo para abrirem o link uma vez, para a IA ficar guardada no navegador.
+2. Na aula, mande o link no chat e diga só: "alguém roubou o dinheiro da festa; descubram quem foi". Compartilhe a sua tela.
+3. Observe e anote, sem conduzir. Aos 15 minutos, peça para alguém clicar em "Abrir votação".
+4. Depois da revelação, abra a conversa com as perguntas da seção seguinte.
+5. Clique em "Baixar registro" antes de fechar a aba.
 
 ## O que eu espero que aconteça
 
 Escrito antes do teste:
 
-- A turma vai usar os sussurros para plantar boatos e tentar fazer os moradores dos outros acusarem alguém.
-- Alguém vai pôr o próprio morador para dormir para "protegê-lo" de uma acusação, ou vai acordá-lo para ele se defender.
-- Quem não tiver WebGPU vai reclamar de ficar "de fora" do mundo: sem máquina boa, sem morador.
-- As pessoas vão falar do morador como "o meu", e ficar incomodadas quando ele disser algo que elas não queriam.
-- Quando alguém fechar o notebook no meio, o morador vai sumir, e a turma vai notar.
+- O dono da culpada vai apagar a memória da própria testemunha cedo, ou desligar a internet dele quando as perguntas apertarem.
+- Pelo menos um dono de testemunha inocente vai apagar a memória dela "para ver o que acontece", e a turma vai perder uma pista sem saber.
+- Alguém vai pedir no chat do Meet: "mostra a tela, o que a sua testemunha sabe?". A turma vai tentar contornar a IA indo direto ao dono.
+- Na revelação, a turma vai se incomodar mais com as memórias apagadas do que com ter errado o culpado.
+- Quem não tiver WebGPU vai ficar sem testemunha e vai comentar que "fica de fora".
+- O modelo pequeno às vezes vai deixar escapar a verdade ou inventar. A turma vai tratar isso como "a testemunha está confusa", não como defeito.
+
+## O que observar e o que dá para extrair
+
+Durante o teste, sem conduzir:
+
+- **Quem apaga, quando e por quê.** A revelação mostra quem apagou. O registro baixado mostra o horário.
+- **Quem desliga a internet da própria testemunha**, e se volta depois.
+- **Para quem a turma pergunta**: para a IA, ou direto para o dono no chat do Meet.
+- **Como as pessoas falam da própria testemunha**: "a minha", "ela", "a IA".
+- **Se alguém reclama de não poder recuperar** uma memória apagada.
+
+Perguntas para os 20 minutos de conversa:
+
+1. Quem apagou a memória da própria testemunha? Por quê? Como foi saber que não tinha volta?
+2. Se essa testemunha fosse a IA do seu celular, e o crime fosse real, você apagaria?
+3. Deveria existir uma cópia em algum lugar, e quem deveria guardá-la?
+4. Quem perguntou direto ao dono, em vez de à IA? A verdade estava na IA ou na pessoa?
+
+Saída para o `REGISTRO.md`: o JSON de "Baixar registro" de quem conduz (falas, votos e revelação) e as notas de observação.
 
 ## Limitações conhecidas
 
-- **O broker é público.** As falas da vila passam por ele em texto aberto. Não sussurre nada pessoal.
-- **O modelo é pequeno.** Às vezes um morador se repete, sai do personagem ou fala sem sentido.
-- **Precisa de WebGPU e de uma placa de vídeo razoável.** Celulares, em geral, não rodam um morador, só um espírito.
+- **O broker é público.** As falas do escritório passam por ele em texto aberto. Não escreva nada pessoal. Os segredos das testemunhas não passam por ele.
+- **O modelo é pequeno.** Às vezes uma testemunha sai do personagem, se repete ou deixa escapar o segredo.
+- **Precisa de WebGPU e de uma placa de vídeo razoável.** Celulares, em geral, não rodam uma testemunha.
+- **Só dá para observar o que é compartilhado.** O jogo não sabe o que cada testemunha sabia, e isso é proposital: é a pergunta do experimento.
 
-## Versão anterior
+## Versões anteriores
 
-A primeira versão deste experimento, "O Fantasma da Chamada", continua em [`fantasma.html`](fantasma.html) (https://fantasma.lab.mateuseap.com/fantasma.html). Ela foi trocada pela vila na madrugada de 17/11, porque a turma só assistia ao fantasma, e a vila faz cada pessoa trazer um pedaço do mundo.
+- "O Fantasma da Chamada" continua em [`fantasma.html`](fantasma.html). Ele foi trocado pela Testemunha na madrugada de 17/11, porque a turma só assistia ao fantasma e a pergunta não dependia de a IA ser local.
+
+## Créditos
+
+O escritório, os bonecos, o andar e os balões vêm do [PixelHub](https://github.com/mateuseap/pixelhub), projeto meu sob licença MIT (`src/pixelhub/`).
 
 ## Arquivos
 
 | Arquivo | Para quê |
 |---|---|
-| `index.html` | A vila inteira: entrada, praça, moradores, sussurros e registro |
+| `index.html` | A página: entrada, painel, interrogatório e votação |
+| `app.js` | O jogo compilado (gerado a partir de `src/`) |
+| `src/main.ts` | O código do jogo: testemunhas, mente local, caso, revelação |
+| `src/pixelhub/` | Mapa, texturas, bonecos e movimento do PixelHub |
 | `fantasma.html` | A versão anterior, O Fantasma da Chamada |
 | `README.md` | Este documento |
+
+Os slides para guiar o teste ficam em `movimento-3/apresentacao-teste/` (no ar em https://testemunha.lab.mateuseap.com/slides/).
+
+Para recompilar o `app.js`: `npm i phaser@3.90.0 mqtt@5.16.1 esbuild` numa pasta qualquer e rode `esbuild src/main.ts --bundle --format=esm --minify --outfile=app.js`, apontando `phaser` e `mqtt` para os builds ESM (`--alias:phaser=…/phaser/dist/phaser.esm.js --alias:mqtt=…/mqtt/dist/mqtt.esm.js`).
