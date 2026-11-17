@@ -42,6 +42,9 @@ header { padding: 8px 16px; display: flex; gap: 16px; align-items: center; flex-
 header h1 { font-size: 22px; font-weight: 600; color: var(--sol); }
 #caso { color: var(--dim); flex: 1; min-width: 220px; font-size: 14px; }
 #contagem { color: var(--sol); font: 15px "Pixelify Sans", sans-serif; }
+#relogio { font: 600 22px "Pixelify Sans", sans-serif; color: var(--ink); min-width: 3ch; }
+#relogio.urgente { color: var(--vermelho); }
+#relogio.fim { color: var(--sol); }
 #rede { font: 15px "Pixelify Sans", sans-serif; color: var(--verde); }
 #rede.off { color: var(--vermelho); }
 .meio { flex: 1; display: flex; min-height: 0; }
@@ -106,6 +109,7 @@ aside { width: 330px; background: var(--ui); border-left: 3px solid var(--borda)
   <header>
     <h1>A Testemunha</h1>
     <span id="caso">O dinheiro da festa de São João sumiu do cofre da capela. Quem pegou?</span>
+    <span id="relogio" aria-label="Tempo para a votação"></span>
     <span id="contagem"></span>
     <span id="rede">online</span>
   </header>

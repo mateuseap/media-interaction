@@ -22,6 +22,8 @@ const BROKER = 'wss://broker.emqx.io:8084/mqtt';
 const BASE = `testemunha-cin0055-v4/${SALA}`;
 const PERTO = 2.6; // tiles: how close you must stand to question a witness
 const NPC_VEL = 2.2; // tiles per second
+// ponytail: fixed 10-minute investigation; ?min=N overrides for longer or shorter sessions
+const DURACAO_MS = Math.max(1, Math.min(60, +(PARAMS.get('min') || 10))) * 60000;
 const CORES_HUMANO = ['#e5c07b', '#98c379', '#61afef', '#c678dd', '#56b6c2', '#d19a66'];
 const CORES_NPC = ['#e06c75', '#ff79c6', '#bd93f9', '#8be9fd', '#50fa7b', '#f1fa8c', '#ffb86c', '#ff5555'];
 
@@ -83,7 +85,7 @@ const fila: { de: string; texto: string; npc?: boolean }[] = [];
 const votos = new Map<string, string>();
 let proximoPasseio = 0, proximoPapo = 0, ultimaReplica = 0;
 let cena: Mundo | null = null;
-let visual = 0;
+let visual = 0, votacaoAberta = false;
 
 const log = (tipo: string, dados: object) => registro.push({ t: agora(), tipo, ...dados });
 const vivoNpc = (m: Npc) => m.id === meu?.id || Date.now() - m.t < 35000;
@@ -263,6 +265,15 @@ function hud(): void {
   $i('pergunta').placeholder = alvo ? `Pergunte a ${alvo.nome}...` : 'Chegue perto de uma testemunha para interrogar';
 }
 setInterval(hud, 300);
+setInterval(() => {
+  const el = $('relogio');
+  if (!rodada) { el.textContent = ''; return; }
+  const resta = new Date(rodada.t).getTime() + DURACAO_MS - Date.now();
+  if (resta <= 0) { el.textContent = 'votação'; el.className = 'fim'; if (!votacaoAberta && $('fim').hidden) abrirVoto(); return; }
+  const m = Math.floor(resta / 60000), seg = Math.floor((resta % 60000) / 1000);
+  el.textContent = `${m}:${String(seg).padStart(2, '0')}`;
+  el.className = resta < 60000 ? 'urgente' : '';
+}, 500);
 function mostrarPainel(): void {
   $('meuPainel').hidden = !meu;
   if (!meu) return;
@@ -385,7 +396,8 @@ function aplicarRodada(r: Rodada): void {
     segredo = papel === 'culpado' ? null : ordem >= 0 && ordem % 3 === 1 ? PISTA_CULPADO(c) : pistas[Math.max(0, ordem) % PISTAS.length];
     log('papel_local', { papel, segredo });
   }
-  linha({ id: 'r-' + r.id, t: r.t, tipo: 'ev', texto: `O caso começou: ${r.ids.length} testemunhas. Andem até elas e interroguem.` });
+  votacaoAberta = false;
+  linha({ id: 'r-' + r.id, t: r.t, tipo: 'ev', texto: `O caso começou: ${r.ids.length} testemunhas. Vocês têm ${Math.round(DURACAO_MS / 60000)} minutos para interrogar. Depois, a votação abre sozinha.` });
   mostrarPainel(); anunciarNpc();
 }
 function novoCaso(forcar: boolean): void {
@@ -396,6 +408,7 @@ function novoCaso(forcar: boolean): void {
   aplicarRodada(r);
 }
 function abrirVoto(): void {
+  votacaoAberta = true;
   $('fim').hidden = false;
   const f = $('fimConteudo'); f.innerHTML = '';
   const h = document.createElement('h2'); h.textContent = 'Quem pegou o dinheiro?';

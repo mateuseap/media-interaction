@@ -205,6 +205,37 @@ td.id { font-family: var(--mono); font-size: 17px; color: var(--red-dark); white
 .cmd p { font-size: 20px; color: rgba(255,255,255,.8); }
 .kbd { font-family: var(--mono); font-size: 18px; border: 2px solid currentColor; border-radius: 4px; padding: 1px 8px; }
 </style>
+<style>
+.arch { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; flex: 1; min-height: 0; align-items: stretch; }
+.arch .pc { border: 3px solid var(--ink); padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; background: var(--paper); }
+.arch .pc .tag { font-family: var(--mono); font-size: 15px; color: var(--ink-3); }
+.arch .pc h3 { font-size: 26px; }
+.arch .pc .box { border: 2px solid var(--gray); padding: 10px 12px; font-size: 18px; line-height: 1.35; }
+.arch .pc .box.ia { background: var(--red-tint); border-color: var(--red); }
+.arch .pc .box.seg { background: var(--black); color: #fff; border-color: var(--black); font-family: var(--mono); font-size: 15px; }
+.arch .rede { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 12px; padding: 0 18px; }
+.arch .rede .fio { width: 100%; height: 3px; background: repeating-linear-gradient(90deg, var(--ink) 0 10px, transparent 10px 18px); }
+.arch .rede b { font-size: 22px; }
+.arch .rede p { font-size: 17px; color: var(--ink-2); line-height: 1.35; }
+.arch .rede .nao { font-family: var(--mono); font-size: 15px; color: var(--red-dark); }
+.loop { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+.loop > div { border-top: 6px solid var(--red); background: var(--paper-2); padding: 18px 18px; }
+.loop .n { font-family: var(--mono); font-size: 15px; color: var(--red-dark); }
+.loop h3 { font-size: 22px; margin: 6px 0 8px; }
+.loop p { font-size: 17px; line-height: 1.36; }
+.coleta { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 22px; flex: 1; min-height: 0; }
+.coleta > div { padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; }
+.coleta .c1 { background: var(--red); color: #fff; }
+.coleta .c2 { background: var(--red-tint); }
+.coleta .c3 { border: 3px solid var(--ink); }
+.coleta .tag { font-family: var(--mono); font-size: 15px; opacity: .8; }
+.coleta h3 { font-size: 26px; }
+.coleta li { font-size: 18px; line-height: 1.36; }
+.coleta .c1 ul.clean li::before { background: #fff; }
+.hip { width: 100%; border-collapse: collapse; }
+.hip td { font-size: 19px; padding: 11px 14px; }
+.hip td.h { font-weight: 700; width: 46%; }
+</style>
 </head>
 <body>
 <main class="deck" id="deck" aria-live="polite">
@@ -246,14 +277,31 @@ td.id { font-family: var(--mono); font-size: 17px; color: var(--red-dark); white
 <section class="slide" data-title="O caso" data-steps="2">
   <div class="head"><div class="kicker">O jogo</div><h1>O dinheiro da festa de São João sumiu do cofre da capela</h1></div>
   <div class="three">
-    <div><div class="ico">você</div><h3>Um boneco</h3><p>Você anda pela vila com WASD ou setas e interroga quem estiver perto.</p></div>
-    <div class="hot" data-at="1"><div class="ico">a sua IA</div><h3>Uma testemunha</h3><p>Uma IA que roda no seu computador. Anda e fofoca sozinha. Viu um pedaço do que aconteceu, e só ela sabe o quê.</p></div>
-    <div data-at="2"><div class="ico">sorteio secreto</div><h3>Uma culpada</h3><p>Uma das testemunhas pegou o dinheiro e vai mentir. Só o dono dela sabe.</p></div>
+    <div><div class="ico">você</div><h3>Um boneco</h3><p>Você escolhe a aparência e anda pela vila com WASD ou setas. É o investigador.</p></div>
+    <div class="hot" data-at="1"><div class="ico">a sua IA</div><h3>Uma testemunha</h3><p>Outro boneco, controlado por uma IA que roda no seu computador. Anda e fofoca sozinha. Viu um pedaço do que aconteceu.</p></div>
+    <div data-at="2"><div class="ico">sorteio secreto</div><h3>Uma culpada</h3><p>Uma das testemunhas pegou o dinheiro e mente. Só o dono dela sabe.</p></div>
   </div>
-  <p class="src" style="margin-top:30px">Nem eu, que fiz o jogo, sei o que cada testemunha sabe. O segredo é sorteado e fica só no navegador do dono.</p>
+  <p class="src" style="margin-top:28px"><b>Objetivo da turma:</b> descobrir qual testemunha é a culpada antes do relógio zerar. <b>Objetivo do dono da culpada:</b> não ser descoberto.</p>
 </section>
 
 <!-- 5 -->
+<section class="slide" data-title="Como a IA funciona" data-steps="2">
+  <div class="head"><div class="kicker">A estrutura</div><h1>Cada testemunha é um modelo de linguagem rodando no navegador do dono</h1></div>
+  <div class="arch">
+    <div class="pc"><div class="tag">computador da Ana</div><h3>Testemunha: Cabo Juca</h3>
+      <div class="box ia">Qwen2.5 1.5B (perto de 1 GB), na placa de vídeo, via WebLLM e WebGPU</div>
+      <div class="box seg" data-at="1">segredo: "você é o CULPADO, minta"</div>
+      <div class="box">ouve as perguntas, responde, anda, puxa conversa sozinha a cada 35 a 60 s</div></div>
+    <div class="rede" data-at="2"><div class="fio"></div><b>A rede só repassa texto</b><p>Falas, posições e votos passam por um broker MQTT público. Ele não tem IA e não guarda nada.</p><span class="nao">o segredo nunca sai do PC</span><div class="fio"></div></div>
+    <div class="pc"><div class="tag">computador do Mateus</div><h3>Testemunha: Vó Quitéria</h3>
+      <div class="box ia">o mesmo modelo, outra cópia, outra placa de vídeo</div>
+      <div class="box seg" data-at="1">segredo: "eu vi alguém com jeito de policial saindo da capela"</div>
+      <div class="box">conta o que viu se perguntarem sobre ontem; se a memória for apagada, não lembra mais</div></div>
+  </div>
+  <p class="src"><b>O que é código e o que é IA.</b> O código sorteia a culpada e as pistas, guarda o segredo, cuida do relógio, dos votos e da revelação. A IA só interpreta a personagem: decide o que dizer, como mentir, de quem desconfiar.</p>
+</section>
+
+<!-- 6 -->
 <section class="slide" data-title="O poder do dono" data-steps="2">
   <div class="head"><div class="kicker">O que você pode fazer com a sua testemunha</div><h1>Você não controla o que ela fala. Mas controla se ela existe.</h1></div>
   <div class="three">
@@ -263,30 +311,32 @@ td.id { font-family: var(--mono); font-size: 17px; color: var(--red-dark); white
   </div>
 </section>
 
-<!-- 6 -->
+<!-- 7 -->
 <section class="slide" data-title="Como vai ser">
-  <div class="head"><div class="kicker">25 minutos</div><h1>Como vai ser</h1></div>
-  <div class="flow">
-    <div><div class="t">0 a 5 min</div><h3>Entrar</h3><p>Abrir o link, digitar o nome e esperar a testemunha chegar.</p></div>
-    <div><div class="t">5 a 20 min</div><h3>Investigar</h3><p>Andar, chegar perto, apertar <span class="kbd">Enter</span> e perguntar. Ouvir as fofocas.</p></div>
-    <div><div class="t">qualquer hora</div><h3>Decidir</h3><p>Dormir, tirar da internet ou apagar a sua testemunha. Ou não.</p></div>
-    <div><div class="t">20 a 25 min</div><h3>Votar</h3><p>Todo mundo vota. A revelação mostra a culpada e quem apagou o quê.</p></div>
+  <div class="head"><div class="kicker">15 minutos de jogo</div><h1>Como vai ser</h1></div>
+  <div class="loop">
+    <div><div class="n">0 a 3 min</div><h3>Entrar</h3><p>Abrir o link, escolher o boneco, esperar a testemunha chegar. O caso começa sozinho com 2 testemunhas.</p></div>
+    <div><div class="n">3 a 13 min</div><h3>Investigar</h3><p>10 minutos no relógio. Andar até uma testemunha, <span class="kbd">Enter</span>, perguntar. Ler as fofocas.</p></div>
+    <div><div class="n">a qualquer hora</div><h3>Decidir</h3><p>O dono pode pôr a sua testemunha para dormir, tirar da internet ou apagar a memória.</p></div>
+    <div><div class="n">13 a 15 min</div><h3>Votar</h3><p>O relógio zera e a votação abre sozinha para todos. Cada um vota em uma testemunha.</p></div>
+    <div><div class="n">15 min</div><h3>Revelação</h3><p>A culpada, quem errou e quem apagou memória, com nome. Aí a conversa começa.</p></div>
   </div>
+  <p class="src" style="margin-top:26px"><b>Sem placa de vídeo ou no celular:</b> entra "sem testemunha", anda, interroga e vota normalmente. Precisa de pelo menos 2 testemunhas na sala para o caso começar.</p>
 </section>
 
-<!-- 7 -->
+<!-- 8 -->
 <section class="slide inverse" data-title="Entrem">
   <div class="kicker">Agora é com vocês</div>
   <div class="link">testemunha<b>.lab.mateuseap.com</b></div>
-  <p class="lead">Chrome ou Edge, num computador. Escreva o seu nome e entre na vila.</p>
+  <p class="lead">Chrome ou Edge, num computador. Escreva o seu nome, escolha o seu boneco e entre na vila.</p>
   <div class="cmd">
     <div><h3>Andar e perguntar</h3><p>WASD ou setas. Perto de alguém, <span class="kbd">Enter</span> para perguntar e <span class="kbd">Esc</span> para voltar a andar.</p></div>
     <div><h3>Sem placa de vídeo, ou no celular?</h3><p>Marque "entrar sem testemunha". Você anda, interroga e vota normalmente.</p></div>
   </div>
-  <p class="src">Alguém roubou o dinheiro da festa. Descubram quem foi.</p>
+  <p class="src">Alguém roubou o dinheiro da festa. Vocês têm 10 minutos.</p>
 </section>
 
-<!-- 8 -->
+<!-- 9 -->
 <section class="slide inverse" data-title="Conversa">
   <div class="kicker">Depois da revelação</div>
   <div class="qs">
@@ -297,19 +347,44 @@ td.id { font-family: var(--mono); font-size: 17px; color: var(--red-dark); white
   </div>
 </section>
 
-<!-- 9 -->
+<!-- 10 -->
+<section class="slide" data-title="O que dá para extrair">
+  <div class="head"><div class="kicker">Insumo para o registro</div><h1>O que o teste vai mostrar</h1></div>
+  <div class="coleta">
+    <div class="c1"><div class="tag">o jogo registra</div><h3>Números</h3>
+      <ul class="clean"><li>Quantas memórias foram apagadas, por quem, e se a culpada estava entre elas.</li><li>Quem tirou a testemunha da internet, e se voltou.</li><li>Se a turma acertou a culpada, e por quantos votos.</li><li>Todas as perguntas e respostas, com horário (botão "Baixar registro").</li></ul></div>
+    <div class="c2"><div class="tag">eu observo</div><h3>Comportamento</h3>
+      <ul class="clean"><li>Se alguém pergunta direto ao dono no chat do Meet, em vez de à IA.</li><li>Como falam da própria testemunha: "a minha", "ela", "o programa".</li><li>A reação quando descobrem uma memória apagada.</li><li>Quem ficou sem testemunha por falta de placa de vídeo, e o que disse.</li></ul></div>
+    <div class="c3"><div class="tag">a turma responde</div><h3>Opinião</h3>
+      <ul class="clean"><li>Por que apagou, ou por que não.</li><li>Se apagaria no mundo real.</li><li>Quem deveria guardar a cópia: ninguém, o dono, uma empresa, a justiça.</li></ul></div>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="slide" data-title="Como ler o resultado">
+  <div class="head"><div class="kicker">O que cada resultado diz sobre o futuro</div><h1>Como ler o resultado</h1></div>
+  <table class="hip">
+    <tr><th>Se acontecer</th><th>O que sugere sobre IA local</th></tr>
+    <tr><td class="h">A culpada apaga a memória e a turma erra</td><td>Sem servidor, quem tem o aparelho controla a verdade. A privacidade da IA local também protege quem esconde algo.</td></tr>
+    <tr><td class="h">Inocentes apagam "para ver"</td><td>Apagar vira gesto banal. A memória da IA não é tratada como prova.</td></tr>
+    <tr><td class="h">Ninguém apaga</td><td>As pessoas tratam a memória da IA como algo que não é delas para destruir.</td></tr>
+    <tr><td class="h">A turma pergunta direto ao dono</td><td>A IA local não substitui a pessoa: a confiança volta para quem tem o aparelho.</td></tr>
+    <tr><td class="h">A turma pede uma cópia em algum lugar</td><td>O futuro "sem servidor" do tema 16 encontra resistência: as pessoas querem um registro externo.</td></tr>
+  </table>
+</section>
+
+<!-- 12 -->
 <section class="slide" data-title="Por que só com IA local">
   <div class="head"><div class="kicker">A tecnologia emergente</div><h1>Por que isso só existe com IA local</h1></div>
   <table>
     <tr><th>Com</th><th>O que acontece com a pergunta</th></tr>
     <tr><td class="id">roteiro</td><td>O segredo e a mentira estariam no código do jogo. Qualquer um poderia ler. Não há testemunha de verdade.</td></tr>
     <tr><td class="id">nuvem</td><td>A empresa teria a memória de todas as testemunhas. Apagar seria só esconder: alguém poderia pedir o log.</td></tr>
-    <tr><td class="id">IA local</td><td>Cada memória mora num computador diferente, sem cópia. Qwen2.5 1.5B rodando no navegador via WebLLM e WebGPU. É o único caso em que a pergunta existe.</td></tr>
+    <tr><td class="id">IA local</td><td>Cada memória mora num computador diferente, sem cópia. É o único caso em que a pergunta existe.</td></tr>
   </table>
-  <p class="src"><b>A rede só repassa mensagens.</b> Os navegadores trocam falas e posições por um broker MQTT público, sem IA. Os segredos das testemunhas não passam por ele.</p>
 </section>
 
-<!-- 10 -->
+<!-- 13 -->
 <section class="slide" data-title="O que eu espero ver">
   <div class="head"><div class="kicker">Escrito antes do teste</div><h1>O que eu espero ver</h1></div>
   <ul class="clean">

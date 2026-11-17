@@ -41,7 +41,7 @@ Por que a tecnologia madura não serve:
 
 ## Como usar
 
-Uma sessão leva cerca de 25 minutos: 5 para entrar, 15 investigando e 5 para votar e revelar.
+Uma sessão leva cerca de 15 minutos: 3 para entrar, 10 investigando (um relógio na tela conta o tempo) e 2 para votar e ver a revelação. Quando o relógio zera, a votação abre sozinha para todos. Para mudar a duração, acrescente `?min=N` ao link.
 
 **Quem joga (a turma):**
 
@@ -49,7 +49,7 @@ Uma sessão leva cerca de 25 minutos: 5 para entrar, 15 investigando e 5 para vo
 2. Escreva o seu nome, escolha a aparência do seu boneco e clique em "Entrar na vila". Você vira um boneco, e a sua testemunha (a IA) entra junto e começa a baixar.
 3. Ande com WASD ou com as setas. Chegue perto de qualquer testemunha e aperte Enter para interrogar. Esc volta a andar.
 4. No painel à direita, só você vê se a sua testemunha é inocente ou culpada. Ali você decide se ela dorme, se sai da internet ou se a memória dela é apagada.
-5. Quando a turma quiser, alguém clica em "Abrir votação". Todos votam e alguém clica em "Revelar para todos".
+5. Quando o relógio zera, a votação abre sozinha (ou alguém clica antes em "Abrir votação"). Todos votam e alguém clica em "Revelar para todos".
 
 Sem placa de vídeo ou sem WebGPU, marque "entrar sem testemunha": você anda, interroga e vota, mas não traz uma IA.
 
@@ -61,7 +61,7 @@ Para uma sala separada, acrescente `?sala=nome` ao link. Todos com o mesmo nome 
 
 1. Na véspera, peça no grupo para abrirem o link uma vez, para a IA ficar guardada no navegador.
 2. Na aula, mande o link no chat e diga só: "alguém roubou o dinheiro da festa; descubram quem foi". Compartilhe a sua tela.
-3. Observe e anote, sem conduzir. Aos 15 minutos, peça para alguém clicar em "Abrir votação".
+3. Observe e anote, sem conduzir. A votação abre sozinha depois de 10 minutos de caso.
 4. Depois da revelação, abra a conversa com as perguntas da seção seguinte.
 5. Clique em "Baixar registro" antes de fechar a aba.
 
@@ -77,6 +77,8 @@ Escrito antes do teste:
 - O modelo pequeno às vezes vai deixar escapar a verdade ou inventar. A turma vai tratar isso como "a testemunha está confusa", não como defeito.
 
 ## O que observar e o que dá para extrair
+
+Como o jogo funciona por dentro: cada testemunha é uma cópia do modelo Qwen2.5 1.5B rodando no navegador do dono. O código sorteia a culpada e as pistas, guarda o segredo só naquele navegador, conta o tempo, recolhe os votos e monta a revelação. A IA só interpreta a personagem: decide o que dizer, como mentir e de quem desconfiar.
 
 Durante o teste, sem conduzir:
 
