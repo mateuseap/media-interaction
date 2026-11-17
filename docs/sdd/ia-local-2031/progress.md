@@ -1,6 +1,6 @@
 # Progresso: IA local em 2031
 
-CURRENT OBJECTIVE: movimento 3, experimento "A Vila nos Computadores" (troca do fantasma em 17/11).
+CURRENT OBJECTIVE: movimento 3, experimento "A Testemunha" (troca final em 17/11).
 CURRENT PHASE: TESTE (17/11 de manhã, Meet). Vila publicada, só teste de fumaça feito.
 CURRENT BRANCH: master
 BASE BRANCH: master (remoto não tem develop).
@@ -36,10 +36,13 @@ DEADLINES:
 - REGISTRO.md: 30/11 23h59.
 - Apresentação final: 01/12.
 
-VILA (17/11, madrugada):
-- `movimento-3/experimento/index.html`: cada aluno traz um morador; mente local (Qwen2.5 1.5B, ou 3B) no navegador do dono; falas trocadas por broker MQTT público `broker.emqx.io`; sussurros, eventos, dormir. Fantasma movido para `fantasma.html`.
-- Publicada em https://fantasma.lab.mateuseap.com (homelab PRs #266 e #267, pin 64bf07f).
-- Verificado: teste de fumaça headless (entrar como espírito, evento aparece na praça). NÃO verificado: dois moradores com mente conversando entre si (teste com 3 navegadores não chegou a rodar).
+TESTEMUNHA (17/11, madrugada; substitui vila e fantasma):
+- Jogo: `movimento-3/experimento/index.html` + `app.js` (compilado de `src/main.ts`; motor de mapa, bonecos e movimento copiado do PixelHub em `src/pixelhub/`, MIT). Cada jogador anda com o próprio boneco e traz uma testemunha (IA local Qwen2.5 1.5B via WebLLM) que anda e fofoca sozinha; segredo sorteado só no navegador do dono; uma culpada; dono pode dormir, tirar da internet ou apagar a memória (silencioso); votação e revelação mostram quem apagou.
+- Pergunta: se a única testemunha mora no aparelho de alguém, quem decide se a verdade aparece?
+- Slides do teste: `movimento-3/apresentacao-teste/` (cópia em `experimento/slides/`), no ar em https://testemunha.lab.mateuseap.com/slides/
+- No ar: https://testemunha.lab.mateuseap.com (homelab PRs #268 e #269, pin 7644bd5). `fantasma.lab` continua apontando para o mesmo site.
+- Verificado: 3 navegadores (2 testemunhas + 1 visitante): caso sorteado, interrogatório, internet desligada, memória apagada, votação, revelação. Defeito visto: testemunha inocente não revelava a pista; prompt reforçado depois, NÃO retestado.
+- Sem PC bom: "entrar sem testemunha" (anda, pergunta, vota); precisa de pelo menos 2 testemunhas na sala para o caso começar.
 - Linux: Chrome precisa de `chrome://flags/#enable-unsafe-webgpu`.
 
 SITE DA DISCIPLINA: `exp_url` salvo em 16/11 23h27 com autorização do usuário ("submete algo que podemos ir modificando"):
