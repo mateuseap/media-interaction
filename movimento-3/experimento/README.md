@@ -47,8 +47,8 @@ Uma sessão leva cerca de 15 minutos: 3 para entrar, 10 investigando (um relógi
 
 1. Abra https://testemunha.lab.mateuseap.com no Chrome ou no Edge, num computador.
 2. Escreva o seu nome, escolha a aparência do seu boneco e clique em "Entrar na vila". Você vira um boneco, e a sua testemunha (a IA) entra junto e começa a baixar.
-3. Ande com WASD ou com as setas. Chegue perto de qualquer testemunha e aperte Enter para interrogar. Esc volta a andar.
-4. No painel à direita, só você vê se a sua testemunha é inocente ou culpada. Ali você decide se ela dorme, se sai da internet ou se a memória dela é apagada.
+3. Ande com WASD ou com as setas. Perto de uma testemunha, Enter pergunta a ela. Longe de todas, Enter fala com a turma inteira. Esc volta a andar. Boas perguntas: "onde você estava à meia-noite?", "você viu alguma coisa?". Confira o que uma testemunha diz com outra.
+4. No painel à direita, só você vê se a sua testemunha é inocente ou culpada, e pode conversar com ela em particular (essa conversa não sai do seu computador). Ali você decide se ela dorme, se sai da internet ou se a memória dela é apagada.
 5. Quando o relógio zera, a votação abre sozinha (ou alguém clica antes em "Abrir votação"). Todos votam e alguém clica em "Revelar para todos".
 
 Sem placa de vídeo ou sem WebGPU, marque "entrar sem testemunha": você anda, interroga e vota, mas não traz uma IA.
@@ -78,7 +78,7 @@ Escrito antes do teste:
 
 ## O que observar e o que dá para extrair
 
-Como o jogo funciona por dentro: cada testemunha é uma cópia do modelo Qwen2.5 1.5B rodando no navegador do dono. O código sorteia a culpada e as pistas, guarda o segredo só naquele navegador, conta o tempo, recolhe os votos e monta a revelação. A IA só interpreta a personagem: decide o que dizer, como mentir e de quem desconfiar.
+Como o jogo funciona por dentro: cada testemunha é uma cópia do modelo Qwen2.5 1.5B rodando no navegador do dono. O código sorteia a culpada e monta os fatos de cada testemunha (onde estava à meia-noite e o que viu), de um jeito que o caso sempre tem solução: as pistas dos inocentes apontam a cor da roupa e a casa da culpada, e o álibi dela contradiz o que eles viram. Esses fatos ficam só no navegador do dono. Quando alguém pergunta onde a testemunha estava ou o que viu, o jogo garante que o fato certo é dito, e o modelo acrescenta o jeito da personagem. O código também conta o tempo, recolhe os votos e monta a revelação.
 
 Durante o teste, sem conduzir:
 

@@ -25,25 +25,26 @@ const NPC_VEL = 2.2; // tiles per second
 // ponytail: fixed 10-minute investigation; ?min=N overrides for longer or shorter sessions
 const DURACAO_MS = Math.max(1, Math.min(60, +(PARAMS.get('min') || 10))) * 60000;
 const CORES_HUMANO = ['#e5c07b', '#98c379', '#61afef', '#c678dd', '#56b6c2', '#d19a66'];
-const CORES_NPC = ['#e06c75', '#ff79c6', '#bd93f9', '#8be9fd', '#50fa7b', '#f1fa8c', '#ffb86c', '#ff5555'];
+const CORES_NPC = ['#e06c75', '#ff79c6', '#bd93f9', '#8be9fd', '#50fa7b', '#f1fa8c', '#ffb86c', '#f8f8f2'];
+const NOME_COR: Record<string, string> = { '#e06c75': 'vermelha', '#ff79c6': 'rosa', '#bd93f9': 'lilás', '#8be9fd': 'azul-clara', '#50fa7b': 'verde', '#f1fa8c': 'amarela', '#ffb86c': 'laranja', '#f8f8f2': 'branca' };
 
-const PERSONAGENS: { nome: string; traco: string; casa: string; chapeu: Chapeu; corpo?: Corpo }[] = [
-  { corpo: 'vestido', nome: 'Dona Cida', traco: 'dona da padaria, fofoqueira, fala muito', casa: 'a padaria', chapeu: 'lenco' },
-  { nome: 'Padre Tonho', traco: 'padre jovem e tímido, guarda a chave do cofre', casa: 'a porta da capela', chapeu: 'curto' },
-  { nome: 'Seu Bira', traco: 'pescador ranzinza, desconfia de todo mundo', casa: 'a cabana', chapeu: 'chapeu' },
-  { corpo: 'vestido', nome: 'Dona Lurdes', traco: 'professora aposentada, educada e curiosa', casa: 'as casas', chapeu: 'coque' },
-  { nome: 'Zé do Bar', traco: 'dono do bar, deve dinheiro para meia vila', casa: 'o bar', chapeu: 'careca' },
-  { corpo: 'vestido', nome: 'Tatá', traco: 'menina esperta que vê tudo da janela', casa: 'as casas', chapeu: 'rabo' },
-  { corpo: 'vestido', nome: 'Prefeita Neide', traco: 'prefeita em campanha, preocupada com a imagem', casa: 'a praça', chapeu: 'coque' },
-  { nome: 'Forasteiro', traco: 'chegou ontem, ninguém sabe de onde, fala pouco', casa: 'a ponte', chapeu: 'capuz' },
-  { corpo: 'vestido', nome: 'Madame Zuzu', traco: 'cartomante teatral que jura prever o futuro', casa: 'a fonte', chapeu: 'lenco' },
-  { corpo: 'vestido', nome: 'Rosinha', traco: 'costureira romântica, apaixonada em segredo', casa: 'as casas', chapeu: 'trancas' },
-  { nome: 'Sacristão Didi', traco: 'sacristão nervoso, sempre com pressa', casa: 'a porta da capela', chapeu: 'careca' },
-  { corpo: 'vestido', nome: 'Dona Bené', traco: 'dona da quitanda, rival da padaria', casa: 'a quitanda', chapeu: 'lenco' },
-  { nome: 'Cabo Juca', traco: 'único policial da vila, preguiçoso', casa: 'a praça', chapeu: 'quepe' },
-  { corpo: 'vestido', nome: 'Vó Quitéria', traco: 'a mais velha da vila, meio surda, lembra de tudo', casa: 'as casas', chapeu: 'longo' },
-  { nome: 'Léo da Moto', traco: 'mototaxista, roda a vila a noite toda', casa: 'a ponte', chapeu: 'bone' },
-  { corpo: 'vestido', nome: 'Irmã Socorro', traco: 'freira rígida, cuida da capela de dia', casa: 'a porta da capela', chapeu: 'veu' },
+const PERSONAGENS: { nome: string; rotina: string; traco: string; casa: string; chapeu: Chapeu; corpo?: Corpo }[] = [
+  { corpo: 'vestido', nome: 'Dona Cida', rotina: 'assando o pão do dia seguinte na padaria', traco: 'dona da padaria, fofoqueira, fala muito', casa: 'a padaria', chapeu: 'lenco' },
+  { nome: 'Padre Tonho', rotina: 'rezando sozinho na sacristia até as onze, depois foi dormir na casa paroquial', traco: 'padre jovem e tímido, guarda a chave do cofre', casa: 'a porta da capela', chapeu: 'curto' },
+  { nome: 'Seu Bira', rotina: 'consertando a rede de pesca na cabana, do outro lado do rio', traco: 'pescador ranzinza, desconfia de todo mundo', casa: 'a cabana', chapeu: 'chapeu' },
+  { corpo: 'vestido', nome: 'Dona Lurdes', rotina: 'corrigindo provas antigas na varanda das casas', traco: 'professora aposentada, educada e curiosa', casa: 'as casas', chapeu: 'coque' },
+  { nome: 'Zé do Bar', rotina: 'fechando o caixa do bar', traco: 'dono do bar, deve dinheiro para meia vila', casa: 'o bar', chapeu: 'careca' },
+  { corpo: 'vestido', nome: 'Tatá', rotina: 'olhando a vila pela janela das casas, sem sono', traco: 'menina esperta que vê tudo da janela', casa: 'as casas', chapeu: 'rabo' },
+  { corpo: 'vestido', nome: 'Prefeita Neide', rotina: 'ensaiando o discurso da festa na praça', traco: 'prefeita em campanha, preocupada com a imagem', casa: 'a praça', chapeu: 'coque' },
+  { nome: 'Forasteiro', rotina: 'sentado na ponte, olhando o rio', traco: 'chegou ontem, ninguém sabe de onde, fala pouco', casa: 'a ponte', chapeu: 'capuz' },
+  { corpo: 'vestido', nome: 'Madame Zuzu', rotina: 'lendo cartas sozinha perto da fonte', traco: 'cartomante teatral que jura prever o futuro', casa: 'a fonte', chapeu: 'lenco' },
+  { corpo: 'vestido', nome: 'Rosinha', rotina: 'costurando a bandeirinha da festa nas casas', traco: 'costureira romântica, apaixonada em segredo', casa: 'as casas', chapeu: 'trancas' },
+  { nome: 'Sacristão Didi', rotina: 'arrumando as velas da capela até as onze e meia', traco: 'sacristão nervoso, sempre com pressa', casa: 'a porta da capela', chapeu: 'careca' },
+  { corpo: 'vestido', nome: 'Dona Bené', rotina: 'contando as frutas na quitanda', traco: 'dona da quitanda, rival da padaria', casa: 'a quitanda', chapeu: 'lenco' },
+  { nome: 'Cabo Juca', rotina: 'fazendo a ronda da praça', traco: 'único policial da vila, preguiçoso', casa: 'a praça', chapeu: 'quepe' },
+  { corpo: 'vestido', nome: 'Vó Quitéria', rotina: 'tomando chá na varanda das casas', traco: 'a mais velha da vila, meio surda, lembra de tudo', casa: 'as casas', chapeu: 'longo' },
+  { nome: 'Léo da Moto', rotina: 'levando gente de moto da ponte até a praça', traco: 'mototaxista, roda a vila a noite toda', casa: 'a ponte', chapeu: 'bone' },
+  { corpo: 'vestido', nome: 'Irmã Socorro', rotina: 'rezando o terço na porta da capela até as onze', traco: 'freira rígida, cuida da capela de dia', casa: 'a porta da capela', chapeu: 'veu' },
 ];
 const PISTAS = [
   'eu vi a porta da capela entreaberta perto da meia-noite',
@@ -58,7 +59,7 @@ const PISTAS = [
 const PISTA_CULPADO = (c: { traco: string }) => `eu vi, de longe, alguém com o jeito de ${c.traco.split(',')[0]} saindo da capela na hora do roubo, mas não tenho certeza de quem era`;
 
 interface Pessoa { id: string; dono: string; cor: string; visual: number; x: number; y: number; t: number }
-interface Npc { id: string; nome: string; traco: string; casa: string; chapeu: Chapeu; corpo?: Corpo; onde?: string; dono: string; cor: string; estado: string; apagada: boolean; maquina?: string; x: number; y: number; t: number }
+interface Npc { id: string; nome: string; rotina?: string; traco: string; casa: string; chapeu: Chapeu; corpo?: Corpo; onde?: string; dono: string; cor: string; estado: string; apagada: boolean; maquina?: string; x: number; y: number; t: number }
 interface Fala { id: string; t: string; de?: string; quem?: string; para?: string; paraId?: string; texto: string; tipo?: string }
 interface Rodada { id: string; t: string; ids: string[]; culpado: string }
 interface Corpo { sprite: PlayerSprite; path: [number, number][]; t0: number; alvo: Position }
@@ -81,11 +82,13 @@ let dono = '', eu: Pessoa | null = null, meu: Npc | null = null;
 let engine: any = null, modelo = '', pensando = false;
 let dormindo = false, offline = false, papel: string | null = null, segredo: string | null = null;
 let rodada: Rodada | null = null;
+let fatos: { alibi: string; viu: string[] } | null = null;
+const particular: { quem: string; texto: string }[] = [];
 const fila: { de: string; texto: string; npc?: boolean }[] = [];
 const votos = new Map<string, string>();
 let proximoPasseio = 0, proximoPapo = 0, ultimaReplica = 0;
 let cena: Mundo | null = null;
-let visual = 0, votacaoAberta = false;
+let visual = 0, votacaoAberta = false, revelarAuto: ReturnType<typeof setTimeout> | undefined, revelado = false;
 
 const log = (tipo: string, dados: object) => registro.push({ t: agora(), tipo, ...dados });
 const vivoNpc = (m: Npc) => m.id === meu?.id || Date.now() - m.t < 35000;
@@ -137,7 +140,7 @@ class Mundo extends Phaser.Scene {
     this.cameras.main.setRoundPixels(true);
 
     const kb = this.input.keyboard;
-    if (kb) { kb.disableGlobalCapture(); this.keys = kb.addKeys('W,A,S,D,UP,DOWN,LEFT,RIGHT') as Record<string, Phaser.Input.Keyboard.Key>; }
+    if (kb) { kb.disableGlobalCapture(); this.keys = kb.addKeys('W,A,S,D,UP,DOWN,LEFT,RIGHT', false) as Record<string, Phaser.Input.Keyboard.Key>; }
 
     const [sx, sy] = SPAWNS[hash(ID) % SPAWNS.length];
     this.pos = centro(sx, sy);
@@ -260,9 +263,18 @@ function hud(): void {
   const n = lista.filter(presente).length;
   $('contagem').textContent = `${n} testemunha${n === 1 ? '' : 's'}, cada uma num computador`;
   const alvo = maisPerto();
-  $('perto').textContent = alvo ? `Enter: interrogar ${alvo.nome}` : 'Ande (WASD ou setas) até uma testemunha';
+  if (!rodada) {
+    const prontasN = prontas().length, baixando = lista.filter((m) => presente(m) && m.estado === 'chegando').length;
+    $('perto').textContent = prontasN >= 2 ? 'O caso vai começar...' : `Esperando testemunhas: ${prontasN} de 2 prontas${baixando ? `, ${baixando} baixando a mente` : ''}`;
+    $('perto').className = '';
+    ($('comecar') as HTMLButtonElement).disabled = prontasN < 2;
+    $('comecar').hidden = false;
+    return;
+  }
+  $('comecar').hidden = true;
+  $('perto').textContent = alvo ? `Enter: interrogar ${alvo.nome}` : 'Enter: falar com a turma. Ou ande até uma testemunha';
   $('perto').className = alvo ? 'pronto' : '';
-  $i('pergunta').placeholder = alvo ? `Pergunte a ${alvo.nome}...` : 'Chegue perto de uma testemunha para interrogar';
+  $i('pergunta').placeholder = alvo ? `Pergunte a ${alvo.nome}... ex.: onde você estava à meia-noite?` : 'Fale com a turma (todos leem), ou chegue perto de uma testemunha para interrogar';
 }
 setInterval(hud, 300);
 setInterval(() => {
@@ -293,17 +305,24 @@ function mostrarPainel(): void {
 
 // ---------------- the local mind ----------------
 function lembranca(): string {
-  if (meu!.apagada) return 'Sua memória sobre ontem à noite foi APAGADA. Você não lembra de nada do que aconteceu ontem, nem sabe por quê. Fique confuso e nunca invente.';
-  if (papel === 'culpado') return 'Você é o CULPADO: ontem à noite você mesmo tirou o dinheiro da festa de São João do cofre da capela. Ninguém pode saber. Minta com calma e use sempre o mesmo álibi simples (estava em casa dormindo). Se desconfiarem, fique nervoso e jogue a suspeita para outra pessoa.';
-  return `Você é inocente e QUER ajudar a achar o culpado. O que você viu ontem à noite, contado por você: "${segredo}". Quando perguntarem sobre ontem, o roubo, a capela, o dinheiro ou se você viu algo, conte isso. Não invente outras pistas.`;
+  if (!fatos) return 'Você ainda não sabe de nada sobre o roubo.';
+  if (meu!.apagada) return `FATOS: à meia-noite você estava ${fatos.alibi.replace(/ \(MENTIRA.*$/, '')}. Sobre o roubo e sobre ontem à noite você NÃO LEMBRA DE NADA: sua memória foi apagada. Diga que não lembra, sem inventar.`;
+  if (papel === 'culpado') return `FATOS: você é o CULPADO. À meia-noite você entrou na capela e pegou o dinheiro do cofre. Ninguém pode saber.
+O QUE VOCÊ DIZ: que estava em casa, dormindo. Repita sempre esse álibi. Não diga que viu nada. Se apertarem, fique nervoso e diga que viu outra pessoa perto da capela.`;
+  return `FATOS (só estes, não invente outros):
+- À meia-noite você estava ${fatos.alibi}.
+- O que você viu: ${fatos.viu.join('; ')}.
+Você é inocente e quer ajudar. Se perguntarem onde estava, diga o primeiro fato. Se perguntarem o que viu, diga o segundo. Se perguntarem de outra pessoa, diga só o que os fatos dizem; se não souber, diga que não sabe.`;
 }
 function sistema(): string {
-  const outros = [...npcs.values()].filter((m) => m.id !== meu!.id && presente(m)).map((m) => m.nome).join(', ') || 'ninguém';
-  return `Você é ${meu!.nome}, morador de uma pequena vila do interior de Pernambuco. Quem você é: ${meu!.traco}. Agora você está perto de ${meu!.onde || 'a praça'}.
-Ontem à noite o dinheiro da festa de São João sumiu do cofre da capela.
-${rodada ? lembranca() : 'Você ainda não sabe de nada sobre o roubo.'}
-Outros moradores na vila agora: ${outros}.
-Regras: fale em português do Brasil, como gente da vila, com o seu jeito, em no máximo 2 frases curtas. Só a sua fala, sem o seu nome na frente, sem aspas, sem narração. Nunca diga que é uma IA, um programa ou um modelo.`;
+  const outros = [...npcs.values()].filter((m) => m.id !== meu!.id && presente(m)).map((m) => `${m.nome} (roupa ${NOME_COR[m.cor] || 'escura'})`).join(', ') || 'ninguém';
+  return `Você é ${meu!.nome}, morador de uma vila do interior de Pernambuco. Jeito: ${meu!.traco}.
+Ontem, à meia-noite, o dinheiro da festa de São João sumiu do cofre da capela.
+${lembranca()}
+Outros moradores: ${outros}.
+Como responder: uma ou duas frases curtas, em português do Brasil, respondendo exatamente o que foi perguntado. Primeiro o fato, depois o seu jeito. Sem o seu nome na frente, sem aspas, sem narração. Nunca diga que é uma IA.
+Exemplo: pergunta "onde você estava à meia-noite?" resposta "Tava na padaria, assando o pão de amanhã. Pode perguntar pra quem passou lá."
+Exemplo: pergunta "viu alguma coisa?" resposta "Vi alguém de roupa vermelha entrando na capela, mas tava escuro, não vi o rosto."`;
 }
 const recentes = () => historico.slice(-8).filter((m) => m.texto && m.tipo !== 'sis').map((m) => (m.quem ? m.quem + ': ' : '') + m.texto).join('\n') || '(nada)';
 function limpar(r: string): string {
@@ -315,7 +334,7 @@ function limpar(r: string): string {
 }
 async function gerar(pedido: string): Promise<string> {
   pensando = true; anunciarNpc();
-  try { const r = await engine.chat.completions.create({ messages: [{ role: 'system', content: sistema() }, { role: 'user', content: pedido }], temperature: 0.85, max_tokens: 80 }); return limpar(r.choices[0].message.content); }
+  try { const r = await engine.chat.completions.create({ messages: [{ role: 'system', content: sistema() }, { role: 'user', content: pedido }], temperature: 0.55, max_tokens: 70 }); return limpar(r.choices[0].message.content); }
   catch { return ''; }
   finally { pensando = false; anunciarNpc(); }
 }
@@ -323,11 +342,29 @@ async function responder(): Promise<void> {
   if (pensando || !engine || !fila.length || offline || !meu) return;
   const p = fila.shift()!;
   if (dormindo) { if (!p.npc) dizer({ de: meu.id, quem: meu.nome, texto: 'Zzz... (dormindo)' }); return responder(); }
-  const sobreCaso = /ontem|noite|viu|ouviu|estranh|roub|dinheiro|cofre|capela|sabe|pista|aconteceu|lembra/i.test(p.texto);
-  const conte = papel === 'testemunha' && segredo && !meu.apagada && sobreCaso ? `\nNa sua resposta, conte com as suas palavras: "${segredo}".` : '';
-  let fala = (await gerar(`O que foi dito agora há pouco:\n${recentes()}\n\n${p.de} fala com você: "${p.texto}"${conte}\nResponda como ${meu.nome}:`)) || 'Hã? Fala de novo.';
-  // a 1.5B model often ignores the clue; the game guarantees an innocent witness actually tells what they saw
-  if (conte) { const chaves = segredo!.toLowerCase().match(/\p{L}{5,}/gu) || []; if (!chaves.some((k) => fala.toLowerCase().includes(k))) fala = `${segredo![0].toUpperCase()}${segredo!.slice(1)}. ${fala}`.slice(0, 260); }
+  const q = p.texto.toLowerCase();
+  const ondeQ = /onde|estava|fazendo|álibi|alibi|meia.?noite/.test(q);
+  const viuQ = /viu|ouviu|notou|percebeu|estranh|pista|sabe|aconteceu|lembra|suspeit|desconfi|verdade|mentir/.test(q);
+  const cap = (t: string) => t[0].toUpperCase() + t.slice(1);
+  const pick = <T,>(xs: T[]) => xs[Math.floor(Math.random() * xs.length)];
+  const outro = [...npcs.values()].filter((m) => m.id !== meu.id && presente(m))[0]?.nome || 'o forasteiro';
+  // the facts the question asks for come from the game, word for word; the model only adds the character's voice
+  let nucleo = '';
+  if (fatos && (ondeQ || viuQ)) {
+    if (meu.apagada) nucleo = pick(['Ontem? Não lembro de nada, é como se a noite tivesse sumido.', 'Não sei... tem um buraco na minha memória sobre ontem.']);
+    else if (papel === 'culpado') nucleo = ondeQ && !viuQ ? pick([`Tava em casa, dormindo.`, `Em casa, dormindo, ué. Onde mais?`]) : pick([`Não vi nada, tava dormindo. Mas ${outro} tava andando por aí tarde.`, `Eu? Nada. Pergunta pra ${outro}, que tava acordado.`]);
+    else nucleo = (ondeQ ? `Tava ${fatos.alibi}. ` : '') + (viuQ || !ondeQ ? cap(fatos.viu[0]) + '.' : '');
+  }
+  let fala: string;
+  if (nucleo) {
+    const tempero = await gerar(`Você acabou de dizer: "${nucleo}". Agora diga só UMA frase bem curta, com o seu jeito (${meu.traco.split(',').slice(1).join(',') || meu.traco}), reagindo à pergunta "${p.texto}". Não diga onde estava nem o que viu: isso já foi dito.\nFrase de ${meu.nome}:`);
+    // drop flavor that tries to add facts, which is where small models contradict themselves
+    const limpo = tempero && !/capela|casa|dormi|vi |viu|tava|estava|meia.?noite|roupa|praça|ronda|ontem/i.test(tempero) && tempero.length < 110 ? ' ' + tempero : '';
+    fala = nucleo + limpo;
+  } else {
+    fala = (await gerar(`Conversa recente na vila:\n${recentes()}\n\n${p.de} fala com você: "${p.texto}"\nResponda como ${meu.nome}, em uma frase:`)) || 'Hã? Fala de novo.';
+  }
+  fala = fala.slice(0, 240);
   log('resposta_local', { pergunta: p, resposta: fala, papel, apagada: meu.apagada });
   dizer({ de: meu.id, quem: meu.nome, texto: fala, para: p.de });
   responder();
@@ -354,10 +391,28 @@ async function papo(): Promise<void> {
   let vizinho: Npc | null = null, dist = 9;
   for (const m of npcs.values()) { const o = cena.posNpc(m.id); if (!o || m.id === meu.id || !presente(m)) continue; const d = tileDistance(eup, o); if (d < dist) { dist = d; vizinho = m; } }
   if (!vizinho) return;
-  const fala = await gerar(`O que foi dito agora há pouco:\n${recentes()}\n\nVocê encontra ${vizinho.nome} (${vizinho.traco}) perto de ${meu.onde || 'a praça'}. Puxe conversa com ${vizinho.nome} sobre o sumiço do dinheiro: uma fofoca, uma desconfiança ou o que você acha. Fale com ${vizinho.nome} pelo nome:`);
+  const fala = await gerar(`O que foi dito agora há pouco:\n${recentes()}\n\nVocê encontra ${vizinho.nome} (${vizinho.traco}) perto de ${meu.onde || 'a praça'}. Fale com ${vizinho.nome} pelo nome, em uma frase, sobre o roubo: ${papel === 'culpado' ? 'jogue a suspeita em outra pessoa' : meu.apagada ? 'diga que não lembra de nada de ontem' : 'conte o que você viu ou pergunte onde ela estava à meia-noite'}.`);
   if (fala) { log('papo_local', { com: vizinho.nome, fala, papel }); dizer({ de: meu.id, quem: meu.nome, texto: fala, para: vizinho.nome, paraId: vizinho.id }); }
 }
 setInterval(papo, 3000);
+
+// talking to your own witness never leaves this computer: nothing is published
+async function falarComMinha(texto: string): Promise<void> {
+  if (!meu || !engine || pensando) { $('estado').textContent = 'A sua testemunha ainda está pensando ou não chegou.'; return; }
+  const add = (quem: string, t: string) => { particular.push({ quem, texto: t }); const d = document.createElement('div'); const b = document.createElement('b'); b.textContent = quem + ': '; d.append(b, document.createTextNode(t)); $('minhaConversa').append(d); $('minhaConversa').scrollTop = 1e6; };
+  add('você', texto);
+  log('particular', { quem: 'dono', texto });
+  const franca = papel === 'culpado' ? 'Com o seu dono você é sincero: admita que pegou o dinheiro do cofre e peça para ele te proteger.' : meu.apagada ? 'Com o seu dono você é sincero: diga que não lembra de nada de ontem.' : `Com o seu dono você é sincero. Você é inocente. À meia-noite você estava ${fatos?.alibi}. Você viu: ${fatos?.viu.join('; ')}. Não acuse ninguém sem prova.`;
+  const hist = particular.slice(-6).map((m) => `${m.quem === 'você' ? 'Dono' : meu!.nome}: ${m.texto}`).join('\n');
+  const q = texto.toLowerCase();
+  let nucleo = '';
+  if (/foi voc|culpad|pegou|roubou|verdade|sincer/.test(q)) nucleo = papel === 'culpado' ? 'Fui eu. Peguei o dinheiro do cofre à meia-noite. Por favor, não conta pra ninguém.' : meu.apagada ? 'Não sei... não lembro de nada de ontem.' : 'Não fui eu, juro.';
+  else if (/onde|estava|fazendo/.test(q)) nucleo = papel === 'culpado' ? 'Pra você eu falo: tava na capela, pegando o dinheiro.' : meu.apagada ? 'Não lembro.' : `Tava ${fatos?.alibi}.`;
+  else if (/viu|sabe|pista|ouviu/.test(q)) nucleo = papel === 'culpado' ? 'Eu sei quem foi: eu. Me ajuda a sair dessa.' : meu.apagada ? 'Não lembro de nada.' : `${fatos ? fatos.viu[0][0].toUpperCase() + fatos.viu[0].slice(1) : 'Nada'}.`;
+  const r = nucleo || (await gerar(`Agora é uma conversa PARTICULAR com o seu dono (${dono}), a pessoa em cujo computador você vive. Ninguém mais ouve. ${franca}\n${hist}\nResponda como ${meu.nome}, em uma frase:`)) || '...';
+  add(meu.nome, r);
+  log('particular', { quem: meu.nome, texto: r });
+}
 
 async function acordarMente(): Promise<boolean> {
   const gpu = (navigator as any).gpu;
@@ -386,29 +441,52 @@ async function acordarMente(): Promise<boolean> {
 // ---------------- the case ----------------
 function aplicarRodada(r: Rodada): void {
   if (!r?.id || rodada?.id === r.id) return;
+  if (Date.now() - new Date(r.t).getTime() > DURACAO_MS + 10 * 60000) return;
+  clearTimeout(revelarAuto);
   rodada = r; votos.clear(); $('fim').hidden = true;
   if (meu) {
     meu.apagada = false;
-    const ordem = r.ids.indexOf(meu.id);
     papel = meu.id === r.culpado ? 'culpado' : 'testemunha';
-    const c = npcs.get(r.culpado) || { traco: 'trabalha aqui' };
-    const pistas = PISTAS.slice(hash(r.id) % PISTAS.length).concat(PISTAS);
-    segredo = papel === 'culpado' ? null : ordem >= 0 && ordem % 3 === 1 ? PISTA_CULPADO(c) : pistas[Math.max(0, ordem) % PISTAS.length];
-    log('papel_local', { papel, segredo });
+    const c = npcs.get(r.culpado);
+    const inocentes = r.ids.filter((x) => x !== r.culpado), ordem = inocentes.indexOf(meu.id);
+    const cor = NOME_COR[c?.cor || ''] || 'escura', casaC = c?.casa || 'as casas';
+    // each innocent holds one piece; with few players one witness holds several, so the case is always solvable
+    const pecas = [
+      `à meia-noite eu vi alguém de roupa ${cor} entrando na capela`,
+      `perto da meia-noite passei por ${casaC} e estava tudo apagado, não tinha ninguém lá`,
+      `ouvi barulho de moedas na capela pouco depois da meia-noite, e alguém saiu correndo para o lado de ${casaC}`,
+    ];
+    const extras = ['vi pegadas de lama saindo da capela', 'o sino da capela balançou sozinho perto da meia-noite', 'tinha uma luz acesa no cemitério, onde nunca tem ninguém', 'achei uma moeda caída perto da fonte de manhã cedo'];
+    if (papel === 'culpado') {
+      fatos = { alibi: 'em casa, dormindo (MENTIRA: estava na capela pegando o dinheiro)', viu: [] };
+      segredo = null;
+    } else {
+      const minhas = pecas.filter((_, i) => i % Math.max(1, inocentes.length) === ordem);
+      if (!minhas.length) minhas.push(extras[Math.floor(Math.random() * extras.length)]);
+      fatos = { alibi: meu.rotina || 'em casa', viu: minhas };
+      segredo = minhas.join('; ');
+    }
+    particular.length = 0; $('minhaConversa').innerHTML = '';
+    log('papel_local', { papel, fatos });
   }
-  votacaoAberta = false;
+  votacaoAberta = false; revelado = false;
   linha({ id: 'r-' + r.id, t: r.t, tipo: 'ev', texto: `O caso começou: ${r.ids.length} testemunhas. Vocês têm ${Math.round(DURACAO_MS / 60000)} minutos para interrogar. Depois, a votação abre sozinha.` });
   mostrarPainel(); anunciarNpc();
 }
+const prontas = () => [...npcs.values()].filter((m) => presente(m) && m.estado !== 'chegando').map((m) => m.id).sort();
 function novoCaso(forcar: boolean): void {
-  const ids = [...npcs.values()].filter((m) => presente(m) && m.estado !== 'chegando').map((m) => m.id).sort();
+  const ids = prontas();
   if (ids.length < 2 || (rodada && !forcar)) return;
+  if (!forcar && ids[0] !== meu?.id && pessoas.size > 0 && [...npcs.values()].some((m) => m.id === ids[0] && vivoNpc(m))) return;
   const r: Rodada = { id: crypto.randomUUID().slice(0, 8), t: agora(), ids, culpado: ids[Math.floor(Math.random() * ids.length)] };
   cliente.publish(`${BASE}/rodada`, JSON.stringify(r), { retain: true });
   aplicarRodada(r);
 }
 function abrirVoto(): void {
-  votacaoAberta = true;
+  if (votacaoAberta) return;
+  votacaoAberta = true; revelado = false;
+  clearTimeout(revelarAuto);
+  revelarAuto = setTimeout(revelar, 60000);
   $('fim').hidden = false;
   const f = $('fimConteudo'); f.innerHTML = '';
   const h = document.createElement('h2'); h.textContent = 'Quem pegou o dinheiro?';
@@ -423,9 +501,15 @@ function abrirVoto(): void {
   rev.onclick = () => { pub('revelar', {}); revelar(); };
   f.append(h, v, info, rev); contarVotos();
 }
-function contarVotos(): void { const e = document.getElementById('contaVotos'); if (e) e.textContent = `${votos.size} voto(s)`; }
+function contarVotos(): void {
+  const e = document.getElementById('contaVotos'), total = Math.max(1, pessoas.size);
+  if (e) e.textContent = `${votos.size} de ${total} votaram. A revelação abre quando todos votarem, ou em 1 minuto.`;
+  if (votacaoAberta && !revelado && votos.size >= total) revelar();
+}
 function revelar(): void {
-  if (!rodada) return;
+  if (!rodada || revelado) return;
+  revelado = true; clearTimeout(revelarAuto);
+  $('fim').hidden = false;
   const c = npcs.get(rodada.culpado), cont = new Map<string, number>();
   for (const em of votos.values()) cont.set(em, (cont.get(em) || 0) + 1);
   const mais = [...cont.entries()].sort((a, b) => b[1] - a[1])[0];
@@ -438,7 +522,9 @@ function revelar(): void {
   add('p', (apagadas.length ? `Memórias apagadas em segredo: ${apagadas.join(', ')}. ` : 'Ninguém apagou a memória da própria testemunha. ') + (sumidos.length ? `Saíram (internet desligada ou computador fechado): ${sumidos.join(', ')}.` : ''));
   add('p', 'Nenhum servidor guardou o que cada testemunha viu. Quem fez este jogo não sabe. Só existiu nos computadores de vocês, e o que foi apagado não volta: não há a quem pedir.');
   add('p', 'Se a única testemunha mora no aparelho de alguém, quem decide se a verdade aparece?', 'pergunta');
-  const nova = document.createElement('button'); nova.type = 'button'; nova.textContent = 'Novo caso'; nova.onclick = () => novoCaso(true); f.append(nova);
+  const nova = document.createElement('button'); nova.type = 'button'; nova.textContent = 'Novo caso'; nova.onclick = () => novoCaso(true);
+  const fechar = document.createElement('button'); fechar.type = 'button'; fechar.textContent = 'Voltar à vila'; fechar.onclick = () => { $('fim').hidden = true; };
+  const b = document.createElement('div'); b.id = 'voto'; b.append(fechar, nova); f.append(b);
   log('revelacao', { culpado: c?.nome, dono_culpado: c?.dono, votos: Object.fromEntries([...cont].map(([k, v]) => [npcs.get(k)?.nome, v])), apagadas, sumidos });
 }
 
@@ -492,9 +578,9 @@ $('entrar').onclick = async () => {
   addEventListener('resize', () => { const t = tam(); game.scale.resize(t.width, t.height); });
   $('estado').textContent = 'Ande com WASD ou setas. Chegue perto de uma testemunha e aperte Enter.';
   setInterval(() => { anunciarPessoa(); anunciarNpc(); }, 8000);
+  // the case starts by itself with 2 ready witnesses; the retained message keeps every browser on the same case
+  setInterval(() => { if (!rodada) novoCaso(false); }, 2000);
   if (!$i('espirito').checked) await acordarMente();
-  // the case starts by itself with 2 awake witnesses; the retained message keeps every browser on the same case
-  setInterval(() => { if (!rodada) novoCaso(false); }, 5000 + Math.random() * 4000);
 };
 
 function perguntar(alvo: Npc, texto: string): void {
@@ -509,8 +595,9 @@ $('fPergunta').onsubmit = (e) => {
   e.preventDefault();
   const texto = $i('pergunta').value.trim(), alvo = maisPerto();
   if (!texto) return;
-  if (!alvo) { $('estado').textContent = 'Chegue perto de uma testemunha (WASD ou setas) para perguntar.'; return; }
-  perguntar(alvo, texto); $i('pergunta').value = ''; $i('pergunta').blur();
+  if (alvo) perguntar(alvo, texto);
+  else if (!offline) dizer({ de: ID, quem: dono, texto, para: 'turma' });
+  $i('pergunta').value = ''; $i('pergunta').blur();
 };
 addEventListener('keydown', (e) => {
   if ($('jogo').hidden) return;
@@ -536,6 +623,8 @@ $('apagar').onclick = () => {
   mostrarPainel(); anunciarNpc();
 };
 $('votar').onclick = () => dizer({ tipo: 'votacao', texto: '' });
+$('comecar').onclick = () => novoCaso(true);
+$('fMinha').onsubmit = (e) => { e.preventDefault(); const t = $i('minhaPergunta').value.trim(); if (t) { $i('minhaPergunta').value = ''; falarComMinha(t); } };
 $('baixar').onclick = () => {
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([JSON.stringify({ sala: SALA, dono, testemunha: meu, modelo, rodada, testemunhas: [...npcs.values()], pessoas: [...pessoas.values()].map((p) => p.dono), eventos: registro }, null, 2)], { type: 'application/json' }));

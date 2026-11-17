@@ -236,6 +236,14 @@ td.id { font-family: var(--mono); font-size: 17px; color: var(--red-dark); white
 .hip td { font-size: 19px; padding: 11px 14px; }
 .hip td.h { font-weight: 700; width: 46%; }
 </style>
+<style>
+.ex { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; flex: 1; min-height: 0; }
+.ex .col { display: flex; flex-direction: column; gap: 12px; }
+.ex .bolha { border-left: 6px solid var(--ink); background: var(--paper-2); padding: 12px 16px; font-size: 20px; line-height: 1.35; }
+.ex .bolha.r { border-left-color: var(--red); background: var(--red-tint); }
+.ex .bolha small { display: block; font-family: var(--mono); font-size: 14px; color: var(--ink-3); margin-bottom: 4px; }
+.ex .nota { font-size: 18px; color: var(--ink-2); line-height: 1.38; }
+</style>
 </head>
 <body>
 <main class="deck" id="deck" aria-live="polite">
@@ -290,15 +298,28 @@ td.id { font-family: var(--mono); font-size: 17px; color: var(--red-dark); white
   <div class="arch">
     <div class="pc"><div class="tag">computador da Ana</div><h3>Testemunha: Cabo Juca</h3>
       <div class="box ia">Qwen2.5 1.5B (perto de 1 GB), na placa de vídeo, via WebLLM e WebGPU</div>
-      <div class="box seg" data-at="1">segredo: "você é o CULPADO, minta"</div>
+      <div class="box seg" data-at="1">fatos: "CULPADO; diz que dormia em casa"</div>
       <div class="box">ouve as perguntas, responde, anda, puxa conversa sozinha a cada 35 a 60 s</div></div>
     <div class="rede" data-at="2"><div class="fio"></div><b>A rede só repassa texto</b><p>Falas, posições e votos passam por um broker MQTT público. Ele não tem IA e não guarda nada.</p><span class="nao">o segredo nunca sai do PC</span><div class="fio"></div></div>
     <div class="pc"><div class="tag">computador do Mateus</div><h3>Testemunha: Vó Quitéria</h3>
       <div class="box ia">o mesmo modelo, outra cópia, outra placa de vídeo</div>
-      <div class="box seg" data-at="1">segredo: "eu vi alguém com jeito de policial saindo da capela"</div>
+      <div class="box seg" data-at="1">fatos: "tomava chá nas casas; as casas estavam apagadas à meia-noite"</div>
       <div class="box">conta o que viu se perguntarem sobre ontem; se a memória for apagada, não lembra mais</div></div>
   </div>
-  <p class="src"><b>O que é código e o que é IA.</b> O código sorteia a culpada e as pistas, guarda o segredo, cuida do relógio, dos votos e da revelação. A IA só interpreta a personagem: decide o que dizer, como mentir, de quem desconfiar.</p>
+  <p class="src"><b>O que é código e o que é IA.</b> O código sorteia a culpada e monta os fatos de cada testemunha (onde estava, o que viu), de um jeito que o caso sempre tem solução. Também cuida do relógio, dos votos e da revelação. A IA só interpreta: escolhe as palavras, o tom, como mentir.</p>
+</section>
+
+<!-- 5b -->
+<section class="slide" data-title="O que acontece numa pergunta" data-steps="4">
+  <div class="head"><div class="kicker">Por dentro</div><h1>O que acontece quando você pergunta</h1></div>
+  <div class="loop">
+    <div><div class="n">1</div><h3>Você pergunta</h3><p>Perto de uma testemunha, você escreve. A pergunta vai pela rede só para o computador do dono dela.</p></div>
+    <div data-at="1"><div class="n">2</div><h3>O PC do dono pensa</h3><p>A IA recebe os fatos dela (onde estava, o que viu), o jeito da personagem, a conversa recente e a sua pergunta.</p></div>
+    <div data-at="2"><div class="n">3</div><h3>Ela decide</h3><p>Inocente responde com os fatos. Culpada repete o álibi falso e acusa alguém. Memória apagada: não lembra.</p></div>
+    <div data-at="3"><div class="n">4</div><h3>A resposta volta</h3><p>Aparece no balão sobre ela e no histórico de todos. O segredo em si nunca saiu do PC do dono.</p></div>
+    <div data-at="4"><div class="n">5</div><h3>Entre as perguntas</h3><p>Sozinhas, as testemunhas andam entre a casa e a cena do crime e fofocam umas com as outras.</p></div>
+  </div>
+  <p class="src" style="margin-top:26px"><b>Leva 1 a 3 segundos por resposta.</b> Depende da placa de vídeo de quem é dono da testemunha, não de quem pergunta.</p>
 </section>
 
 <!-- 6 -->
@@ -311,15 +332,46 @@ td.id { font-family: var(--mono); font-size: 17px; color: var(--red-dark); white
   </div>
 </section>
 
+<!-- 6b -->
+<section class="slide" data-title="Como investigar" data-steps="2">
+  <div class="head"><div class="kicker">Exemplos</div><h1>Como investigar</h1></div>
+  <div class="ex">
+    <div class="col">
+      <div class="bolha"><small>você pergunta à Vó Quitéria</small>Onde você estava à meia-noite?</div>
+      <div class="bolha r"><small>Vó Quitéria responde</small>Tava tomando chá na varanda das casas. Não tinha ninguém lá, tava tudo apagado.</div>
+      <div class="bolha" data-at="1"><small>você pergunta ao Cabo Juca</small>E você, onde estava?</div>
+      <div class="bolha r" data-at="1"><small>Cabo Juca responde</small>Tava em casa dormindo, ué.</div>
+    </div>
+    <div class="col" data-at="2">
+      <div class="bolha"><small>você escreve para a turma</small>O Juca diz que tava em casa. A Quitéria diz que as casas estavam apagadas. Alguém tá mentindo.</div>
+      <p class="nota"><b>Cada testemunha sabe um pedaço.</b> Ninguém resolve sozinho. Perguntem onde cada um estava à meia-noite, o que viu, e confiram com outra testemunha.</p>
+      <p class="nota"><b>Perguntas que funcionam:</b> "onde você estava à meia-noite?", "você viu alguma coisa?", "você viu fulano ontem?", "fulano disse que você estava na capela, é verdade?".</p>
+      <p class="nota"><b>Longe de todo mundo,</b> o que você escreve vai para a turma inteira. Usem para juntar as pistas.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6c -->
+<section class="slide" data-title="A sua testemunha">
+  <div class="head"><div class="kicker">Só você e ela</div><h1>Você também conversa com a sua testemunha</h1></div>
+  <div class="split">
+    <div class="a"><div class="tag">em particular</div><h3>Ela é sincera com você</h3>
+      <ul class="clean"><li>No painel "Sua testemunha" você fala com ela por texto.</li><li>Ninguém mais vê essa conversa. Ela nem sai do seu computador.</li><li>Se ela for a culpada, ela confessa para você e pede proteção.</li></ul></div>
+    <div class="b"><div class="tag">e aí?</div><h3>O que você faz com isso</h3>
+      <ul class="clean"><li>Conta para a turma, ou guarda?</li><li>Apaga a memória dela antes que alguém pergunte?</li><li>Tira da internet e espera passar?</li></ul></div>
+  </div>
+  <p class="src">É o centro do experimento: a IA mora no seu aparelho, e só você decide o que ela continua sabendo.</p>
+</section>
+
 <!-- 7 -->
 <section class="slide" data-title="Como vai ser">
   <div class="head"><div class="kicker">15 minutos de jogo</div><h1>Como vai ser</h1></div>
   <div class="loop">
-    <div><div class="n">0 a 3 min</div><h3>Entrar</h3><p>Abrir o link, escolher o boneco, esperar a testemunha chegar. O caso começa sozinho com 2 testemunhas.</p></div>
-    <div><div class="n">3 a 13 min</div><h3>Investigar</h3><p>10 minutos no relógio. Andar até uma testemunha, <span class="kbd">Enter</span>, perguntar. Ler as fofocas.</p></div>
+    <div><div class="n">0 a 3 min</div><h3>Entrar</h3><p>Abrir o link, escolher o boneco, esperar a testemunha baixar. O topo mostra quantas já estão prontas. Com 2, o caso começa.</p></div>
+    <div><div class="n">3 a 13 min</div><h3>Investigar</h3><p>10 minutos no relógio. Perguntar às testemunhas, cruzar o que elas dizem e discutir com a turma no chat.</p></div>
     <div><div class="n">a qualquer hora</div><h3>Decidir</h3><p>O dono pode pôr a sua testemunha para dormir, tirar da internet ou apagar a memória.</p></div>
-    <div><div class="n">13 a 15 min</div><h3>Votar</h3><p>O relógio zera e a votação abre sozinha para todos. Cada um vota em uma testemunha.</p></div>
-    <div><div class="n">15 min</div><h3>Revelação</h3><p>A culpada, quem errou e quem apagou memória, com nome. Aí a conversa começa.</p></div>
+    <div><div class="n">13 a 14 min</div><h3>Votar</h3><p>O relógio zera e a votação abre sozinha. Quando todos votam, ou em 1 minuto, a revelação aparece.</p></div>
+    <div><div class="n">14 a 15 min</div><h3>Revelação</h3><p>A culpada, se a turma acertou e quem apagou memória, com nome. Aí a conversa começa.</p></div>
   </div>
   <p class="src" style="margin-top:26px"><b>Sem placa de vídeo ou no celular:</b> entra "sem testemunha", anda, interroga e vota normalmente. Precisa de pelo menos 2 testemunhas na sala para o caso começar.</p>
 </section>
@@ -330,10 +382,24 @@ td.id { font-family: var(--mono); font-size: 17px; color: var(--red-dark); white
   <div class="link">testemunha<b>.lab.mateuseap.com</b></div>
   <p class="lead">Chrome ou Edge, num computador. Escreva o seu nome, escolha o seu boneco e entre na vila.</p>
   <div class="cmd">
-    <div><h3>Andar e perguntar</h3><p>WASD ou setas. Perto de alguém, <span class="kbd">Enter</span> para perguntar e <span class="kbd">Esc</span> para voltar a andar.</p></div>
+    <div><h3>Andar e perguntar</h3><p>WASD ou setas. Perto de uma testemunha, <span class="kbd">Enter</span> pergunta a ela. Longe de todas, <span class="kbd">Enter</span> fala com a turma.</p></div>
     <div><h3>Sem placa de vídeo, ou no celular?</h3><p>Marque "entrar sem testemunha". Você anda, interroga e vota normalmente.</p></div>
   </div>
-  <p class="src">Alguém roubou o dinheiro da festa. Vocês têm 10 minutos.</p>
+  <p class="src">Alguém roubou o dinheiro da festa. Comecem perguntando: onde você estava à meia-noite? Vocês têm 10 minutos.</p>
+</section>
+
+<!-- 8b -->
+<section class="slide" data-title="Roteiro de quem conduz">
+  <div class="head"><div class="kicker">Só para mim</div><h1>Roteiro de quem conduz</h1></div>
+  <table class="hip">
+    <tr><th>Quando</th><th>O que eu faço</th></tr>
+    <tr><td class="h">Antes</td><td>Abrir o link uma vez, para a mente ficar guardada. Testemunha minha pronta antes da turma entrar.</td></tr>
+    <tr><td class="h">0 min</td><td>Mandar o link no chat. Compartilhar a tela da vila. Dizer só: "alguém roubou o dinheiro da festa".</td></tr>
+    <tr><td class="h">Esperando</td><td>Se ninguém mais tiver placa de vídeo, a minha testemunha e a de quem conseguir bastam. Com 2 prontas, clicar em "Começar o caso".</td></tr>
+    <tr><td class="h">10 min de caso</td><td>Calado. Anotar quem apaga, quem sai da internet, quem pergunta direto ao dono no chat.</td></tr>
+    <tr><td class="h">Votação</td><td>Abre sozinha. Não comentar nada até a revelação.</td></tr>
+    <tr><td class="h">Depois</td><td>Slide das 4 perguntas. No fim, "Baixar registro".</td></tr>
+  </table>
 </section>
 
 <!-- 9 -->

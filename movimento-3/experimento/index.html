@@ -63,6 +63,11 @@ aside { width: 330px; background: var(--ui); border-left: 3px solid var(--borda)
 .botoes { display: flex; gap: 6px; flex-wrap: wrap; }
 .botoes button { font-size: 14px; padding: 7px 10px; }
 #memoriaTxt { color: var(--dim); font-size: 13px; }
+.minha { display: flex; gap: 6px; }
+.minha input { flex: 1; min-width: 0; font-size: 14px; padding: 7px 9px; }
+.minha button { font-size: 14px; padding: 7px 10px; }
+#minhaConversa { max-height: 120px; overflow-y: auto; font-size: 13px; display: flex; flex-direction: column; gap: 3px; }
+#minhaConversa:empty { display: none; }
 #historico { flex: 1; overflow-y: auto; padding: 10px 14px; display: flex; flex-direction: column; gap: 5px; font-size: 14px; }
 #historico .q { font-weight: 700; margin-right: 4px; }
 #historico .sis { color: #857b97; font-style: italic; }
@@ -121,6 +126,11 @@ aside { width: 330px; background: var(--ui); border-left: 3px solid var(--borda)
         <div id="meuNome"></div>
         <div id="segredo"></div>
         <div id="memoriaTxt"></div>
+        <form id="fMinha" class="minha">
+          <input id="minhaPergunta" maxlength="200" autocomplete="off" placeholder="Fale em particular com ela (só você vê)" aria-label="Conversa particular com a sua testemunha">
+          <button type="submit">Falar</button>
+        </form>
+        <div id="minhaConversa" aria-live="polite"></div>
         <div class="botoes">
           <button type="button" id="dormir">Dormir</button>
           <button type="button" id="internet">Desligar internet</button>
@@ -129,6 +139,7 @@ aside { width: 330px; background: var(--ui); border-left: 3px solid var(--borda)
       </div>
       <div class="painel">
         <div class="botoes">
+          <button type="button" id="comecar" class="ok" hidden disabled>Começar o caso</button>
           <button type="button" id="votar" class="ok">Abrir votação</button>
           <button type="button" id="baixar">Baixar registro</button>
         </div>
