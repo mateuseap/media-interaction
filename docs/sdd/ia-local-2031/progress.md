@@ -13,7 +13,7 @@ COMPLETED:
   - Modelo Qwen2.5 3B Instruct no navegador via WebLLM/WebGPU; versão leve 1.5B opcional; variante f16 ou f32 conforme a GPU.
   - O código libera um fragmento a cada 2 perguntas, detecta grosseria e decide o final; o modelo só interpreta o personagem.
   - Voz pelo navegador; botão "Registro" baixa a sessão em JSON.
-- Publicado no homelab: https://fantasma.lab.mateuseap.com (homelab PRs #262 e #263, pin atualizado em #264 e #265). TLS Let's Encrypt ok.
+- Publicado no homelab em https://fantasma.lab.mateuseap.com (homelab PRs #262 e #263, pin atualizado em #264 e #265). Host removido em 20/11. TLS Let's Encrypt ok.
 
 TESTS PASSED:
 - Sessão completa jogada por script no link publicado, nos modelos 3B e 1.5B: segredo protegido, pistas no ritmo, reação à grosseria, negação de ser IA, despedida e sumiço.
@@ -40,7 +40,7 @@ TESTEMUNHA (17/11, madrugada; substitui vila e fantasma):
 - Jogo: `movimento-3/experimento/index.html` + `app.js` (compilado de `src/main.ts`; motor de mapa, bonecos e movimento copiado do PixelHub em `src/pixelhub/`, MIT). Cada jogador anda com o próprio boneco e traz uma testemunha (IA local Qwen2.5 1.5B via WebLLM) que anda e fofoca sozinha; segredo sorteado só no navegador do dono; uma culpada; dono pode dormir, tirar da internet ou apagar a memória (silencioso); votação e revelação mostram quem apagou.
 - Pergunta: se a única testemunha mora no aparelho de alguém, quem decide se a verdade aparece?
 - Slides do teste: `movimento-3/apresentacao-teste/` (cópia em `experimento/slides/`), no ar em https://testemunha.lab.mateuseap.com/slides/
-- No ar: https://testemunha.lab.mateuseap.com (homelab PRs #268 e #269, pin 7644bd5). `fantasma.lab` continua apontando para o mesmo site.
+- No ar: https://testemunha.lab.mateuseap.com (homelab PRs #268 e #269, pin 7644bd5). Em 20/11, o app do homelab virou `testemunha` (homelab PR #278) e o host `fantasma.lab` foi removido.
 - Verificado: 3 navegadores (2 testemunhas + 1 visitante): caso sorteado, interrogatório, internet desligada, memória apagada, votação, revelação. Defeito visto: testemunha inocente não revelava a pista; prompt reforçado depois, NÃO retestado.
 - Sem PC bom: "entrar sem testemunha" (anda, pergunta, vota); precisa de pelo menos 2 testemunhas na sala para o caso começar.
 - Linux: Chrome precisa de `chrome://flags/#enable-unsafe-webgpu`.
