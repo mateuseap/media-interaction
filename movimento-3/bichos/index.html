@@ -9,48 +9,96 @@ button,input{font:inherit}button{cursor:pointer}[hidden]{display:none!important}
 .btn.claro{background:#fff}.btn.perigo{background:#ffb3b3}
 input{border:3px solid var(--borda);border-radius:8px;padding:9px 11px;background:#fff;min-width:0}
 .entrada{min-height:100%;display:grid;place-items:center;padding:16px;background:linear-gradient(180deg,#8fd3f4 0 45%,#6fbf5a 45%)}
-.cartao{width:min(560px,94vw);background:var(--papel);border:4px solid var(--borda);border-radius:12px;box-shadow:0 6px 0 var(--borda);padding:22px;display:grid;gap:11px}
+.cartao{width:min(580px,94vw);background:var(--papel);border:4px solid var(--borda);border-radius:12px;box-shadow:0 6px 0 var(--borda);padding:22px;display:grid;gap:11px}
 .cartao h1{margin:0;font-size:60px;line-height:.9;color:#e8473f;text-shadow:4px 4px 0 var(--borda);text-align:center}
 .cartao p{margin:0;text-align:center}
-.ovo{text-align:center;font-size:72px;animation:balanca 1.2s ease-in-out infinite}
+.passos{margin:0;padding-left:22px;display:grid;gap:3px}
+.ovo{text-align:center;font-size:64px;animation:balanca 1.2s ease-in-out infinite}
 @keyframes balanca{50%{transform:rotate(9deg)}}
 #visuais{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
 .visual{padding:6px 0 2px;background:#f1e6cc;border:2px solid var(--borda);border-radius:6px;display:flex;justify-content:center}
 .visual canvas{width:40px;height:50px;image-rendering:pixelated}
 .visual[aria-pressed="true"]{background:var(--sol)}
 label{display:flex;gap:8px;align-items:center;justify-content:center;font-size:14px}
-.jogo{height:100%;display:grid;grid-template-columns:1fr 330px}
+.jogo{height:100%;display:grid;grid-template-columns:1fr 340px}
 #game{position:relative;overflow:hidden;min-width:0}
 #game canvas{image-rendering:pixelated}
 .topo{position:absolute;left:12px;top:10px;right:12px;display:flex;justify-content:space-between;gap:10px;pointer-events:none;z-index:2}
 .topo span{background:var(--papel);border:3px solid var(--borda);border-radius:8px;padding:4px 10px;font-weight:700}
-#hp:empty{display:none}#hp{background:#ffb3b3!important}
+#relogio{background:var(--sol)!important}
+#perto{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:3;background:var(--sol);border:3px solid var(--borda);border-radius:8px;padding:8px 14px;font-weight:700;cursor:pointer;animation:pulsa .9s ease-in-out infinite alternate;white-space:nowrap}
+@keyframes pulsa{to{transform:translateX(-50%) scale(1.06)}}
 .lado{background:var(--papel);border-left:4px solid var(--borda);display:flex;flex-direction:column;min-height:0;overflow:auto}
 .bloco{padding:12px 14px;border-bottom:3px solid var(--borda);display:grid;gap:7px}
 .bloco h3{margin:0;font-size:14px;color:#6b6580}
+.como{background:#eaf6ff}.como ol{margin:0;padding-left:20px;font-size:14px;display:grid;gap:3px}
 .ficha{display:grid;grid-template-columns:84px 1fr;gap:10px;align-items:center}
 #f-pet{width:84px;height:60px;image-rendering:pixelated;background:#cfeaff;border:3px solid var(--borda);border-radius:8px}
 #f-nome{margin:0;font-size:22px}
+#f-mente{font-size:13px;font-weight:700}
 .tag{display:inline-block;border:2px solid var(--borda);border-radius:4px;padding:0 5px;font-size:12px;margin:2px 2px 0 0}
 .linha{display:flex;gap:6px}.linha input{flex:1}
-#f-mem{font-size:13px;color:#4d475e;max-height:90px;overflow:auto}
-#placar{margin:0;padding-left:20px;font-size:14px}
+#f-resposta{font-size:14px;background:#fff;border:2px dashed #c9bfa5;border-radius:6px;padding:6px 8px}#f-resposta:empty{display:none}
+#f-mem{font-size:13px;color:#4d475e;max-height:80px;overflow:auto}
+#placar{margin:0;padding-left:22px;font-size:14px}#placar .eu{font-weight:700}
 #feed{font-size:13px;display:grid;gap:5px}#feed p{margin:0;border-left:3px solid #d8cfb5;padding-left:7px}#feed p.forte{border-color:var(--sol);font-weight:600}
 small{color:#6b6580}
-@media(max-width:820px){.jogo{grid-template-columns:1fr;grid-template-rows:60vh auto}.lado{border-left:0;border-top:4px solid var(--borda)}#visuais{grid-template-columns:repeat(4,1fr)}}
+/* battle screen */
+.batalha{position:absolute;inset:0;z-index:5;display:grid;grid-template-rows:1fr auto;background:linear-gradient(180deg,#a9e2f5 0 55%,#9bd47a 55%)}
+.campo-b{position:relative}
+.lad{position:absolute;display:grid;gap:8px;justify-items:center}
+.lad.op{right:10%;top:8%}.lad.eu{left:10%;bottom:6%}
+.lad canvas{width:168px;height:120px;image-rendering:pixelated}
+.lad.eu canvas{transform:scaleX(-1)}
+.plat{position:absolute;width:230px;height:46px;border-radius:50%;background:#7fbf5c;box-shadow:inset 0 -6px 0 #5f9a44}
+.lad.op .plat{bottom:-14px}.lad.eu .plat{bottom:-14px}
+.lad canvas{position:relative;z-index:1}
+.caixahp{background:var(--papel);border:3px solid var(--borda);border-radius:10px;box-shadow:0 4px 0 var(--borda);padding:8px 12px;width:270px;position:relative;z-index:2}
+.caixahp .n{display:flex;justify-content:space-between;align-items:center;gap:6px;font-weight:700}
+.caixahp .n small{font-weight:400}
+.barra{height:12px;border:3px solid var(--borda);border-radius:6px;background:#ddd;overflow:hidden;margin-top:5px}
+.barra i{display:block;height:100%;background:#3ccf6e;transition:width .5s}.barra i.meio{background:#f2c14e}.barra i.mal{background:#e8473f}
+.caixahp .hp{text-align:right;font-size:13px}
+.lad canvas.bate{animation:bate .4s}.lad.eu canvas.bate{animation:bateEu .4s}
+.lad canvas.dor{animation:dor .5s}
+@keyframes bate{50%{transform:translate(-40px,20px) scale(1.15)}}
+@keyframes bateEu{50%{transform:scaleX(-1) translate(-40px,-20px) scale(1.15)}}
+@keyframes dor{20%,60%{opacity:.15}40%{transform:translateX(8px)}}
+.lad.eu canvas.dor{animation:dorEu .5s}
+@keyframes dorEu{20%,60%{opacity:.15}40%{transform:scaleX(-1) translateX(8px)}}
+.caixa-b{margin:0 12px 12px;background:var(--papel);border:4px solid var(--borda);border-radius:12px;box-shadow:0 5px 0 var(--borda);padding:12px 16px;display:grid;gap:7px;min-height:130px}
+#b-texto{font-size:19px;font-weight:700}
+#b-motivo{font-size:14px;color:#4d475e}#b-motivo:empty{display:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(max-width:860px){.jogo{grid-template-columns:1fr;grid-template-rows:62vh auto}.lado{border-left:0;border-top:4px solid var(--borda)}#visuais{grid-template-columns:repeat(4,1fr)}.lad canvas{width:112px;height:80px}.caixahp{width:200px}.plat{width:150px}}
 </style></head><body>
-<section id="entrada" class="entrada"><div class="cartao"><h1>BICHOS</h1><div class="ovo">🥚</div><p>Choque um bicho. A mente dele roda só no seu computador e aprende só com você. Na praça, quando ele encontra o bicho de alguém, os dois lutam sozinhos.</p>
+<section id="entrada" class="entrada"><div class="cartao"><h1>BICHOS</h1><div class="ovo">🥚</div>
+<p><b>Torneio de bichos criados por IA.</b> A mente do seu bicho roda só no seu computador e aprende só com você.</p>
+<ol class="passos"><li>Choque o ovo descrevendo o bicho.</li><li>Ensine coisas a ele: cada memória deixa o golpe especial mais forte.</li><li>Chegue perto do bicho de alguém e aperte E. Ele luta sozinho; você só grita dicas.</li><li>Quem tiver mais vitórias quando o relógio zerar é campeão.</li></ol>
 <input id="nome" maxlength="16" placeholder="Seu nome" autocomplete="nickname"><div id="visuais"></div>
 <input id="desc" maxlength="60" placeholder="Descreva o ovo: sapo que adora forró">
-<label><input id="usar-ia" type="checkbox"> Usar a IA deste computador (~1 GB na 1ª vez)</label>
+<label><input id="usar-ia" type="checkbox"> Usar a IA deste computador (~1 GB na 1ª vez, precisa de WebGPU)</label>
 <button id="chocar" class="btn">Chocar o ovo</button><button id="voltar" class="btn claro" hidden></button><div id="aviso" style="text-align:center"></div></div></section>
 <main id="jogo" class="jogo" hidden>
-<section id="game"><div class="topo"><span id="estado"></span><span id="hp"></span><span id="rede">conectando…</span></div></section>
+<section id="game">
+<div class="topo"><span id="estado"></span><span id="relogio"></span><span id="rede">conectando…</span></div>
+<div id="perto" hidden></div>
+<section id="batalha" class="batalha" hidden>
+<div class="campo-b">
+<div class="lad op"><div class="caixahp"><div class="n"><span id="b-op-nome"></span><span id="b-op-tipo" class="tag"></span></div><small id="b-op-dono"></small><div class="barra"><i id="b-op-barra"></i></div><div id="b-op-hp" class="hp"></div></div><div class="plat"></div><canvas id="b-op-pet" width="84" height="60"></canvas></div>
+<div class="lad eu"><div class="plat"></div><canvas id="b-eu-pet" width="84" height="60"></canvas><div class="caixahp"><div class="n"><span id="b-eu-nome"></span><span id="b-eu-tipo" class="tag"></span></div><small id="b-eu-dono"></small><div class="barra"><i id="b-eu-barra"></i></div><div id="b-eu-hp" class="hp"></div></div></div>
+</div>
+<div class="caixa-b"><div id="b-texto"></div><div id="b-motivo"></div>
+<div id="b-grito-linha" class="linha"><input id="b-grito" maxlength="80" placeholder="Grite uma dica: usa o Tsunami! / lembra do cuscuz!"><button id="b-gritar" class="btn">Gritar</button></div>
+<button id="b-fechar" class="btn" hidden>Voltar para a praça</button></div>
+</section>
+</section>
 <aside class="lado">
-<div class="bloco"><div class="ficha"><canvas id="f-pet" width="84" height="60"></canvas><div><h2 id="f-nome"></h2><span id="f-tipo" class="tag"></span> <span id="f-vit"></span></div></div><div id="f-golpes"></div></div>
-<div class="bloco"><h3>Ensinar (fica só neste computador)</h3><div class="linha"><input id="memoria" maxlength="120" placeholder="eu amo cuscuz no café"><button id="ensinar" class="btn">Ensinar</button></div><div id="f-mem"></div></div>
-<div class="bloco"><h3>Na batalha, você só pode gritar</h3><div class="linha"><input id="grito" maxlength="80" placeholder="lembra do cuscuz!"><button id="gritar" class="btn">Gritar</button></div><small>O bicho decide se obedece. Se o grito lembrar algo que você ensinou, o golpe fica mais forte.</small><div class="linha"><button id="guardar" class="btn claro"></button><button id="apagar" class="btn perigo">Apagar</button></div></div>
-<div class="bloco"><h3>Placar</h3><ol id="placar"></ol></div>
+<div class="bloco como"><h3>Como ganhar</h3><ol><li>Ensine seu bicho aqui embaixo.</li><li>Chegue perto de outro bicho e aperte <b>E</b>.</li><li>A IA do seu bicho escolhe os golpes. Você só grita.</li><li>Mais vitórias até o relógio zerar = campeão.</li></ol></div>
+<div class="bloco"><div class="ficha"><canvas id="f-pet" width="84" height="60"></canvas><div><h2 id="f-nome"></h2><span id="f-tipo" class="tag"></span> <small id="f-vit"></small></div></div><div id="f-mente"></div><div id="f-golpes"></div></div>
+<div class="bloco"><h3>Ensinar (fica só neste computador)</h3><div class="linha"><input id="memoria" maxlength="120" placeholder="eu amo cuscuz no café"><button id="ensinar" class="btn">Ensinar</button></div><div id="f-resposta"></div><small id="f-proximo"></small><div id="f-mem"></div></div>
+<div class="bloco"><h3>Placar do torneio</h3><ol id="placar"></ol><div class="linha"><button id="guardar" class="btn claro"></button><button id="apagar" class="btn perigo">Apagar</button></div></div>
 <div class="bloco" style="border:0"><h3>Praça</h3><div id="feed"></div></div>
 </aside></main>
+<div id="fim" class="entrada" style="position:fixed;inset:0;z-index:20;background:#1d1a2bcc" hidden><div class="cartao"><h1 id="fim-titulo" style="font-size:40px"></h1><p id="fim-texto"></p><ol id="fim-lista" class="passos"></ol><button id="novo-torneio" class="btn">Novo torneio</button></div></div>
 <script type="module" src="app.js"></script></body></html>
