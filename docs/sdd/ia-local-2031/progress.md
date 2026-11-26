@@ -1,50 +1,69 @@
 # Progresso: IA local em 2031
 
-CURRENT OBJECTIVE: movimento 3, experimento "A Testemunha" (troca final em 17/11).
-CURRENT PHASE: TESTE (17/11 de manhã, Meet). Vila publicada, só teste de fumaça feito.
-CURRENT BRANCH: master
-BASE BRANCH: master (remoto não tem develop).
+CURRENT OBJECTIVE: apresentar o primeiro entregável do projeto Forja-Mundo em 26/11 e evoluí-lo até a apresentação final de 08/12.
+CURRENT PHASE: PRIMEIRO ENTREGÁVEL PUBLICADO.
+CURRENT BRANCH: master.
+BASE BRANCH: master (este repositório não usa `develop`).
 
 COMPLETED:
 - Movimento 2: documento, deck, roteiro e validador. Apresentação em 08/10.
 - Movimento 3, ideias v1 (14/10) e v2 (19/10). Link salvo no site em 14/10 (`ideias_url`).
-- Movimento 3, experimento (16/11): `movimento-3/experimento/index.html` e `README.md`.
-  - Jogo de página única. Um fantasma (Rui, morto em 1987) entra na chamada do Meet; a turma descobre como ele morreu.
-  - Modelo Qwen2.5 3B Instruct no navegador via WebLLM/WebGPU; versão leve 1.5B opcional; variante f16 ou f32 conforme a GPU.
-  - O código libera um fragmento a cada 2 perguntas, detecta grosseria e decide o final; o modelo só interpreta o personagem.
-  - Voz pelo navegador; botão "Registro" baixa a sessão em JSON.
-- Publicado no homelab em https://fantasma.lab.mateuseap.com (homelab PRs #262 e #263, pin atualizado em #264 e #265). Host removido em 20/11. TLS Let's Encrypt ok.
+- A Testemunha construída e publicada em 17/11. Teste remoto realizado pelo Meet com cerca de 5 pessoas, das quais cerca de 4 usaram IA.
+- Primeiro entregável do projeto Forja-Mundo construído e publicado em 26/11:
+  - jogo multiplayer em `movimento-3/forja-mundo/`;
+  - jogadores criam itens por IA local ou por gerador procedural imediato;
+  - itens caem no mundo compartilhado e criam biomas visuais;
+  - jogadores recolhem itens e fundem dois em uma terceira invenção;
+  - README com ideia, pergunta, tecnologia, instruções e próximos passos;
+  - deck de 7 slides em `movimento-3/forja-mundo/slides.html`.
+- Código do projeto no commit `703b4a0a35f210a8c237e7fa91f41bf9184826d7`.
+- Deploy no homelab pelos PRs #284 (`develop`) e #285 (`main`).
 
 TESTS PASSED:
-- Sessão completa jogada por script no link publicado, nos modelos 3B e 1.5B: segredo protegido, pistas no ritmo, reação à grosseria, negação de ser IA, despedida e sumiço.
-- Screenshots da tela inicial, do fantasma e do estado magoado.
+- Build do bundle com esbuild.
+- Teste local com 3 navegadores: entrada, renderização, criação procedural, item na mochila e sincronização MQTT entre todos.
+- Teste de fusão: dois itens selecionados geraram um terceiro item.
+- Teste ao vivo com 2 navegadores: item criado por um jogador apareceu no registro do outro; nenhum erro JavaScript.
+- Links ao vivo retornaram HTTP 200:
+  - https://testemunha.lab.mateuseap.com/
+  - https://testemunha.lab.mateuseap.com/slides.html
 
 DECISIONS MADE:
-- Ideias v1 descartadas por medirem desempenho; ideia do guarda descartada pelo usuário por ser pouco interessante.
-- Direção final inspirada no experimento da bvga: personagem num mundo compartilhado, turma inteira junta, resultado imprevisível.
-- Hospedagem no homelab por preferência do usuário (subdomínio `.lab.mateuseap.com`), no padrão estático do `fj-presentation`.
-- Modelo 3B como padrão: português muito melhor que o 1.5B nos testes.
+- Projeto e experimento podem ser a mesma linha, mas o projeto final não precisa ficar preso ao mistério da Testemunha.
+- Primeiro entregável prioriza criatividade coletiva e entrada imediata: "entrem, inventem coisas e vejam o mundo aparecer".
+- Direção escolhida: geração como verbo dentro do jogo, não conteúdo preparado antes da partida.
+- Base técnica reaproveitada da Testemunha: Phaser, PixelHub, WebLLM, Qwen2.5 1.5B, MQTT e deploy estático.
+- Modo procedural existe para quem não tem WebGPU e para demos sem esperar o download do modelo.
+- Pergunta atual: quando cada pessoa puder gerar partes de um jogo no próprio aparelho, quem passa a construir o mundo: quem desenvolveu o jogo, a IA ou os jogadores?
 
 OPEN RISKS:
-- Primeiro download de cerca de 1,7 GB: pedir para abrir o link na véspera.
-- O reconhecimento de voz do Chrome envia áudio ao Google; alternativa é escrever na caixa.
-- O enunciado fala em teste presencial; o do meap é online pelo Meet (confirmar com o professor, se ainda não confirmado).
+- Fluxo com WebLLM não foi retestado de ponta a ponta nesta madrugada; o mesmo carregamento já usado na Testemunha foi reaproveitado.
+- Primeiro download do modelo local tem cerca de 1 GB. Para demo imediata, desmarcar "Usar IA local neste aparelho".
+- Broker MQTT é público. Não inserir dados pessoais.
+- Poderes dos itens são descrições nesta primeira versão; ainda não alteram mecanicamente o jogo.
+- O arquivo do teste de 17/11 (`/home/mateuseap/Downloads/testemunha-aula-2026-11-17T0857.json`) só registra Mateus, Dona Lurdes e 3 eventos. Não contém sessão completa, votos ou revelação.
 
-DEADLINES:
-- Experimento + README: 16/11 23h59.
-- Teste: 17/11 (Meet).
-- REGISTRO.md: 30/11 23h59.
-- Apresentação final: 01/12.
+DEADLINES (mudança informada pelo professor via WhatsApp):
+- Primeira apresentação do projeto: 26/11, entre 8h e 10h.
+- Professor indisponível na semana seguinte.
+- Apresentação final: 08/12.
+- O site da disciplina ainda não refletia essas mudanças em 26/11 à 00h.
+- Prazo de `REGISTRO.md` no site: 03/12 23h59, ainda não reconfirmado após a mudança pelo WhatsApp.
 
-TESTEMUNHA (17/11, madrugada; substitui vila e fantasma):
-- Jogo: `movimento-3/experimento/index.html` + `app.js` (compilado de `src/main.ts`; motor de mapa, bonecos e movimento copiado do PixelHub em `src/pixelhub/`, MIT). Cada jogador anda com o próprio boneco e traz uma testemunha (IA local Qwen2.5 1.5B via WebLLM) que anda e fofoca sozinha; segredo sorteado só no navegador do dono; uma culpada; dono pode dormir, tirar da internet ou apagar a memória (silencioso); votação e revelação mostram quem apagou.
-- Pergunta: se a única testemunha mora no aparelho de alguém, quem decide se a verdade aparece?
-- Slides do teste: `movimento-3/apresentacao-teste/` (cópia em `experimento/slides/`), no ar em https://testemunha.lab.mateuseap.com/slides/
-- No ar: https://testemunha.lab.mateuseap.com (homelab PRs #268 e #269, pin 7644bd5). Em 20/11, o app do homelab virou `testemunha` (homelab PR #278) e o host `fantasma.lab` foi removido.
-- Verificado: 3 navegadores (2 testemunhas + 1 visitante): caso sorteado, interrogatório, internet desligada, memória apagada, votação, revelação. Defeito visto: testemunha inocente não revelava a pista; prompt reforçado depois, NÃO retestado.
-- Sem PC bom: "entrar sem testemunha" (anda, pergunta, vota); precisa de pelo menos 2 testemunhas na sala para o caso começar.
-- Linux: Chrome precisa de `chrome://flags/#enable-unsafe-webgpu`.
+DELIVERY STATE:
+- Repositório da disciplina: commit em `master` e enviado ao GitHub.
+- Site da disciplina: não alterado, conforme regra do usuário.
+- Homelab PR para `develop`: #284, merged.
+- Homelab release PR para `main`: #285, merged.
+- Deployment: saudável e verificado ao vivo.
+- Branch de projeto: integrada e removida localmente pelo merge fast-forward; branch remota ainda pode ser removida.
+- Branch de homelab: PR merged; limpeza pendente.
 
-SITE DA DISCIPLINA: `exp_url` salvo em 16/11 23h27 com autorização do usuário ("submete algo que podemos ir modificando"):
-https://github.com/mateuseap/media-interaction/tree/master/movimento-3/experimento
-EXACT NEXT ACTION: rodar o teste de 17/11; depois escrever `movimento-3/experimento/REGISTRO.md` (até 03/12, prazo novo do site).
+REMAINING:
+- Apresentar Forja-Mundo em 26/11.
+- Recolher reação da turma e escolher evolução para 08/12.
+- Reconstruir o teste de 17/11 a partir das lembranças do usuário e escrever `movimento-3/experimento/REGISTRO.md`.
+- Confirmar se o prazo de 03/12 mudou junto com a apresentação final.
+- Dar efeitos reais aos poderes ou adicionar pequenas missões/criaturas, conforme reação ao primeiro entregável.
+
+EXACT NEXT ACTION: abrir `https://testemunha.lab.mateuseap.com/slides.html`, apresentar os 7 slides e então abrir `https://testemunha.lab.mateuseap.com/?sala=aula`; para entrada instantânea, desmarcar "Usar IA local neste aparelho".
