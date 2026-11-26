@@ -12,7 +12,7 @@ import { COR_TIPO, textura } from './sprites';
 const $ = <T extends HTMLElement>(x: string) => document.getElementById(x) as T;
 const PARAMS = new URLSearchParams(location.search);
 const SALA = (PARAMS.get('sala') || 'aula').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 24) || 'aula';
-const MIN = Math.max(2, Math.min(30, +(PARAMS.get('min') || 10)));
+const MIN = Math.max(2, Math.min(30, +(PARAMS.get('min') || 6)));
 const BASE = `bichos-cin0055-v3/${SALA}`;
 const ID = (() => { try { const v = localStorage.getItem('bichos_id') || crypto.randomUUID().slice(0, 8); localStorage.setItem('bichos_id', v); return v; } catch { return crypto.randomUUID().slice(0, 8); } })();
 const PERTO = 80, RECARGA = 8000;

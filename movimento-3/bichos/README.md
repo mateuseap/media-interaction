@@ -34,7 +34,7 @@ Por que não dá com tecnologia madura: com uma IA na nuvem, a empresa teria a m
 3. Ensine coisas ao bicho no painel. Duas memórias criam um golpe especial; cada memória nova deixa o golpe mais forte.
 4. Chegue perto do bicho de alguém e aperte E (ou clique no aviso amarelo). Abre a tela de batalha.
 5. Na batalha, cada bicho escolhe o próprio golpe no computador do dono, e a tela mostra quem decidiu e por quê. Você só grita dicas: se o grito citar um golpe, o bicho pode obedecer; se lembrar algo que você ensinou, o golpe ganha +8 de poder.
-6. Um torneio de 10 minutos (`?min=N` muda) conta as vitórias. No fim, aparece o campeão.
+6. Um torneio de 6 minutos (`?min=N` muda) conta as vitórias. No fim, aparece o campeão.
 
 ## Histórico do projeto
 

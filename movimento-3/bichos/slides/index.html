@@ -326,21 +326,46 @@ td.id { font-family: var(--mono); font-size: 17px; color: var(--red-dark); white
 <section class="slide" data-title="O que foi feito">
   <div class="head"><div class="kicker">O que já funciona</div><h1>Primeiro entregável, no ar</h1></div>
   <div class="fez">
-    <div><div class="n">jogo</div><h3>Praça e torneio</h3><p>A vila da Testemunha refeita de dia. Bichos em pixel art, desafio por proximidade, torneio de 10 minutos com placar e campeão.</p></div>
+    <div><div class="n">jogo</div><h3>Praça e torneio</h3><p>A vila da Testemunha refeita de dia. Bichos em pixel art, desafio por proximidade, torneio de 6 minutos com placar e campeão.</p></div>
     <div><div class="n">batalha</div><h3>Estilo Pokémon</h3><p>Barras de HP, vantagem de tipo, crítico, grito do dono e a explicação de cada decisão na tela.</p></div>
     <div><div class="n">ia local</div><h3>Memória só sua</h3><p>O bicho mora no navegador. Ninguém mais tem cópia. Apagar não tem volta. Sem WebGPU, regras simples fazem o papel da IA.</p></div>
   </div>
-  <p class="src" style="margin-top:40px"><b>Testes que ficaram pelo caminho nesta semana:</b> sandbox de itens 2D, sandbox e FPS em 3D, tabuleiro e cartas contra chefão. Caíram por serem caros demais em 3D ou por a IA local não ser o personagem.</p>
 </section>
 
-<section class="slide" data-title="Próximos passos">
-  <div class="head"><div class="kicker">Até 08/12</div><h1>Próximos passos</h1></div>
-  <div class="steps">
-    <div class="done"><b>26/11</b><p>Primeira versão no ar e primeiro teste com a turma.</p></div>
-    <div><b>IA de verdade</b><p>Testar a IA local em PCs com WebGPU e comparar bichos com IA e sem IA.</p></div>
-    <div><b>Personalidade</b><p>O bicho desobedece mais quando foi mal treinado. Memórias mudam o jeito de lutar.</p></div>
-    <div><b>Herança</b><p>Exportar o bicho como arquivo e passar para outra pessoa: ele continua sendo seu?</p></div>
-    <div><b>08/12</b><p>Torneio da turma, REGISTRO.md e apresentação final.</p></div>
+<section class="slide" data-title="Explorações">
+  <div class="head"><div class="kicker">O caminho até aqui</div><h1>Explorações do movimento 3</h1></div>
+  <table>
+    <tr><th>Versão</th><th>O que testava</th><th>Onde está</th></tr>
+    <tr><td class="id">Fantasma</td><td>Um personagem com IA local entra na chamada do Meet. A turma só assistia, e a pergunta não dependia da IA ser local.</td><td class="id">testemunha.lab.mateuseap.com/fantasma.html</td></tr>
+    <tr><td class="id">Testemunha</td><td>Cada pessoa traz uma IA local com um segredo que só ela guarda. Testada com a turma em 17/11.</td><td class="id">testemunha.lab.mateuseap.com</td></tr>
+    <tr><td class="id">Forja-Mundo</td><td>Sandbox 2D: escrever um item e a IA criar bioma e poder. Sem objetivo, virava mural.</td><td class="id">código no repositório</td></tr>
+    <tr><td class="id">Faz Aí, Forja Arena</td><td>Objetos e FPS em 3D. Ficou caro demais e o visual não chegou lá.</td><td class="id">código no repositório</td></tr>
+    <tr><td class="id">Tabuleiro, cartas</td><td>IA como juiz de cartas e obstáculos. Funcionava, mas a IA não era o personagem.</td><td class="id">só local</td></tr>
+    <tr><td class="id">Bichos</td><td>A IA local vira o personagem que você treina e que age por você.</td><td class="id">bichos.lab.mateuseap.com</td></tr>
+  </table>
+</section>
+
+<section class="slide" data-title="Objetivo e próximos passos">
+  <div class="head"><div class="kicker">Para onde o projeto vai, até 08/12</div><h1>O que eu quero observar</h1></div>
+  <div class="idea">
+    <div>
+      <p class="q">Se a IA treinada por você <b>age no seu lugar</b>, quem responde pelo que ela faz?</p>
+      <dl>
+        <dt>Futuro</dt><dd>Efeito e6 do mapa: agentes pessoais no aparelho, que negociam e competem pelo dono. Hoje a gente joga; em 2031, a IA joga por nós.</dd>
+        <dt>Por que local</dt><dd>Na nuvem, a empresa teria a memória de todos os bichos. No aparelho, o bicho é só seu: ninguém copia, e apagar não tem volta.</dd>
+        <dt>No jogo</dt><dd>Você não controla a luta. Só treina antes e grita durante. O bicho decide.</dd>
+      </dl>
+    </div>
+    <div class="expect">
+      <h3>Próximos passos</h3>
+      <ul class="clean">
+        <li><b>Medir:</b> o dono assume a derrota como dele, ou culpa o bicho? Registrar falas no teste.</li>
+        <li><b>IA de verdade:</b> rodar o Qwen em PCs com WebGPU e comparar bichos com IA e com regras.</li>
+        <li><b>Desobediência:</b> bicho mal treinado ignora mais o grito. Treino passa a ter peso real.</li>
+        <li><b>Herança:</b> exportar o bicho como arquivo para outra pessoa. Ele ainda é seu?</li>
+        <li><b>08/12:</b> torneio da turma, REGISTRO.md e apresentação final.</li>
+      </ul>
+    </div>
   </div>
 </section>
 
