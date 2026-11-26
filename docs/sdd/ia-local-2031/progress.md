@@ -17,16 +17,18 @@ COMPLETED:
   - README com ideia, pergunta, tecnologia, instruções e próximos passos;
   - deck de 7 slides em `movimento-3/forja-mundo/slides.html`.
 - Código do projeto no commit `703b4a0a35f210a8c237e7fa91f41bf9184826d7`.
-- Deploy no homelab pelos PRs #284 (`develop`) e #285 (`main`).
+- Deploy inicial pelos PRs #284 e #285 substituiu indevidamente A Testemunha.
+- Correção pelos PRs #286 (`develop`) e #287 (`main`): A Testemunha restaurada e Forja-Mundo publicado como aplicação independente.
 
 TESTS PASSED:
 - Build do bundle com esbuild.
 - Teste local com 3 navegadores: entrada, renderização, criação procedural, item na mochila e sincronização MQTT entre todos.
 - Teste de fusão: dois itens selecionados geraram um terceiro item.
 - Teste ao vivo com 2 navegadores: item criado por um jogador apareceu no registro do outro; nenhum erro JavaScript.
-- Links ao vivo retornaram HTTP 200:
-  - https://testemunha.lab.mateuseap.com/
-  - https://testemunha.lab.mateuseap.com/slides.html
+- Links independentes verificados ao vivo, sem erros JavaScript:
+  - A Testemunha: https://testemunha.lab.mateuseap.com/
+  - Forja-Mundo: https://forja-mundo.lab.mateuseap.com/
+  - Slides do Forja-Mundo: https://forja-mundo.lab.mateuseap.com/slides.html
 
 DECISIONS MADE:
 - Projeto e experimento podem ser a mesma linha, mas o projeto final não precisa ficar preso ao mistério da Testemunha.
@@ -53,9 +55,9 @@ DEADLINES (mudança informada pelo professor via WhatsApp):
 DELIVERY STATE:
 - Repositório da disciplina: commit em `master` e enviado ao GitHub.
 - Site da disciplina: não alterado, conforme regra do usuário.
-- Homelab PR para `develop`: #284, merged.
-- Homelab release PR para `main`: #285, merged.
-- Deployment: saudável e verificado ao vivo.
+- Homelab PR corretivo para `develop`: #286, merged.
+- Homelab release PR corretivo para `main`: #287, merged.
+- Deployments independentes: saudáveis e verificados ao vivo.
 - Branch de projeto: integrada e removida localmente pelo merge fast-forward; branch remota ainda pode ser removida.
 - Branch de homelab: PR merged; limpeza pendente.
 
@@ -66,4 +68,4 @@ REMAINING:
 - Confirmar se o prazo de 03/12 mudou junto com a apresentação final.
 - Dar efeitos reais aos poderes ou adicionar pequenas missões/criaturas, conforme reação ao primeiro entregável.
 
-EXACT NEXT ACTION: abrir `https://testemunha.lab.mateuseap.com/slides.html`, apresentar os 7 slides e então abrir `https://testemunha.lab.mateuseap.com/?sala=aula`; para entrada instantânea, desmarcar "Usar IA local neste aparelho".
+EXACT NEXT ACTION: abrir `https://forja-mundo.lab.mateuseap.com/slides.html`, apresentar os 7 slides e então abrir `https://forja-mundo.lab.mateuseap.com/?sala=aula`; para entrada instantânea, desmarcar "Usar IA local neste aparelho".

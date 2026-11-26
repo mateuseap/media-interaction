@@ -1,5 +1,9 @@
 # Forja-Mundo
 
+**Para jogar:** https://forja-mundo.lab.mateuseap.com
+
+**Slides:** https://forja-mundo.lab.mateuseap.com/slides.html
+
 *CIN0055, Tendências em Mídia e Interação, Centro de Informática, UFPE. Projeto de meap (Mateus Elias), tema 16: IA local no dispositivo e no navegador.*
 
 ## Ideia
