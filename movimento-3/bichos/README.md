@@ -4,6 +4,8 @@
 
 **Para jogar:** https://bichos.lab.mateuseap.com (Chrome ou Edge, num computador). Use `?sala=nome` para uma sala separada.
 
+**Slides da apresentação de 26/11:** https://bichos.lab.mateuseap.com/slides/ (código em `slides/`).
+
 ## O que é
 
 Cada pessoa choca um bicho descrevendo o ovo ("sapo que adora forró") e anda com ele por uma praça em pixel art, junto com a turma. A mente do bicho é uma IA que roda no navegador do dono e aprende só com ele: o que o dono conta vira memória e pode virar golpe novo. Quando dois bichos se encontram na praça, eles lutam sozinhos. O dono não controla a luta, só pode gritar uma dica, e o bicho decide se obedece. Vence quem tiver mais vitórias no placar.
