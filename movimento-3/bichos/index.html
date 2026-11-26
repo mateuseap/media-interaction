@@ -1,0 +1,82 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bichos</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&display=swap" rel="stylesheet"><style>
+:root{--ceu:#7ec8e3;--grama:#6fbf5a;--grama2:#4e9a3e;--terra:#c99a5b;--tinta:#1d1a2b;--papel:#fff8e7;--borda:#2b2440;--hp:#3ccf6e;--hpmal:#e8473f;--sel:#ffd447}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{font:16px/1.35 'Pixelify Sans',system-ui,sans-serif;color:var(--tinta);background:linear-gradient(180deg,var(--ceu) 0 38%,var(--grama) 38% 100%);overflow:hidden;image-rendering:pixelated}
+button,input{font:inherit}button{cursor:pointer}[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--sel);outline-offset:2px}
+.janela{background:var(--papel);border:4px solid var(--borda);border-radius:10px;box-shadow:0 6px 0 var(--borda)}
+.btn{border:4px solid var(--borda);border-radius:8px;background:var(--sel);padding:10px 16px;font-weight:700;box-shadow:0 4px 0 var(--borda)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--borda)}
+.btn:disabled{filter:grayscale(1);opacity:.5}
+input{border:4px solid var(--borda);border-radius:8px;padding:10px 12px;background:white}
+.centro{height:100%;display:grid;place-items:center;padding:16px}
+.inicio{width:min(520px,94vw);padding:24px;display:grid;gap:12px;text-align:center}
+.inicio h1{margin:0;font-size:64px;line-height:.9;color:#e8473f;text-shadow:4px 4px 0 var(--borda)}
+.inicio p{margin:0}
+.ovo{font-size:90px;animation:balanca 1.2s ease-in-out infinite}
+@keyframes balanca{50%{transform:rotate(8deg)}}
+.praca{height:100%;display:grid;grid-template-columns:1fr 320px}
+.campo{position:relative;overflow:hidden}
+.campo::before{content:"";position:absolute;left:0;right:0;top:38%;height:6px;background:var(--grama2)}
+.pet{position:absolute;display:grid;justify-items:center;cursor:pointer;transition:left 1.4s ease,top 1.4s ease}
+.pet .bicho{font-size:52px;animation:pula 1s ease-in-out infinite;filter:drop-shadow(0 4px 0 #0003)}
+.pet:nth-child(odd) .bicho{animation-delay:.4s}
+@keyframes pula{50%{transform:translateY(-6px)}}
+.pet .placa{background:var(--papel);border:3px solid var(--borda);border-radius:6px;padding:1px 6px;font-size:13px;white-space:nowrap}
+.pet.meu .placa{background:var(--sel)}
+.pet .balao{position:absolute;bottom:100%;background:white;border:3px solid var(--borda);border-radius:8px;padding:4px 8px;font-size:13px;width:max-content;max-width:180px;margin-bottom:4px}
+.lado{border-left:4px solid var(--borda);background:var(--papel);display:grid;grid-template-rows:auto auto 1fr;min-height:0}
+.ficha{padding:14px;border-bottom:4px solid var(--borda);display:grid;gap:6px}
+.ficha .topo{display:flex;gap:10px;align-items:center}
+.ficha .topo .e{font-size:48px}
+.ficha h2{margin:0;font-size:24px}
+.tag{display:inline-block;border:2px solid var(--borda);border-radius:4px;padding:0 5px;font-size:12px;background:var(--c,#ddd)}
+.t-fogo{--c:#ff9a5c}.t-agua{--c:#7cc4ff}.t-planta{--c:#8ee07a}.t-raio{--c:#ffe066}.t-sombra{--c:#b79bf2}.t-luz{--c:#fff2a8}
+.golpes{display:flex;flex-wrap:wrap;gap:4px}
+.ensinar{padding:14px;border-bottom:4px solid var(--borda);display:grid;gap:6px}
+.ensinar small{color:#6b6580}
+.memorias{overflow:auto;padding:12px 14px;font-size:14px;display:grid;align-content:start;gap:4px}
+.memorias b{font-size:13px;color:#6b6580}
+.aviso{position:absolute;left:50%;top:14px;transform:translateX(-50%);padding:8px 14px;font-weight:700;z-index:5;white-space:nowrap}
+.batalha{position:fixed;inset:0;background:linear-gradient(180deg,#9ad8ee 0 52%,#8fd16f 52%);display:grid;grid-template-rows:1fr auto;z-index:20}
+.palco{position:relative}
+.lutador{position:absolute;display:grid;gap:8px;justify-items:center}
+.lutador.op{right:12%;top:10%}.lutador.eu{left:12%;bottom:8%}
+.lutador .bicho{font-size:110px;filter:drop-shadow(0 8px 0 #0003)}
+.lutador.eu .bicho{transform:scaleX(-1)}
+.lutador .bicho.bate{animation:bate .4s}
+.lutador .bicho.dor{animation:dor .45s}
+@keyframes bate{50%{transform:translateX(40px) scale(1.15)}}
+@keyframes dor{25%,75%{opacity:.2}50%{transform:translateX(-10px)}}
+.lutador.eu .bicho.bate{animation:bateEu .4s}
+@keyframes bateEu{50%{transform:scaleX(-1) translateX(-40px) scale(1.15)}}
+.hp{width:260px;padding:8px 10px}
+.hp .n{display:flex;justify-content:space-between;font-weight:700}
+.hp .barra{height:12px;border:3px solid var(--borda);border-radius:6px;background:#ddd;overflow:hidden;margin-top:4px}
+.hp .barra i{display:block;height:100%;background:var(--hp);transition:width .5s}
+.hp .barra i.mal{background:var(--hpmal)}
+.caixa{margin:0 14px 14px;padding:14px;display:grid;grid-template-columns:1fr 380px;gap:14px;min-height:150px}
+.caixa .texto{font-size:20px}
+.caixa .acoes{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-content:start}
+.caixa .acoes .livre{grid-column:1/-1;display:flex;gap:6px}
+.caixa .acoes .livre input{flex:1;min-width:0}
+.golpe{border:3px solid var(--borda);border-radius:8px;padding:8px;background:var(--c,#eee);font-weight:700;text-align:left}
+.golpe small{display:block;font-weight:400;font-size:12px}
+.numero{position:fixed;font:700 40px 'Pixelify Sans';color:#e8473f;text-shadow:3px 3px 0 var(--borda);pointer-events:none;animation:sobe 1s forwards;z-index:30}
+@keyframes sobe{to{transform:translateY(-60px);opacity:0}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(max-width:800px){.praca{grid-template-columns:1fr;grid-template-rows:55vh auto}.caixa{grid-template-columns:1fr}.lutador .bicho{font-size:72px}}
+</style></head><body>
+<section id="tela-entrar" class="centro"><div class="janela inicio"><h1>BICHOS</h1><div class="ovo">🥚</div><p>Seu bicho nasce e mora só no seu navegador. Você cria, ensina e batalha com o bicho dos outros.</p><input id="nome" maxlength="16" placeholder="Seu nome"><input id="desc" maxlength="60" placeholder="Descreva o ovo: sapo que adora forró"><label><input id="usar-ia" type="checkbox"> Usar a IA deste computador (~1 GB na 1ª vez)</label><button id="chocar" class="btn">Chocar o ovo</button><div id="aviso-entrar"></div></div></section>
+<main id="tela-praca" class="praca" hidden>
+<section id="campo" class="campo"><div id="aviso" class="janela aviso">Clique no bicho de alguém para desafiar</div></section>
+<aside class="lado">
+<div class="ficha"><div class="topo"><span id="f-emoji" class="e"></span><div><h2 id="f-nome"></h2><span id="f-tipo" class="tag"></span> <span id="f-vit"></span></div></div><small id="f-pers"></small><div id="f-golpes" class="golpes"></div></div>
+<div class="ensinar"><b>Ensinar seu bicho</b><input id="memoria" maxlength="120" placeholder="Conte algo: eu amo cuscuz no café"><button id="ensinar" class="btn">Ensinar</button><small>O que você ensina vira memória e pode virar um golpe novo. Fica só neste computador.</small></div>
+<div id="memorias" class="memorias"></div>
+</aside></main>
+<section id="tela-batalha" class="batalha" hidden>
+<div class="palco"><div class="lutador op"><div class="janela hp"><div class="n"><span id="op-nome"></span><span id="op-hp"></span></div><div class="barra"><i id="op-barra"></i></div></div><div id="op-bicho" class="bicho"></div></div><div class="lutador eu"><div id="eu-bicho" class="bicho"></div><div class="janela hp"><div class="n"><span id="eu-nome"></span><span id="eu-hp"></span></div><div class="barra"><i id="eu-barra"></i></div></div></div></div>
+<div class="janela caixa"><div id="b-texto" class="texto"></div><div id="b-acoes" class="acoes"></div></div>
+</section>
+<script type="module" src="app.js"></script></body></html>

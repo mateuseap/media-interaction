@@ -1,0 +1,13 @@
+import { strict as a } from 'node:assert';
+import { aprender, dano, eficacia, nascer, petDaIA } from './regras';
+const sapo = nascer('sapo que adora forró', 'p1', 'x');
+a.equal(sapo.tipo, 'agua'); a.equal(sapo.nome, 'Sapo'); a.equal(sapo.golpes.length, 3);
+a.ok(!nascer('<b>bicho', 'p', 'y').personalidade.includes('<'));
+a.equal(eficacia('agua', 'fogo'), 1.5); a.equal(eficacia('fogo', 'agua'), 0.75); a.equal(eficacia('fogo', 'raio'), 1);
+const ia = petDaIA({ nome: 'Zé Forró', tipo: 'hack', golpes: [{ nome: 'Xote', poder: 999 }] }, sapo);
+a.equal(ia.tipo, 'agua'); a.equal(ia.golpes[0].poder, 18); a.equal(ia.nome, 'Zé Forró');
+const t = aprender(aprender(sapo, 'gosta de cuscuz'), 'odeia segunda', { nome: 'Cuscuz Voador', tipo: 'fogo' });
+a.equal(t.memorias.length, 2); a.equal(t.golpes.length, 4); a.equal(t.golpes[3].poder, 24);
+a.equal(aprender(t, 'x', { nome: 'B', tipo: 'luz' }).golpes.length, 4);
+a.equal(dano({ nome: 'J', tipo: 'agua', poder: 20 }, 'fogo', () => 0.5).valor, 30);
+console.log('regras ok');
