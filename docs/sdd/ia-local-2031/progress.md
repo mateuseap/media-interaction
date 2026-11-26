@@ -10,7 +10,7 @@ CURRENT BRANCH: master (este repositório não usa `develop`).
 - REGISTRO.md: o site ainda diz 03/12 23h59. Reconfirmar com o professor.
 
 ## Projeto atual: Bichos
-- No ar: https://bichos.lab.mateuseap.com (homelab PRs #290 e #291, pin `2a3a9dd`).
+- No ar: https://bichos.lab.mateuseap.com (homelab PRs #290 a #294, pin `2aeb049`): tela de batalha com HP, desafio com E, torneio de 10 min, quem decide cada golpe aparece na tela.
 - Código: `movimento-3/bichos/`. README com ideia, pergunta, tecnologia e histórico.
 - Cada pessoa choca um bicho, anda com ele na praça (vila da Testemunha refeita de dia) e ensina coisas a ele. A mente do bicho é Qwen2.5 1.5B local (WebLLM); a memória fica só no navegador. Quando dois bichos se encontram, lutam sozinhos; o dono só grita dicas. Placar de vitórias.
 - Pergunta: quando a sua IA age por você num espaço compartilhado, com o que aprendeu de você, o que ela faz ainda é você? (efeito e6 do mapa).
