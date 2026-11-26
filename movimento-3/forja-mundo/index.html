@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Forja-Mundo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#100d18;--panel:#211a2d;--ink:#f7edda;--dim:#b8a9c6;--gold:#ffc857;--pink:#f16f9a;--green:#75d69c;--line:#09070d}*{box-sizing:border-box}html,body{height:100%;margin:0}body{background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,sans-serif}button,input{font:inherit;color:inherit;background:#352943;border:2px solid var(--line);border-radius:7px;padding:10px 12px}button{font-family:"Pixelify Sans",sans-serif;cursor:pointer;box-shadow:0 3px 0 var(--line)}button:hover:not(:disabled){background:#49385c}button:disabled{opacity:.45;cursor:not-allowed}h1,h2,.px{font-family:"Pixelify Sans",sans-serif}.entrada{max-width:650px;margin:6vh auto;padding:20px;display:grid;gap:14px}.entrada h1{font-size:clamp(46px,10vw,74px);margin:0;color:var(--gold);text-shadow:4px 4px var(--line)}.entrada p{margin:0;color:var(--dim)}.entrada b{color:var(--ink)}.entrada label{display:grid;gap:5px}.entrada button{font-size:20px;background:#5b3d76}.jogo{height:100%;display:flex;flex-direction:column}header{height:56px;display:flex;align-items:center;gap:18px;padding:7px 14px;background:var(--panel);border-bottom:3px solid var(--line)}header h1{font-size:24px;color:var(--gold);margin:0}header span{color:var(--dim)}#rede{margin-left:auto;color:var(--green)}.meio{flex:1;min-height:0;display:flex}#game{flex:1;min-width:0;overflow:hidden}#game canvas{image-rendering:pixelated}aside{width:360px;background:var(--panel);border-left:3px solid var(--line);display:flex;flex-direction:column;overflow:auto}.bloco{padding:14px;border-bottom:3px solid var(--line);display:grid;gap:9px}.bloco h2{font-size:16px;color:var(--gold);margin:0}.bloco p{margin:0;color:var(--dim);font-size:14px}.linha{display:flex;gap:8px}.linha input{min-width:0;flex:1}#inventario{display:grid;gap:8px}.item{padding:9px;background:#171220;border:2px solid #433651;border-radius:7px;display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center}.item .icone{font-size:25px}.item b{font-family:"Pixelify Sans"}.item small{display:block;color:var(--dim)}.item[aria-selected=true]{border-color:var(--pink);background:#332138}.log{display:grid;gap:7px}.log div{font-size:13px;color:var(--dim)}.log b{color:var(--ink)}#estado{min-height:2.8em;color:var(--gold)}.dica{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);background:#171220e8;border:2px solid var(--line);padding:7px 12px;border-radius:7px;font-family:"Pixelify Sans"}@media(max-width:800px){aside{width:300px}}@media(max-width:650px){.meio{display:block;overflow:auto}#game{height:58vh}aside{width:100%;border-left:0;border-top:3px solid var(--line)}}[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<section id="entrada" class="entrada">
+<h1>Forja-Mundo</h1>
+<p><b>Um mundo que só existe depois que alguém imagina.</b></p>
+<p>Escreva qualquer objeto. Sua IA local inventa nome, poder e bioma. O item cai no mundo compartilhado e transforma o mapa de todo mundo.</p>
+<label>Seu nome<input id="nome" maxlength="20" autocomplete="nickname" placeholder="Como vão te chamar?"></label>
+<label><span><input id="usarIA" type="checkbox" checked> Usar IA local neste aparelho</span><small>Primeira vez baixa cerca de 1 GB. Sem WebGPU, forja procedural funciona na hora.</small></label>
+<button id="entrar">Entrar e criar</button>
+<div id="aviso" role="status"></div>
+</section>
+<section id="jogo" class="jogo" hidden>
+<header><h1>Forja-Mundo</h1><span>WASD/setas para andar · invente e arraste o mundo</span><span id="rede">conectando...</span></header>
+<div class="meio">
+<div id="game"></div>
+<aside>
+<section class="bloco"><h2>Forjar</h2><p>Vale qualquer coisa. O mapa muda para combinar.</p><div class="linha"><input id="pedido" maxlength="100" placeholder="ex.: guarda-chuva vulcânico"><button id="forjar">Criar</button></div><div id="estado" role="status">A forja está aquecendo.</div></section>
+<section class="bloco"><h2>Mochila</h2><p>Selecione 2 itens e funda algo impossível.</p><div id="inventario"><small>Vá perto de um item no mapa para pegá-lo.</small></div><button id="fundir" disabled>Fundir selecionados</button></section>
+<section class="bloco"><h2>Acontecendo agora</h2><div id="log" class="log"></div></section>
+</aside>
+</div>
+</section>
+<script type="module" src="app.js"></script>
+</body>
+</html>
